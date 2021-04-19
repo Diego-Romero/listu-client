@@ -8,6 +8,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import React from "react";
@@ -20,8 +21,16 @@ import {
   SPACING_INPUTS,
 } from "../config";
 import { useHistory } from "react-router";
+import { registerRequest } from "../api/requests";
+import { createToast } from "../utils/utils";
 
-const initialValues = {
+export interface RegisterFormTypes {
+  email: string;
+  password: string;
+  name: string;
+}
+
+const initialValues: RegisterFormTypes = {
   email: "",
   password: "",
   name: "",
@@ -35,17 +44,26 @@ const validationSchema = Yup.object().shape({
 
 export const RegisterForm: React.FC = () => {
   const history = useHistory();
+  const toast = useToast();
   const [show, setShow] = React.useState(false);
+  async function register(values: RegisterFormTypes, actions) {
+    actions.setSubmitting(false);
+    try {
+      const res = await registerRequest(values);
+      toast(createToast("Whoop 🙌", "success", res.data.message));
+      history.push(config.routes.login);
+    } catch (e) {
+      const errorMessage = e.response.data.message;
+      toast(
+        createToast("Yikes... There has been an error", "error", errorMessage)
+      );
+    }
+  }
   return (
     <Box>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          setTimeout(() => {
-            actions.setSubmitting(false);
-            history.push(config.routes.createList);
-          }, 1000);
-        }}
+        onSubmit={register}
         validationSchema={validationSchema}
       >
         {(props) => (

@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/99ff3b07-e0e3-48ea-9b8d-b1a35c3af711/deploy-status)](https://app.netlify.com/sites/listuapp/deploys)
+
 # Listu Client
 
 In order to run the project locally, you will need to first install the necessary dependencies

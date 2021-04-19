@@ -12,8 +12,6 @@ export const SPACING_BUTTONS = 8;
 
 export const config = {
   env: {
-    auth0Domain: process.env.REACT_APP_AUTH_0_DOMAIN,
-    auth0ClientId: process.env.REACT_APP_AUTH_0_CLIENT_ID,
     serverUrl: process.env.REACT_APP_SERVER_URL,
   },
   routes: {
