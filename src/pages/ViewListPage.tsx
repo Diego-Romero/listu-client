@@ -19,7 +19,6 @@ import {
   Text,
   Tooltip,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
@@ -29,19 +28,20 @@ import { config, SPACING_BUTTONS } from "../config";
 import { useHistory } from "react-router";
 import { CreateListItemForm } from "../components/CreateItemForm";
 import { ListItem } from "../type";
-import { useParams } from "react-router-dom";
 
-interface ParamTypes {
-  id: string;
-}
+// interface ParamTypes {
+//   id: string;
+// }
 
 export const ViewListPage = () => {
   const history = useHistory();
   const [items, setItems] = React.useState<ListItem[]>([]);
-  const toast = useToast();
+  setItems([]) // todo: delete me
+  // const toast = useToast();
   const [loading, setLoading] = React.useState(false);
-  const { id } = useParams<ParamTypes>();
-  const [file, setFiles] = React.useState(null);
+  setLoading(false) // todo: delete
+  // const { id } = useParams<ParamTypes>();
+  // const [file, setFiles] = React.useState(null);
 
   const {
     isOpen: modalIsOpen,
@@ -49,34 +49,34 @@ export const ViewListPage = () => {
     onClose: modalOnClose,
   } = useDisclosure();
 
-  const getItems = async () => {
-    setLoading(true);
-    // try {
-    //   const token = await getAccessTokenSilently();
-    //   const url = `${config.env.serverUrl}/list/${id}`;
-    //   const response = await fetch(url, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   const data: ListItem[] = await response.json();
-    //   console.log("response from loading items", data);
-    //   setItems(data);
-    // } catch (error) {
-    //   console.log("error fetching from the api", error);
-    //   toast({
-    //     title: "Sorry!",
-    //     description: "Something has gone wrong",
-    //     status: "error",
-    //     duration: 6000,
-    //     isClosable: true,
-    //   });
-    //   history.push(config.routes.home);
-    // } finally {
-    //   setLoading(false);
-    // }
-    setLoading(false)
-  };
+  // const getItems = async () => {
+  //   setLoading(true);
+  //   // try {
+  //   //   const token = await getAccessTokenSilently();
+  //   //   const url = `${config.env.serverUrl}/list/${id}`;
+  //   //   const response = await fetch(url, {
+  //   //     headers: {
+  //   //       Authorization: `Bearer ${token}`,
+  //   //     },
+  //   //   });
+  //   //   const data: ListItem[] = await response.json();
+  //   //   console.log("response from loading items", data);
+  //   //   setItems(data);
+  //   // } catch (error) {
+  //   //   console.log("error fetching from the api", error);
+  //   //   toast({
+  //   //     title: "Sorry!",
+  //   //     description: "Something has gone wrong",
+  //   //     status: "error",
+  //   //     duration: 6000,
+  //   //     isClosable: true,
+  //   //   });
+  //   //   history.push(config.routes.home);
+  //   // } finally {
+  //   //   setLoading(false);
+  //   // }
+  //   setLoading(false)
+  // };
 
   const createNewItem = async (body) => {
     console.log("creating new item", body);
@@ -118,6 +118,7 @@ export const ViewListPage = () => {
   // }, [getAccessTokenSilently]);
 
   async function deleteItem(itemId: string) {
+    console.log(itemId)
     // todo: implement item
     // console.log("deleting item", itemId);
     // try {
@@ -152,6 +153,7 @@ export const ViewListPage = () => {
   }
 
   async function uploadImage(event, itemId: string) {
+    console.log(event, itemId)
     // todo: implement upload image
     // const files = event.target.files;
     // if (!files) return;

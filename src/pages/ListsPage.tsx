@@ -11,7 +11,6 @@ import {
   AccordionPanel,
   Stack,
   Button,
-  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
@@ -22,8 +21,10 @@ import { List } from "../type";
 
 export const ListsPage = () => {
   const [lists, setLists] = React.useState<List[]>([]);
+  setLists([]) // todo: delete
   const [loading, setLoading] = React.useState(false);
-  const toast = useToast();
+  setLoading(false) // todo: delete
+  // const toast = useToast();
   const history = useHistory();
   const handleClick = (id) => {
     const url = config.routes.singleListUrl(id);
