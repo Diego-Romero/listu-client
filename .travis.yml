@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - 14
+
+cache: yarn
+
+script:
+  - npm run check:prettier
+  - npm run check:lint
+  - npm run test
+  - npm run build
