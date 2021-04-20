@@ -47,12 +47,12 @@ export const RegisterForm: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const [show, setShow] = React.useState(false);
-  const { login } = useAuthenticatedContext()
+  const { login } = useAuthenticatedContext();
   async function register(values: RegisterFormTypes, actions) {
     actions.setSubmitting(false);
     try {
       const res = await registerRequest(values);
-      login(res.data)
+      login(res.data);
       toast(createToast("Whoop 🙌", "success"));
       history.push(config.routes.lists);
     } catch (e) {

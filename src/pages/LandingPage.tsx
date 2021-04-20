@@ -7,7 +7,7 @@ import logo from "../images/icons/undraw_experience_design_eq3j.svg";
 
 export const Landing: React.FC = () => {
   const history = useHistory();
-  const { user } = useAuthenticatedContext()
+  const { user } = useAuthenticatedContext();
   return (
     <VStack spacing={6} mt={8} textAlign="center">
       <Heading as="h1" size="2xl">

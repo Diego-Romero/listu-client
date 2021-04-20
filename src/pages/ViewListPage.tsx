@@ -36,10 +36,10 @@ import { ListItem } from "../type";
 export const ViewListPage = () => {
   const history = useHistory();
   const [items, setItems] = React.useState<ListItem[]>([]);
-  setItems([]) // todo: delete me
+  setItems([]); // todo: delete me
   // const toast = useToast();
   const [loading, setLoading] = React.useState(false);
-  setLoading(false) // todo: delete
+  setLoading(false); // todo: delete
   // const { id } = useParams<ParamTypes>();
   // const [file, setFiles] = React.useState(null);
 
@@ -118,7 +118,7 @@ export const ViewListPage = () => {
   // }, [getAccessTokenSilently]);
 
   async function deleteItem(itemId: string) {
-    console.log(itemId)
+    console.log(itemId);
     // todo: implement item
     // console.log("deleting item", itemId);
     // try {
@@ -153,7 +153,7 @@ export const ViewListPage = () => {
   }
 
   async function uploadImage(event, itemId: string) {
-    console.log(event, itemId)
+    console.log(event, itemId);
     // todo: implement upload image
     // const files = event.target.files;
     // if (!files) return;
@@ -195,7 +195,7 @@ export const ViewListPage = () => {
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      { loading ? (
+      {loading ? (
         <Heading>Loading</Heading>
       ) : (
         <Card maxW={"500px"}>

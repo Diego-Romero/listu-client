@@ -21,10 +21,10 @@ import { List } from "../type";
 
 export const ListsPage = () => {
   const [lists, setLists] = React.useState<List[]>([]);
-  console.log(setLists)
+  console.log(setLists);
   // setLists([]) // todo: delete
   const [loading, setLoading] = React.useState(false);
-  console.log(setLoading)
+  console.log(setLoading);
   // setLoading(false) // todo: delete
   // const toast = useToast();
   const history = useHistory();
@@ -35,7 +35,7 @@ export const ListsPage = () => {
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      { loading ? (
+      {loading ? (
         <Heading>Loading</Heading>
       ) : (
         <Card maxW={"500px"}>

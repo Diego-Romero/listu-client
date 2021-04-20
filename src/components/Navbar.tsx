@@ -18,14 +18,14 @@ import { createToast } from "../utils/utils";
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  const toast = useToast()
-  const {  user, logout } = useAuthenticatedContext()
+  const toast = useToast();
+  const { user, logout } = useAuthenticatedContext();
   async function logUserOut() {
     try {
-      await logoutRequest()
+      await logoutRequest();
       logout();
       toast(createToast("See you soon!", "success"));
-      history.push(config.routes.home)
+      history.push(config.routes.home);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
@@ -51,22 +51,16 @@ export const NavBar: React.FC = () => {
           variant="ghost"
         />
         <MenuList>
-          <MenuItem
-            onClick={() => history.push(config.routes.home)}
-          >
+          <MenuItem onClick={() => history.push(config.routes.home)}>
             Home
           </MenuItem>
           {user !== null ? (
-            <MenuItem
-            onClick={() => logUserOut()}
-            >
-              Logout
-            </MenuItem>
-          ) : 
+            <MenuItem onClick={() => logUserOut()}>Logout</MenuItem>
+          ) : (
             <MenuItem onClick={() => history.push(config.routes.login)}>
               Login / Register
             </MenuItem>
-          }
+          )}
         </MenuList>
       </Menu>
       <ColorModeSwitcher justifySelf="flex-end" />

@@ -41,5 +41,3 @@ export const config = {
     themeDark: "dark",
   },
 };
-
-console.log(config);

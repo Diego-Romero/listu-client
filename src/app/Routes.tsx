@@ -11,20 +11,25 @@ import { Login } from "../pages/LoginPage";
 import { ViewListPage } from "../pages/ViewListPage";
 
 export const Routes = () => {
-  const {  user, logout, login } = useAuthenticatedContext()
-  React.useEffect(() => { // hook to check if user has been authenticated
+  const { user, logout, login } = useAuthenticatedContext();
+  React.useEffect(() => {
+    // hook to check if user has been authenticated
     const fetchUser = async () => {
       try {
-        const req = await getUserRequest()
-        login(req.data)
+        const req = await getUserRequest();
+        login(req.data);
       } catch (_err) {
-        logout()
+        logout();
       }
-      }
-    fetchUser()
-  }, [])
+    };
+    fetchUser();
+  }, []);
 
-  const PrivateRoute = ({ component, isAuthenticated = user !== null, ...rest }: any) => {
+  const PrivateRoute = ({
+    component,
+    isAuthenticated = user !== null,
+    ...rest
+  }: any) => {
     const routeComponent = (props: any) =>
       isAuthenticated ? (
         React.createElement(component, props)
@@ -45,7 +50,11 @@ export const Routes = () => {
       </Route>
       {/* Private Routes */}
       <PrivateRoute path={config.routes.lists} exact component={ListsPage} />
-      <PrivateRoute path={config.routes.createList} exact component={CreateListPage} />
+      <PrivateRoute
+        path={config.routes.createList}
+        exact
+        component={CreateListPage}
+      />
       <PrivateRoute path={config.routes.list} exact component={ViewListPage} />
       {/* 404 when route is unidentified */}
       <Route>

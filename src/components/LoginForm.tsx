@@ -38,13 +38,13 @@ const validationSchema = Yup.object().shape({
 
 export const LoginForm: React.FC = () => {
   const history = useHistory();
-  const toast = useToast()
-  const { login } = useAuthenticatedContext()
+  const toast = useToast();
+  const { login } = useAuthenticatedContext();
   async function loginUser(values: LoginFormValues, actions) {
     actions.setSubmitting(false);
     try {
-       const res = await loginRequest(values)
-       login(res.data)
+      const res = await loginRequest(values);
+      login(res.data);
       toast(createToast("Welcome 🙌", "success"));
       history.push(config.routes.lists);
     } catch (e) {
