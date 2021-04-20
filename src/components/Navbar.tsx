@@ -13,25 +13,13 @@ import { useHistory } from "react-router-dom";
 import { config } from "../config";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
-import { getUserRequest, logoutRequest } from "../api/requests";
+import { logoutRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
   const toast = useToast()
-  const {  user, logout, login } = useAuthenticatedContext()
-  React.useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const req = await getUserRequest()
-        console.log("user is logged in", req.data)
-        login(req.data)
-      } catch (_err) {
-        logout()
-      }
-      }
-    fetchUser()
-  }, [])
+  const {  user, logout } = useAuthenticatedContext()
   async function logUserOut() {
     try {
       await logoutRequest()
