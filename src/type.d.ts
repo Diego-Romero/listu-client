@@ -1,7 +1,9 @@
+import { UserResponse } from "./api/requests";
+
 export type AuthenticatedContextType = {
-  loggedIn: boolean;
+  user: null | UserResponse;
   logout: () => void;
-  login: () => void;
+  login: (user: UserResponse) => void;
 };
 
 export interface Friend {

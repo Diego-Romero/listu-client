@@ -5,17 +5,26 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import React from "react";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
+import { loginRequest } from "../api/requests";
 import {
   config,
   REQUIRED_FIELD_ERROR,
   SPACING_BUTTONS,
   SPACING_INPUTS,
 } from "../config";
+import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { createToast } from "../utils/utils";
+
+export interface LoginFormValues {
+  email: string;
+  password: string;
+}
 
 const initialValues = {
   email: "",
@@ -29,17 +38,27 @@ const validationSchema = Yup.object().shape({
 
 export const LoginForm: React.FC = () => {
   const history = useHistory();
+  const toast = useToast()
+  const { login } = useAuthenticatedContext()
+  async function loginUser(values: LoginFormValues, actions) {
+    actions.setSubmitting(false);
+    try {
+       const res = await loginRequest(values)
+       login(res.data)
+      toast(createToast("Welcome 🙌", "success"));
+      history.push(config.routes.lists);
+    } catch (e) {
+      const errorMessage = e.response.data.message;
+      toast(
+        createToast("Yikes... There has been an error", "error", errorMessage)
+      );
+    }
+  }
   return (
     <Box>
       <Formik
         initialValues={initialValues}
-        onSubmit={(_values, actions) => {
-          // todo: add login here
-          setTimeout(() => {
-            actions.setSubmitting(false);
-            history.push(config.routes.lists);
-          }, 1000);
-        }}
+        onSubmit={loginUser}
         validationSchema={validationSchema}
       >
         {(props) => (

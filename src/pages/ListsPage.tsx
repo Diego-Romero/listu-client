@@ -21,48 +21,17 @@ import { List } from "../type";
 
 export const ListsPage = () => {
   const [lists, setLists] = React.useState<List[]>([]);
-  setLists([]) // todo: delete
+  console.log(setLists)
+  // setLists([]) // todo: delete
   const [loading, setLoading] = React.useState(false);
-  setLoading(false) // todo: delete
+  console.log(setLoading)
+  // setLoading(false) // todo: delete
   // const toast = useToast();
   const history = useHistory();
   const handleClick = (id) => {
     const url = config.routes.singleListUrl(id);
     history.push(url);
   };
-
-  // const callSecureApi = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const token = await getAccessTokenSilently();
-  //     console.log(token);
-  //     const url = `${config.env.serverUrl}/lists`;
-  //     const response = await fetch(url, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     const data = await response.json();
-  //     setLists(data);
-  //     console.log("data", data);
-  //   } catch (error) {
-  //     console.log("error fetching from the api", error);
-  //     toast({
-  //       title: "Sorry!",
-  //       description: "Something has gone wrong",
-  //       status: "error",
-  //       duration: 6000,
-  //       isClosable: true,
-  //     });
-  //     history.push(config.routes.home);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // React.useEffect(() => {
-  //   callSecureApi();
-  // }, [getAccessTokenSilently]);
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>

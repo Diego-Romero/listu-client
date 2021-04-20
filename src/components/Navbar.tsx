@@ -5,16 +5,46 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  useToast,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
-import { HamburgerIcon, MinusIcon } from "@chakra-ui/icons";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { getUserRequest, logoutRequest } from "../api/requests";
+import { createToast } from "../utils/utils";
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  const isAuthenticated = false;
+  const toast = useToast()
+  const {  user, logout, login } = useAuthenticatedContext()
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const req = await getUserRequest()
+        console.log("user is logged in", req.data)
+        login(req.data)
+      } catch (_err) {
+        logout()
+      }
+      }
+    fetchUser()
+  }, [])
+  async function logUserOut() {
+    try {
+      await logoutRequest()
+      logout();
+      toast(createToast("See you soon!", "success"));
+      history.push(config.routes.home)
+    } catch (e) {
+      const errorMessage = e.response.data.message;
+      toast(
+        createToast("Yikes... There has been an error", "error", errorMessage)
+      );
+    }
+  }
 
   return (
     <Flex
@@ -38,14 +68,17 @@ export const NavBar: React.FC = () => {
           >
             Home
           </MenuItem>
-          {isAuthenticated ? (
+          {user !== null ? (
             <MenuItem
-              icon={<MinusIcon />}
-              // onClick={() => logout({ returnTo: window.location.origin })}
+            onClick={() => logUserOut()}
             >
               Logout
             </MenuItem>
-          ) : null}
+          ) : 
+            <MenuItem onClick={() => history.push(config.routes.login)}>
+              Login / Register
+            </MenuItem>
+          }
         </MenuList>
       </Menu>
       <ColorModeSwitcher justifySelf="flex-end" />

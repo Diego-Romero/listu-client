@@ -9,6 +9,7 @@ import { CreateListPage } from "../pages/CreateListPage";
 import { ListsPage } from "../pages/ListsPage";
 import { ViewListPage } from "../pages/ViewListPage";
 import { FourOFourPage } from "../pages/404Page";
+import { AuthenticatedProvider } from "../context/AuthenticatedContext";
 
 export const Loading: React.FC = () => (
   <Flex direction="column" alignItems="center" justify="center" width="100%">
@@ -44,7 +45,8 @@ export const App = () => {
   // };
   return (
     <ChakraProvider theme={theme}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthenticatedProvider>
           <NavBar />
           <Body>
             <Switch>
@@ -58,10 +60,10 @@ export const App = () => {
                 <ListsPage />
               </Route>
               {/* <ProtectedRoute path={config.routes.lists} component={<ListsPage />} /> */}
-              <Route path={config.routes.lists}>
+              <Route path={config.routes.lists} exact>
                 <ListsPage />
               </Route>
-              <Route path={config.routes.list}>
+              <Route path={config.routes.list} exact>
                 <ViewListPage />
               </Route>
               <Route path={config.routes.home} exact>
@@ -72,7 +74,8 @@ export const App = () => {
               </Route>
             </Switch>
           </Body>
-        </BrowserRouter>
+        </AuthenticatedProvider>
+      </BrowserRouter>
     </ChakraProvider>
   );
 };
