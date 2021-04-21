@@ -38,21 +38,21 @@ export const ListsPage = () => {
     history.push(url);
   };
 
-    const fetchUser = async () => {
-      try {
-        const { data } = await getUserRequest();
-        setLists(data.lists);
-      } catch (_err) {
-        toast(
-          createToast(
-            "Whoops, there has been an error fetching your lists",
-            "error"
-          )
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUser = async () => {
+    try {
+      const { data } = await getUserRequest();
+      setLists(data.lists);
+    } catch (_err) {
+      toast(
+        createToast(
+          "Whoops, there has been an error fetching your lists",
+          "error"
+        )
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>

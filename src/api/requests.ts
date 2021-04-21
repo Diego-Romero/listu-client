@@ -18,37 +18,15 @@ export const registerRequest = async (values) => {
 
 export const loginRequest = async (values: LoginFormValues) => {
   const url = `/user/login`;
-  return axiosInstance.post(url, values, {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": true,
-    },
-    withCredentials: true,
-  });
+  return axiosInstance.post(url, values);
 };
 
 export const logoutRequest = async () => {
   const url = `/user/logout`;
-  return axiosInstance.post(
-    url,
-    {},
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true,
-      },
-      withCredentials: true,
-    }
-  );
+  return axiosInstance.post(url);
 };
 
 export const getUserRequest = async () => {
   const url = `/user/me`;
-return axiosInstance.get(url, {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": true,
-    },
-    withCredentials: true,
-  });
+  return axiosInstance.get(url);
 };
