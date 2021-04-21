@@ -6,16 +6,10 @@ export type AuthenticatedContextType = {
   login: (user: UserResponse) => void;
 };
 
-export interface Friend {
-  id: string;
-  name: string;
-  email: string;
-}
-
 export interface List {
   name: string;
-  listId: string;
-  userId: string;
+  _id: string;
+  users: User[];
   description?: string;
   createdAt: string;
 }
@@ -30,7 +24,9 @@ export interface ListItem {
   attachment?: string;
 }
 export interface User {
-  id: string;
+  _id: string;
   name: string;
   email: string;
+  createdAt: string;
+  lists: List[]
 }

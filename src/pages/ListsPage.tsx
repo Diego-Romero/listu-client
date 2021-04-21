@@ -11,6 +11,7 @@ import {
   AccordionPanel,
   Stack,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
@@ -18,20 +19,40 @@ import logo from "../images/icons/undraw_team_up_ip2x.svg";
 import { useHistory } from "react-router";
 import { config, SPACING_BUTTONS } from "../config";
 import { List } from "../type";
+import { getUserRequest } from "../api/requests";
+import { createToast } from "../utils/utils";
 
 export const ListsPage = () => {
   const [lists, setLists] = React.useState<List[]>([]);
-  console.log(setLists);
-  // setLists([]) // todo: delete
   const [loading, setLoading] = React.useState(false);
-  console.log(setLoading);
-  // setLoading(false) // todo: delete
-  // const toast = useToast();
+  const toast = useToast();
   const history = useHistory();
+
+  React.useEffect(() => {
+    setLoading(true);
+    fetchUser();
+  }, []);
+
   const handleClick = (id) => {
     const url = config.routes.singleListUrl(id);
     history.push(url);
   };
+
+    const fetchUser = async () => {
+      try {
+        const { data } = await getUserRequest();
+        setLists(data.lists);
+      } catch (_err) {
+        toast(
+          createToast(
+            "Whoops, there has been an error fetching your lists",
+            "error"
+          )
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
@@ -39,15 +60,15 @@ export const ListsPage = () => {
         <Heading>Loading</Heading>
       ) : (
         <Card maxW={"500px"}>
-          <Heading mt={2} size="lg">
+          <Heading mt={2} size="md" textAlign="center">
             {lists.length === 0
               ? "Uh Oh! You do not have any lists, you should create one!"
-              : "Here are your lists"}
+              : "Lists"}
           </Heading>
           <Accordion mt={4}>
             {lists.length > 0
               ? lists.map((list) => (
-                  <AccordionItem key={list.listId} pt={2} pb={2}>
+                  <AccordionItem key={list._id} pt={2} pb={2}>
                     <h2>
                       <AccordionButton>
                         <Box flex="1" textAlign="left">
@@ -62,16 +83,10 @@ export const ListsPage = () => {
                           <Text as="u">Description:</Text> {list.description}
                         </Box>
                       ) : null}
-                      {/* {item.friends.length > 0 ? (
-                        <Box mt={2}>
-                          <Text as="u">Friends:</Text>{" "}
-                          {concatFriendsNames(item.friends)}
-                        </Box>
-                      ) : null} */}
                       <Stack direction="row" spacing={4} mt={6}>
                         <Button
                           variant="outline"
-                          onClick={() => handleClick(list.listId)}
+                          onClick={() => handleClick(list._id)}
                         >
                           Open
                         </Button>

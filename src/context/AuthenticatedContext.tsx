@@ -1,6 +1,5 @@
 import * as React from "react";
-import { UserResponse } from "../api/requests";
-import { AuthenticatedContextType } from "../type";
+import { AuthenticatedContextType, User } from "../type";
 
 const contextDefaultValues: AuthenticatedContextType = {
   user: null,
@@ -17,9 +16,9 @@ export const useAuthenticatedContext = () => {
 };
 
 export const AuthenticatedProvider: React.FC = ({ children }) => {
-  const [user, setUser] = React.useState<null | UserResponse>(null);
+  const [user, setUser] = React.useState<null | User>(null);
   const logout = () => setUser(null);
-  const login = (user: UserResponse) => setUser(user);
+  const login = (user: User) => setUser(user);
   return (
     <AuthenticatedContext.Provider value={{ user, logout, login }}>
       {children}
