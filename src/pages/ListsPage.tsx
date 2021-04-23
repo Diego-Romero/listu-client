@@ -48,7 +48,8 @@ export const ListsPage = () => {
           "Whoops, there has been an error fetching your lists",
           "error"
         )
-      );
+        );
+        history.push(config.routes.login);
     } finally {
       setLoading(false);
     }

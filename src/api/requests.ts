@@ -1,6 +1,7 @@
 import axios from "axios";
 import { LoginFormValues } from "../components/LoginForm";
 import { config } from "../config";
+import { CreateListValues } from "../pages/CreateListPage";
 
 const axiosInstance = axios.create({
   baseURL: config.env.serverUrl,
@@ -29,4 +30,9 @@ export const logoutRequest = async () => {
 export const getUserRequest = async () => {
   const url = `/user/me`;
   return axiosInstance.get(url);
-};
+}
+
+export const createListRequest = async (values: CreateListValues) => {
+  const url =`/lists`
+  return axiosInstance.post(url, values)
+}

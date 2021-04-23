@@ -18,8 +18,14 @@ import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
+import { createListRequest } from "../api/requests";
 
-const initialValues = {
+export interface CreateListValues {
+  name: string;
+  description: string;
+}
+
+const initialValues: CreateListValues = {
   name: "",
   description: "",
 };
@@ -33,32 +39,15 @@ export const CreateListPage = () => {
   const history = useHistory();
   const toast = useToast();
 
-  // const callSecureApi = async (body) => {
-  //   try {
-  //     const token = await getAccessTokenSilently();
-  //     const url = `${config.env.serverUrl}/lists`;
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify(body),
-  //     });
-  //     const data = await response.json();
-  //     console.log("data", data);
-  //     history.push(config.routes.lists);
-  //   } catch (error) {
-  //     console.log("error fetching from the api", error);
-  //     toast({
-  //       title: "Sorry!",
-  //       description: "Something has gone wrong",
-  //       status: "error",
-  //       duration: 6000,
-  //       isClosable: true,
-  //     });
-  //     history.push(config.routes.home);
-  //   }
-  // };
+  async function createList(values: CreateListValues) {
+    console.log(values)
+    try {
+      const res = await createListRequest(values)
+      console.log(res)
+    } catch (_err) {
+      console.log(_err)
+    }
+  }
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
@@ -70,7 +59,6 @@ export const CreateListPage = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={(values, actions) => {
-            setTimeout(async () => {
               actions.setSubmitting(false);
               toast({
                 title: "Whoop 🙌",
@@ -79,9 +67,7 @@ export const CreateListPage = () => {
                 duration: 6000,
                 isClosable: true,
               });
-              // await callSecureApi(values);
-              // todo: add create list endpoint here
-            }, 1000);
+              createList(values)
           }}
           validationSchema={validationSchema}
         >
