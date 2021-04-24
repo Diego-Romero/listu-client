@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Origin": "*"
   },
   withCredentials: true,
 });
@@ -21,9 +22,9 @@ export const loginRequest = async (values: LoginFormValues) => {
   const url = `${config.env.serverUrl}/user/login`;
   return axios.post(url, values, {
     headers: {
-      "Accept": "application/json",
       "Content-Type": "application/json",
       "Access-Control-Allow-Credentials": true,
+      "Access-Control-Allow-Origin": "*",
     },
     withCredentials: true,
   });
