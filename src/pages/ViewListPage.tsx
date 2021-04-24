@@ -38,7 +38,8 @@ export const ViewListPage = () => {
   // const [file, setFiles] = React.useState(null);
 
   async function getListData() {
-
+    setLoading(true)
+    setItems([])
   }
 
   const {
