@@ -29,25 +29,27 @@ import { useHistory } from "react-router";
 import { CreateListItemForm } from "../components/CreateItemForm";
 import { ListItem } from "../type";
 
-// interface ParamTypes {
-//   id: string;
-// }
-
 export const ViewListPage = () => {
   const history = useHistory();
   const [items, setItems] = React.useState<ListItem[]>([]);
-  setItems([]); // todo: delete me
   // const toast = useToast();
   const [loading, setLoading] = React.useState(false);
-  setLoading(false); // todo: delete
   // const { id } = useParams<ParamTypes>();
   // const [file, setFiles] = React.useState(null);
+
+  async function getListData() {
+
+  }
 
   const {
     isOpen: modalIsOpen,
     onOpen: modalOnOpen,
     onClose: modalOnClose,
   } = useDisclosure();
+
+  React.useEffect(() => {
+    getListData()
+  }, [])
 
   // const getItems = async () => {
   //   setLoading(true);

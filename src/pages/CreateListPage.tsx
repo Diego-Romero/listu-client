@@ -19,6 +19,7 @@ import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
 import { createListRequest } from "../api/requests";
+import { createToast } from "../utils/utils";
 
 export interface CreateListValues {
   name: string;
@@ -40,12 +41,20 @@ export const CreateListPage = () => {
   const toast = useToast();
 
   async function createList(values: CreateListValues) {
-    console.log(values)
     try {
-      const res = await createListRequest(values)
-      console.log(res)
+      await createListRequest(values);
+      toast(
+        createToast("Whoop 🙌", "success", "Your new list is ready to go.")
+      );
+      history.push(config.routes.lists);
     } catch (_err) {
-      console.log(_err)
+      toast(
+        createToast(
+          "Yikes..",
+          "error",
+          "There has been an error creating your list, please try again later."
+        )
+      );
     }
   }
 
@@ -59,15 +68,8 @@ export const CreateListPage = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={(values, actions) => {
-              actions.setSubmitting(false);
-              toast({
-                title: "Whoop 🙌",
-                description: "Your new list is ready to go!",
-                status: "success",
-                duration: 6000,
-                isClosable: true,
-              });
-              createList(values)
+            actions.setSubmitting(false);
+            createList(values);
           }}
           validationSchema={validationSchema}
         >

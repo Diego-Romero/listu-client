@@ -18,8 +18,15 @@ export const registerRequest = async (values) => {
 };
 
 export const loginRequest = async (values: LoginFormValues) => {
-  const url = `/user/login`;
-  return axiosInstance.post(url, values);
+  const url = `${config.env.serverUrl}/user/login`;
+  return axios.post(url, values, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Credentials": true,
+    },
+    withCredentials: true,
+  });
 };
 
 export const logoutRequest = async () => {
@@ -35,4 +42,9 @@ export const getUserRequest = async () => {
 export const createListRequest = async (values: CreateListValues) => {
   const url =`/lists`
   return axiosInstance.post(url, values)
+}
+
+export const getListDataRequest = async (id: string) => {
+  const url =`/lists/${id}`
+  return axiosInstance.get(url)
 }
