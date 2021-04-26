@@ -23,8 +23,6 @@ export const loginRequest = async (values: LoginFormValues) => {
   return axios.post(url, values, {
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": true,
-      "Access-Control-Allow-Origin": "*",
     },
     withCredentials: true,
   });
