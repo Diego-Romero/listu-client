@@ -4,25 +4,31 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
-  Textarea,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import React from "react";
 import * as Yup from "yup";
 import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 
-const initialValues = {
+export interface CreateListItemValues {
+  name: string;
+  description?: string;
+}
+
+const initialValues: CreateListItemValues = {
   name: "",
-  description: "",
+  // description: "",
 };
 
 const validationSchema = Yup.object().shape({
   name: config.validation.name,
-  description: config.validation.description,
+  // description: config.validation.description,
 });
 
 interface Props {
-  createNewItem: (body) => Promise<void>;
+  createNewItem: (body: CreateListItemValues) => Promise<void>;
 }
 
 export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
@@ -48,12 +54,30 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                 isInvalid={form.errors.name && form.touched.name}
               >
                 <FormLabel htmlFor="name">Name</FormLabel>
-                <Input {...field} type="text" />
+                {/* <Input {...field} type="text" /> */}
+                <InputGroup size="md">
+                  <Input
+                    pr="4.5rem"
+                    type="text"
+                    placeholder="Item name"
+                    {...field}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button
+                      h="1.75rem"
+                      size="sm"
+                      type="submit"
+                      isLoading={props.isSubmitting}
+                    >
+                      Add
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <FormErrorMessage>{form.errors.name}</FormErrorMessage>
               </FormControl>
             )}
           </Field>
-          <Field name="description">
+          {/* <Field name="description">
             {({ field, form }) => (
               <FormControl
                 id="description"
@@ -65,8 +89,8 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                 <FormErrorMessage>{form.errors.description}</FormErrorMessage>
               </FormControl>
             )}
-          </Field>
-          <Button
+          </Field>*/}
+          {/* <Button
             mt={4}
             colorScheme="yellow"
             variant="outline"
@@ -75,7 +99,7 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
             isLoading={props.isSubmitting}
           >
             Create
-          </Button>
+          </Button> */}
         </Form>
       )}
     </Formik>

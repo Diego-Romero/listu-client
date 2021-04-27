@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CreateListItemValues } from "../components/CreateItemForm";
 import { LoginFormValues } from "../components/LoginForm";
 import { config } from "../config";
 import { CreateListValues } from "../pages/CreateListPage";
@@ -20,12 +21,7 @@ export const registerRequest = async (values) => {
 
 export const loginRequest = async (values: LoginFormValues) => {
   const url = `${config.env.serverUrl}/user/login`;
-  return axios.post(url, values, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
+  return axiosInstance.post(url, values)
 };
 
 export const logoutRequest = async () => {
@@ -41,6 +37,16 @@ export const getUserRequest = async () => {
 export const createListRequest = async (values: CreateListValues) => {
   const url =`/lists`
   return axiosInstance.post(url, values)
+}
+
+export const createListItemRequest = async (values: CreateListItemValues, listId: string) => {
+  const url =`/lists/${listId}`
+  return axiosInstance.post(url, values)
+}
+
+export const deleteListItemRequest = async (listId: string, itemId: string) => {
+  const url =`/lists/${listId}/${itemId}`
+  return axiosInstance.delete(url)
 }
 
 export const getListDataRequest = async (id: string) => {

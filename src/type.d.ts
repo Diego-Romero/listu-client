@@ -14,14 +14,13 @@ export interface List {
   createdAt: string;
 }
 export interface ListItem {
-  itemId: string;
+  _id: string;
   name: string;
   createdAt: string;
   createdBy: User;
   description: string;
   done: boolean;
   dateCompleted?: string;
-  attachment?: string;
 }
 export interface User {
   _id: string;
