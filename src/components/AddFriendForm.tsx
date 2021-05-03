@@ -40,9 +40,8 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
   const { id } = useParams<ParamTypes>();
   const toast = useToast();
 
-  const addFriend = async (values: AddFriendFormValues) => {
+  const addFriend = async (values: AddFriendFormValues, resetForm: any) => {
     setLoading(true)
-    console.log(values)
     try {
       const res = await addFriendRequest(values, id);
       toast(
@@ -51,9 +50,9 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
           "success"
         )
         );
+        resetForm()
         refreshList()
     } catch (e) {
-      console.log(e, e.toString(), e.data)
       const errorMessage = e.response.data.message;
       toast(
         createToast("Yikes... There has been an error", "error", errorMessage)
@@ -68,7 +67,7 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
         initialValues={initialValues}
         onSubmit={(values, actions) => {
           actions.setSubmitting(false);
-          addFriend(values);
+          addFriend(values, actions.resetForm);
         }}
         validationSchema={validationSchema}
       >
