@@ -16,6 +16,7 @@ export const config = {
   },
   routes: {
     login: "/login",
+    newFriend: "/new-friend/:id",
     home: "/",
     createList: "/create-list",
     lists: "/lists",

@@ -8,6 +8,7 @@ import { CreateListPage } from "../pages/CreateListPage";
 import { Landing } from "../pages/LandingPage";
 import { ListsPage } from "../pages/ListsPage";
 import { Login } from "../pages/LoginPage";
+import { NewFriendPage } from "../pages/NewFriendPage";
 import { ViewListPage } from "../pages/ViewListPage";
 
 export const Routes = () => {
@@ -47,6 +48,9 @@ export const Routes = () => {
       </Route>
       <Route path={config.routes.login} exact>
         <Login />
+      </Route>
+      <Route path={config.routes.newFriend} exact>
+        <NewFriendPage />
       </Route>
       {/* Private Routes */}
       <PrivateRoute path={config.routes.lists} exact component={ListsPage} />

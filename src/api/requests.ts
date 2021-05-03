@@ -2,6 +2,7 @@ import axios from "axios";
 import { AddFriendFormValues } from "../components/AddFriendForm";
 import { CreateListItemValues } from "../components/CreateItemForm";
 import { LoginFormValues } from "../components/LoginForm";
+import { RegisterFriendFormTypes } from "../components/NewFriendForm";
 import { config } from "../config";
 import { CreateListValues } from "../pages/CreateListPage";
 
@@ -17,6 +18,11 @@ const axiosInstance = axios.create({
 
 export const registerRequest = async (values) => {
   const url = `/user/register`;
+  return axiosInstance.post(url, values);
+};
+
+export const registerFriendRequest = async (values: RegisterFriendFormTypes, id: string) => {
+  const url = `/user/friend/register/${id}`;
   return axiosInstance.post(url, values);
 };
 
