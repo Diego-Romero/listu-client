@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AddFriendFormValues } from "../components/AddFriendForm";
 import { CreateListItemValues } from "../components/CreateItemForm";
 import { LoginFormValues } from "../components/LoginForm";
 import { config } from "../config";
@@ -52,4 +53,14 @@ export const deleteListItemRequest = async (listId: string, itemId: string) => {
 export const getListDataRequest = async (id: string) => {
   const url =`/lists/${id}`
   return axiosInstance.get(url)
+}
+
+export const addFriendRequest = async (values: AddFriendFormValues, listId: string) => {
+  const url =`/user/friend/${listId}`
+  return axiosInstance.post(url, values)
+}
+
+export const deleteListRequest = async (listId: string) => {
+  const url =`/lists/${listId}`
+  return axiosInstance.delete(url)
 }

@@ -5,31 +5,70 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import React from "react";
+import { useParams } from "react-router-dom";
 import * as Yup from "yup";
+import { addFriendRequest } from "../api/requests";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
+import { createToast } from "../utils/utils";
 
-const initialValues = {
+export interface AddFriendFormValues {
+  email: string;
+}
+
+const initialValues: AddFriendFormValues = {
   email: "",
 };
+
+interface ParamTypes {
+  id: string;
+}
 
 const validationSchema = Yup.object().shape({
   email: config.validation.email,
 });
 
-export const AddFriendForm: React.FC = () => {
+interface Props {
+  refreshList: () => void
+}
+
+export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
+  const [loading, setLoading] = React.useState(false)
+  const { id } = useParams<ParamTypes>();
+  const toast = useToast();
+
+  const addFriend = async (values: AddFriendFormValues) => {
+    setLoading(true)
+    console.log(values)
+    try {
+      const res = await addFriendRequest(values, id);
+      toast(
+        createToast(
+          res.data.message,
+          "success"
+        )
+        );
+        refreshList()
+    } catch (e) {
+      console.log(e, e.toString(), e.data)
+      const errorMessage = e.response.data.message;
+      toast(
+        createToast("Yikes... There has been an error", "error", errorMessage)
+      );
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <Box>
       <Formik
         initialValues={initialValues}
-        onSubmit={(_values, actions) => {
-          setTimeout(() => {
-            actions.setSubmitting(false);
-            // history.push(config.routes.lists);
-            alert("friendo will be added heres");
-          }, 1000);
+        onSubmit={(values, actions) => {
+          actions.setSubmitting(false);
+          addFriend(values);
         }}
         validationSchema={validationSchema}
       >
@@ -55,7 +94,7 @@ export const AddFriendForm: React.FC = () => {
               variant="outline"
               isFullWidth
               type="submit"
-              isLoading={props.isSubmitting}
+              isLoading={props.isSubmitting || loading}
             >
               Invite my buddy 🤩
             </Button>

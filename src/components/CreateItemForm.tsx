@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 });
 
 interface Props {
-  createNewItem: (body: CreateListItemValues) => Promise<void>;
+  createNewItem: (body: CreateListItemValues) => void;
 }
 
 export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
@@ -36,10 +36,8 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values, actions) => {
-        setTimeout(() => {
-          actions.setSubmitting(false);
-          createNewItem(values);
-        }, 1000);
+        actions.setSubmitting(false);
+        createNewItem(values);
       }}
       validationSchema={validationSchema}
     >
@@ -54,7 +52,6 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                 isInvalid={form.errors.name && form.touched.name}
               >
                 <FormLabel htmlFor="name">Name</FormLabel>
-                {/* <Input {...field} type="text" /> */}
                 <InputGroup size="md">
                   <Input
                     pr="4.5rem"
@@ -77,29 +74,6 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
               </FormControl>
             )}
           </Field>
-          {/* <Field name="description">
-            {({ field, form }) => (
-              <FormControl
-                id="description"
-                mt={SPACING_INPUTS}
-                isInvalid={form.errors.description && form.touched.description}
-              >
-                <FormLabel htmlFor="description">Description</FormLabel>
-                <Textarea size="sm" {...field} />
-                <FormErrorMessage>{form.errors.description}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>*/}
-          {/* <Button
-            mt={4}
-            colorScheme="yellow"
-            variant="outline"
-            isFullWidth
-            type="submit"
-            isLoading={props.isSubmitting}
-          >
-            Create
-          </Button> */}
         </Form>
       )}
     </Formik>

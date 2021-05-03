@@ -12,6 +12,7 @@ export interface List {
   users: User[];
   description?: string;
   createdAt: string;
+  createdBy: User;
 }
 export interface ListItem {
   _id: string;
