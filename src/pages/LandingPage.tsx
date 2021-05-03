@@ -37,7 +37,7 @@ export const Landing: React.FC = () => {
           Login or Register
         </Button>
       )}
-      <Image mt={4} boxSize="600px" src={logo} alt="Login" />
+      <Image mt={2} boxSize={['300px', '450px']} src={logo} alt="Login" />
     </VStack>
   );
 };
