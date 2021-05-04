@@ -18,6 +18,7 @@ export const config = {
     login: "/login",
     newFriend: "/new-friend/:id",
     forgotPassword: "/forgot-password",
+    resetPassword: "/password-reset/:token",
     home: "/",
     createList: "/create-list",
     lists: "/lists",

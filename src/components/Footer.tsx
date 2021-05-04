@@ -1,13 +1,11 @@
 import { Flex, Heading } from "@chakra-ui/layout";
 import { Link } from "@chakra-ui/react";
 import React from "react";
-import { config } from "../config";
 
 
 export const Footer: React.FC = () => {
   return (
     <Flex
-      bg={config.colors.default}
       width="100%"
       textAlign="center"
       alignContent="center"

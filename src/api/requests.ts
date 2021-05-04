@@ -4,6 +4,7 @@ import { CreateListItemValues } from "../components/CreateItemForm";
 import { ForgotPasswordValues } from "../components/ForgotPasswordForm";
 import { LoginFormValues } from "../components/LoginForm";
 import { RegisterFriendFormTypes } from "../components/NewFriendForm";
+import { ResetPasswordFormTypes } from "../components/ResetPasswordForm";
 import { config } from "../config";
 import { CreateListValues } from "../pages/CreateListPage";
 
@@ -74,5 +75,10 @@ export const deleteListRequest = async (listId: string) => {
 
 export const forgotPasswordRequest = async (values: ForgotPasswordValues) => {
   const url =`/user/forgot-password`
+  return axiosInstance.post(url, values)
+}
+
+export const resetPasswordRequest = async (values: ResetPasswordFormTypes, token: string) => {
+  const url =`/user/reset-password/${token}`
   return axiosInstance.post(url, values)
 }

@@ -10,6 +10,7 @@ import { Landing } from "../pages/LandingPage";
 import { ListsPage } from "../pages/ListsPage";
 import { Login } from "../pages/LoginPage";
 import { NewFriendPage } from "../pages/NewFriendPage";
+import { ResetPasswordPage } from "../pages/ResetPasswordPage";
 import { ViewListPage } from "../pages/ViewListPage";
 
 export const Routes = () => {
@@ -52,6 +53,9 @@ export const Routes = () => {
       </Route>
       <Route path={config.routes.forgotPassword} exact>
         <ForgotPasswordPage />
+      </Route>
+      <Route path={config.routes.resetPassword} exact>
+        <ResetPasswordPage />
       </Route>
       <Route path={config.routes.newFriend} exact>
         <NewFriendPage />
