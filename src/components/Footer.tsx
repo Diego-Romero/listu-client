@@ -1,4 +1,3 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Flex, Heading } from "@chakra-ui/layout";
 import { Link } from "@chakra-ui/react";
 import React from "react";

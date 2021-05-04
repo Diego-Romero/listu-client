@@ -5,6 +5,7 @@ import { config } from "../config";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import { FourOFourPage } from "../pages/404Page";
 import { CreateListPage } from "../pages/CreateListPage";
+import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { Landing } from "../pages/LandingPage";
 import { ListsPage } from "../pages/ListsPage";
 import { Login } from "../pages/LoginPage";
@@ -48,6 +49,9 @@ export const Routes = () => {
       </Route>
       <Route path={config.routes.login} exact>
         <Login />
+      </Route>
+      <Route path={config.routes.forgotPassword} exact>
+        <ForgotPasswordPage />
       </Route>
       <Route path={config.routes.newFriend} exact>
         <NewFriendPage />

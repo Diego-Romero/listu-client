@@ -17,6 +17,7 @@ export const config = {
   routes: {
     login: "/login",
     newFriend: "/new-friend/:id",
+    forgotPassword: "/forgot-password",
     home: "/",
     createList: "/create-list",
     lists: "/lists",
