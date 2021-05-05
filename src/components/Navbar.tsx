@@ -13,7 +13,6 @@ import { useHistory } from "react-router-dom";
 import { config } from "../config";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
-import { logoutRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
 
 export const NavBar: React.FC = () => {
@@ -22,8 +21,8 @@ export const NavBar: React.FC = () => {
   const { user, logout } = useAuthenticatedContext();
   async function logUserOut() {
     try {
-      await logoutRequest();
       logout();
+      localStorage.removeItem('token')
       toast(createToast("See you soon!", "success"));
       history.push(config.routes.home);
     } catch (e) {

@@ -23,7 +23,6 @@ import {
 import { useHistory } from "react-router";
 import { registerRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
-import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 
 export interface RegisterFormTypes {
   email: string;
@@ -47,14 +46,13 @@ export const RegisterForm: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const [show, setShow] = React.useState(false);
-  const { login } = useAuthenticatedContext();
+
   async function register(values: RegisterFormTypes, actions) {
     actions.setSubmitting(false);
     try {
-      const res = await registerRequest(values);
-      login(res.data);
-      toast(createToast("Whoop 🙌", "success"));
-      history.push(config.routes.lists);
+      await registerRequest(values);
+      toast(createToast("Whoop 🙌, you can now login!", "success"));
+      history.push(config.routes.home);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(

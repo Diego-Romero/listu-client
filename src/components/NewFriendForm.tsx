@@ -56,8 +56,8 @@ export const NewFriendForm: React.FC = () => {
     try {
       const res = await registerFriendRequest(values, id);
       login(res.data);
-      toast(createToast("Whoop 🙌", "success"));
-      history.push(config.routes.lists);
+      toast(createToast("Whoop 🙌, you can now login!", "success"));
+      history.push(config.routes.login);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(

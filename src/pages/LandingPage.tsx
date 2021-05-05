@@ -7,7 +7,13 @@ import logo from "../images/icons/undraw_experience_design_eq3j.svg";
 
 export const Landing: React.FC = () => {
   const history = useHistory();
-  const { user } = useAuthenticatedContext();
+  const { logout } = useAuthenticatedContext();
+  
+  React.useEffect(() => {
+    localStorage.removeItem('token');
+    logout();
+  }, [])
+
   return (
     <VStack spacing={6} mt={8} textAlign="center">
       <Heading as="h1" size="2xl">
@@ -16,17 +22,6 @@ export const Landing: React.FC = () => {
       <Text fontSize="xl">
         The app to help you and your friends share lists.
       </Text>
-      {user !== null ? (
-        <Button
-          variant="outline"
-          colorScheme={"yellow"}
-          size="lg"
-          mb={4}
-          onClick={() => history.push(config.routes.lists)}
-        >
-          Go to my lists
-        </Button>
-      ) : (
         <Button
           variant="outline"
           colorScheme={"yellow"}
@@ -36,7 +31,6 @@ export const Landing: React.FC = () => {
         >
           Login or Register
         </Button>
-      )}
       <Image mt={2} boxSize={['300px', '450px']} src={logo} alt="Login" />
     </VStack>
   );

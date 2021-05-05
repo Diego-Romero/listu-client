@@ -41,12 +41,15 @@ const validationSchema = Yup.object().shape({
 export const LoginForm: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
-  const { login } = useAuthenticatedContext();
+  const { login, logout } = useAuthenticatedContext();
   async function loginUser(values: LoginFormValues, actions) {
     actions.setSubmitting(false);
+    logout();
+    localStorage.removeItem("token");
     try {
       const res = await loginRequest(values);
-      login(res.data);
+      localStorage.setItem("token", res.data.token);
+      login(res.data.user);
       toast(createToast("Welcome 🙌", "success"));
       history.push(config.routes.lists);
     } catch (e) {
@@ -94,7 +97,12 @@ export const LoginForm: React.FC = () => {
               )}
             </Field>
             <Text mt={4}>
-              <Link color="gray.600" onClick={() => history.push(config.routes.forgotPassword)}>Forgot password?</Link>
+              <Link
+                color="gray.600"
+                onClick={() => history.push(config.routes.forgotPassword)}
+              >
+                Forgot password?
+              </Link>
             </Text>
             <Button
               mt={SPACING_BUTTONS - 4}
