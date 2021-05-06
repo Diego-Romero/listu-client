@@ -59,9 +59,9 @@ export const CreateListPage = () => {
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card maxW={"500px"} width="500px">
+      <Card>
         <Heading mt={2} size="lg" textAlign="center" mb={4}>
-          Create a list 
+          Create a list
         </Heading>
 
         <Formik

@@ -23,7 +23,6 @@ export const ListRow: React.FC<Props> = ({
   ableToDelete,
   openDeleteListDialogue,
 }) => {
-  console.log(list);
   const [open, setOpen] = React.useState(false);
   return (
     <Box>
@@ -31,8 +30,11 @@ export const ListRow: React.FC<Props> = ({
         flexDir="row"
         alignItems="center"
         justifyContent="space-between"
-        pt={4}
-        // onClick={() => navigateToList(list._id)}
+        py={4}
+        px={2}
+        cursor="pointer"
+        _hover={{ backgroundColor: "gray.100" }}
+        onClick={() => setOpen(!open)}
       >
         <Tooltip label="Navigate to list">
           <Flex
@@ -42,6 +44,7 @@ export const ListRow: React.FC<Props> = ({
             _hover={{ textDecoration: "underline", fontWeight: "bold" }}
             cursor="pointer"
             onClick={() => navigateToList(list._id)}
+            zIndex={1}
           >
             <Heading size="md">{list.name} </Heading>
             <ExternalLinkIcon ml={2} w={4} h={4} />
@@ -58,20 +61,26 @@ export const ListRow: React.FC<Props> = ({
         </HStack>
       </Flex>
       <Collapse in={open} animateOpacity>
-
-        <Stack p={2} spacing={2}>
-          <Text fontSize="sm">Created by: {list.createdBy.name}
-          
-          <Text color="gray.500" fontSize="sm">
-            {formatDate(list.createdAt)}
-          </Text>
+        <Stack px={2} pb={4} spacing={2}>
+          <Text fontSize="sm">
+            Created by: {list.createdBy.name}
+            <Text color="gray.500" fontSize="sm">
+              {formatDate(list.createdAt)}
+            </Text>
           </Text>
           {list.description ? (
-            <Text fontSize="md"><b>Description:</b> {list.description}</Text>
+            <Text fontSize="md">
+              <b>Description:</b> {list.description}
+            </Text>
           ) : null}
           <HStack>
             <Tooltip label="Navigate to list">
-              <ExternalLinkIcon w={6} h={6} cursor="pointer" />
+              <ExternalLinkIcon
+                w={6}
+                h={6}
+                cursor="pointer"
+                onClick={() => navigateToList(list._id)}
+              />
             </Tooltip>
             {ableToDelete ? (
               <Tooltip label="Delete list">
@@ -87,7 +96,7 @@ export const ListRow: React.FC<Props> = ({
           </HStack>
         </Stack>
       </Collapse>
-      <Divider pt={4}/>
+      <Divider />
     </Box>
   );
 };

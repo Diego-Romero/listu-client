@@ -3,20 +3,15 @@ import React from "react";
 import { LoadingComponent } from "./Loading";
 
 interface Props {
-  width?: string;
-  maxW?: string;
   loading?: boolean;
 }
 
 export const Card: React.FC<Props> = ({
   children,
-  width = "100%",
-  maxW = "auto",
   loading = false,
 }) => (
   <Box
-    width={width}
-    maxW={maxW}
+    width={['100%', '500px']}
     borderStyle="solid"
     borderRadius="12px"
     p={6}
