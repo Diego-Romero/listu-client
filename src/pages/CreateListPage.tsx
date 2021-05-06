@@ -3,7 +3,6 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
   Heading,
   Image,
@@ -60,9 +59,9 @@ export const CreateListPage = () => {
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card maxW={"500px"}>
-        <Heading mt={2} size="lg">
-          You are on the way!
+      <Card maxW={"500px"} width="500px">
+        <Heading mt={2} size="lg" textAlign="center" mb={4}>
+          Create a list 
         </Heading>
 
         <Formik
@@ -86,10 +85,6 @@ export const CreateListPage = () => {
                     <FormLabel htmlFor="name">Name</FormLabel>
                     <Input {...field} type="text" />
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                    <FormHelperText>
-                      Please just give the list name such as house stuff,
-                      grocery list, plans to conquer to world etc...
-                    </FormHelperText>
                   </FormControl>
                 )}
               </Field>
@@ -107,10 +102,6 @@ export const CreateListPage = () => {
                     <FormErrorMessage>
                       {form.errors.description}
                     </FormErrorMessage>
-                    <FormHelperText>
-                      How would you conquer the world then? Let your friends
-                      know what your list is about!
-                    </FormHelperText>
                   </FormControl>
                 )}
               </Field>
@@ -122,7 +113,7 @@ export const CreateListPage = () => {
                 type="submit"
                 isLoading={props.isSubmitting}
               >
-                Boom!
+                Create
               </Button>
               <Button
                 mt={3}
@@ -137,7 +128,7 @@ export const CreateListPage = () => {
           )}
         </Formik>
       </Card>
-      <Image mt={4} boxSize="400px" src={logo} alt="Login" />
+      <Image mt={4} boxSize="300px" src={logo} alt="Login" />
     </Flex>
   );
 };

@@ -1,15 +1,18 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
+import { LoadingComponent } from "./Loading";
 
 interface Props {
   width?: string;
   maxW?: string;
+  loading?: boolean;
 }
 
 export const Card: React.FC<Props> = ({
   children,
   width = "100%",
   maxW = "auto",
+  loading = false,
 }) => (
   <Box
     width={width}
@@ -21,6 +24,8 @@ export const Card: React.FC<Props> = ({
     borderColor="gray.200"
     borderWidth="1px"
   >
-    {children}
+    {loading ? <LoadingComponent loading={loading}/> : 
+      <Box>{ children }</Box> 
+    }
   </Box>
 );

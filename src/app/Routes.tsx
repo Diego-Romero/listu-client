@@ -1,8 +1,9 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 import { getUserRequest } from "../api/requests";
 import { config } from "../config";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { useLoadingContext } from "../context/LoadingContext";
 import { FourOFourPage } from "../pages/404Page";
 import { CreateListPage } from "../pages/CreateListPage";
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
@@ -15,16 +16,25 @@ import { ViewListPage } from "../pages/ViewListPage";
 
 export const Routes = () => {
   const { user, logout, login } = useAuthenticatedContext();
-  React.useEffect(() => {
-    // hook to check if user has been authenticated
-    const fetchUser = async () => {
-      try {
+  const { setLoading } = useLoadingContext();
+  const history = useHistory();
+
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
         const req = await getUserRequest();
         login(req.data);
-      } catch (_err) {
-        logout();
+        history.push(config.routes.lists);
       }
-    };
+    } catch (_err) {
+      logout(); // guarantee that the user is actually logged out
+    } finally {
+      setLoading(false);
+    }
+  };
+  React.useEffect(() => {
+    // hook to check if user has been authenticated
     fetchUser();
   }, []);
 

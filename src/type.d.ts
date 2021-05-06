@@ -6,12 +6,17 @@ export type AuthenticatedContextType = {
   login: (user: UserResponse) => void;
 };
 
+export type LoadingContextType = {
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+};
+
 export interface List {
   name: string;
   _id: string;
   users: User[];
   description?: string;
-  createdAt: string;
+  createdAt: Date;
   createdBy: User;
 }
 export interface ListItem {

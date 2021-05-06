@@ -14,6 +14,7 @@ import {
   DrawerOverlay,
   Flex,
   Heading,
+  Icon,
   Image,
   ListItem,
   Stack,
@@ -41,8 +42,8 @@ import {
   getListDataRequest,
 } from "../api/requests";
 import { createToast } from "../utils/utils";
-import { SettingsIcon } from "@chakra-ui/icons";
 import { AddFriendForm } from "../components/AddFriendForm";
+import { AiOutlineUserAdd } from 'react-icons/ai';
 
 interface ParamTypes {
   id: string;
@@ -129,8 +130,8 @@ export const ViewListPage = () => {
             <Tooltip
               label="Would you like to invite/remove friends to this list?"
               aria-label="Invite/remove friends"
-          >
-              <SettingsIcon cursor="pointer" w={4} h={4} onClick={onOpen} />
+            >
+              <Icon as={AiOutlineUserAdd} cursor="pointer" onClick={onOpen} w={6} h={6} />
             </Tooltip>
           </Flex>
           {loadingNewItem ? (

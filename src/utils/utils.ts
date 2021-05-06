@@ -1,5 +1,7 @@
-export function concatFriendsNames(friends): string {
-  return friends.map((f) => f.name).join(", ");
+import moment from "moment";
+
+export function formatDate(date: Date) {
+  return moment(date).format("Do MMM YYYY")
 }
 
 export function createToast(

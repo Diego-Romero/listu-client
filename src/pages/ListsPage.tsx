@@ -3,13 +3,7 @@ import {
   Text,
   Heading,
   Image,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
   Box,
-  AccordionIcon,
-  AccordionPanel,
-  Stack,
   Button,
   useToast,
   AlertDialog,
@@ -27,20 +21,20 @@ import { config, SPACING_BUTTONS } from "../config";
 import { List, User } from "../type";
 import { deleteListRequest, getUserRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
+import { ListRow } from "../components/ListRow";
 
 export const ListsPage = () => {
   const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState(false);
   const [alertDialogOpen, setAlertDialogOpen] = React.useState(false);
-  const [alertDialogListId, setAlertDialogListId] = React.useState<string>('');
+  const [alertDialogListId, setAlertDialogListId] = React.useState<string>("");
   const onClose = () => setAlertDialogOpen(false);
   const alertDialogCancelRef = React.useRef();
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const toast = useToast();
   const history = useHistory();
 
   React.useEffect(() => {
-    setLoading(true);
     fetchUser();
   }, []);
 
@@ -50,7 +44,6 @@ export const ListsPage = () => {
   };
 
   const handleListDelete = async () => {
-    setLoading(true);
     try {
       await deleteListRequest(alertDialogListId);
       await fetchUser();
@@ -65,13 +58,18 @@ export const ListsPage = () => {
         )
       );
     } finally {
-      setLoading(false);
-      setAlertDialogListId('')
+      setAlertDialogListId("");
       setAlertDialogOpen(false);
     }
   };
 
+  const openDeleteListDialogue = (list: List) => {
+    setAlertDialogListId(list._id);
+    setAlertDialogOpen(true);
+  };
+
   const fetchUser = async () => {
+    setLoading(true);
     try {
       const { data } = await getUserRequest();
       setUser(data);
@@ -94,71 +92,39 @@ export const ListsPage = () => {
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      {loading || user === null ? (
-        <Heading>Loading</Heading>
-      ) : (
-        <Card maxW={"500px"}>
-          <Heading mt={2} size="md" textAlign="center">
-            {user !== null && user.lists.length === 0
-              ? "Uh Oh! You do not have any lists, you should create one!"
-              : "Lists"}
-          </Heading>
-          <Accordion mt={4}>
-            {user !== null && user.lists.length > 0
-              ? user.lists.map((list) => (
-                  <AccordionItem key={list._id} pt={2} pb={2}>
-                    <h2>
-                      <AccordionButton>
-                        <Box flex="1" textAlign="left">
-                          <Heading fontSize="lg">{list.name}</Heading>
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel>
-                      {list.description ? (
-                        <Box mt={2}>
-                          <Text as="u">Description:</Text> {list.description}
-                        </Box>
-                      ) : null}
-                      <Stack direction="row" spacing={4} mt={6}>
-                        <Button
-                          variant="outline"
-                          onClick={() => handleClick(list._id)}
-                        >
-                          Open
-                        </Button>
-                        {isListCreatedByCurrentUser(list) ? (
-                          <Button
-                            variant="outline"
-                            color="red"
-                            onClick={() => {
-                              setAlertDialogOpen(true)
-                              setAlertDialogListId(list._id)}
-                            }
-                          >
-                            Delete
-                          </Button>
-                        ) : null}
-                      </Stack>
-                    </AccordionPanel>
-                  </AccordionItem>
-                ))
-              : null}
-          </Accordion>
-          <Button
-            mt={SPACING_BUTTONS}
-            colorScheme="yellow"
-            variant="outline"
-            isFullWidth
-            type="submit"
-            onClick={() => history.push(config.routes.createList)}
-          >
-            Create a new shiny list!
-          </Button>
-        </Card>
-      )}
-      <Image mt={4} boxSize="400px" src={logo} alt="Login" />
+      <Card maxW={"500px"} loading={loading} width="500px">
+        <Heading mt={2} size="lg" textAlign="center" mb={4}>
+          Your lists
+        </Heading>
+        {user !== null && user.lists.length > 0 ? (
+          user.lists.map((list) => (
+            <ListRow
+              list={list}
+              key={list._id}
+              navigateToList={handleClick}
+              ableToDelete={isListCreatedByCurrentUser(list)}
+              openDeleteListDialogue={openDeleteListDialogue}
+            />
+          ))
+        ) : (
+          <Box>
+            <Text>
+              You do not seem to have any lists, maybe create a new one?
+            </Text>
+          </Box>
+        )}
+        <Button
+          mt={SPACING_BUTTONS}
+          colorScheme="yellow"
+          variant="outline"
+          isFullWidth
+          type="submit"
+          onClick={() => history.push(config.routes.createList)}
+        >
+          Create a new list
+        </Button>
+      </Card>
+      <Image mt={4} boxSize="350px" src={logo} alt="Login" />
       <AlertDialog
         isOpen={alertDialogOpen}
         leastDestructiveRef={alertDialogCancelRef}
@@ -178,7 +144,11 @@ export const ListsPage = () => {
               <Button ref={alertDialogCancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" onClick={() => handleListDelete()} ml={3}>
+              <Button
+                colorScheme="red"
+                onClick={() => handleListDelete()}
+                ml={3}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>
