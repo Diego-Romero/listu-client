@@ -2,7 +2,6 @@ import {
   Button,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Input,
   InputGroup,
   InputRightElement,
@@ -51,12 +50,11 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                 isRequired
                 isInvalid={form.errors.name && form.touched.name}
               >
-                <FormLabel htmlFor="name">Name</FormLabel>
                 <InputGroup size="md">
                   <Input
                     pr="4.5rem"
                     type="text"
-                    placeholder="Item name"
+                    placeholder="Add a new list item"
                     {...field}
                   />
                   <InputRightElement width="4.5rem">

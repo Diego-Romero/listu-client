@@ -1,28 +1,16 @@
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  DeleteIcon,
-  ExternalLinkIcon,
-} from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { Divider, Flex, Heading, HStack, Box, Stack } from "@chakra-ui/layout";
 import { Collapse, Text, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import { List } from "../type";
+import { ListItem } from "../type";
 import { formatDate } from "../utils/utils";
 
 interface Props {
-  list: List;
-  navigateToList: (id: string) => void;
-  ableToDelete: boolean;
-  openDeleteListDialogue: (list: List) => void;
+  item: ListItem;
+  deleteItem: (id: string) => void;
 }
 
-export const ListRow: React.FC<Props> = ({
-  list,
-  navigateToList,
-  ableToDelete,
-  openDeleteListDialogue,
-}) => {
+export const ListItemRow: React.FC<Props> = ({ item, deleteItem }) => {
   const [open, setOpen] = React.useState(false);
   return (
     <Box>
@@ -36,18 +24,25 @@ export const ListRow: React.FC<Props> = ({
         _hover={{ backgroundColor: "gray.100" }}
         onClick={() => setOpen(!open)}
       >
-        <Tooltip label="Navigate to list">
+        <Tooltip label="Mark item as done">
           <Flex
             flexDir="row"
             alignItems="center"
             justifyContent="center"
             _hover={{ textDecoration: "underline", fontWeight: "bold" }}
             cursor="pointer"
-            onClick={() => navigateToList(list._id)}
+            onClick={() => deleteItem(item._id)}
             zIndex={1}
           >
-            <Heading size="md">{list.name} </Heading>
-            <ExternalLinkIcon ml={2} w={4} h={4} />
+            <CheckIcon mr={2} w={4} h={4} />
+            <Heading size="md">{item.name} </Heading>
+            {/* <IconButton
+              ml={2}
+              aria-label="Mark item as done"
+              variant="outline"
+              size="sm"
+              icon={<CheckIcon />}
+            /> */}
           </Flex>
         </Tooltip>
         <HStack cursor="pointer">
@@ -63,36 +58,25 @@ export const ListRow: React.FC<Props> = ({
       <Collapse in={open} animateOpacity>
         <Stack px={2} pb={4} spacing={2}>
           <Box>
-            <Text fontSize="sm">Created by: {list.createdBy.name}</Text>
+            <Text fontSize="sm">Created by: {item.createdBy.name}</Text>
             <Text color="gray.500" fontSize="sm">
-              {formatDate(list.createdAt)}
+              {formatDate(item.createdAt)}
             </Text>
           </Box>
-          {list.description ? (
+          {item.description ? (
             <Text fontSize="md">
-              <b>Description:</b> {list.description}
+              <b>Description:</b> {item.description}
             </Text>
           ) : null}
           <HStack>
-            <Tooltip label="Navigate to list">
-              <ExternalLinkIcon
-                w={6}
-                h={6}
+            <Tooltip label="Mark item as done">
+              <CheckIcon
+                w={4}
+                h={4}
                 cursor="pointer"
-                onClick={() => navigateToList(list._id)}
+                onClick={() => deleteItem(item._id)}
               />
             </Tooltip>
-            {ableToDelete ? (
-              <Tooltip label="Delete list">
-                <DeleteIcon
-                  ml={2}
-                  w={5}
-                  h={5}
-                  cursor="pointer"
-                  onClick={() => openDeleteListDialogue(list)}
-                />
-              </Tooltip>
-            ) : null}
           </HStack>
         </Stack>
       </Collapse>

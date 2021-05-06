@@ -95,7 +95,7 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
               type="submit"
               isLoading={props.isSubmitting || loading}
             >
-              Invite my buddy 🤩
+              Invite friend 
             </Button>
           </Form>
         )}

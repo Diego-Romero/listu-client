@@ -22,7 +22,7 @@ export interface List {
 export interface ListItem {
   _id: string;
   name: string;
-  createdAt: string;
+  createdAt: Date;
   createdBy: User;
   description: string;
   done: boolean;

@@ -49,6 +49,11 @@ export const createListItemRequest = async (values: CreateListItemValues, listId
   return axiosInstance.post(url, values, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
 }
 
+export const markListItemAsDoneRequest = async (listId: string, itemId: string) => {
+  const url =`/lists/${listId}/done/${itemId}`
+  return axiosInstance.patch(url, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
+}
+
 export const deleteListItemRequest = async (listId: string, itemId: string) => {
   const url =`/lists/${listId}/${itemId}`
   return axiosInstance.delete(url, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
