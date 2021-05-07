@@ -11,6 +11,7 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   Flex,
@@ -301,8 +302,10 @@ export const ViewListPage = () => {
                   </Box>
                 )}
               </Box>
-              <Image mt={8} src={teamUpLogo} alt="Login" />
             </DrawerBody>
+            <DrawerFooter>
+              <Image mt={8} src={teamUpLogo} alt="Login" />
+            </DrawerFooter>
           </DrawerContent>
         </DrawerOverlay>
       </Drawer>
