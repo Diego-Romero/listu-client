@@ -1,13 +1,11 @@
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Divider, Flex, Heading, Box } from "@chakra-ui/layout";
+import { Divider, Flex, Box, Text } from "@chakra-ui/layout";
 import React from "react";
 import { List } from "../type";
 
 interface Props {
   list: List;
   navigateToList: (id: string) => void;
-  ableToDelete: boolean;
-  openDeleteListDialogue: (list: List) => void;
 }
 
 export const ListRow: React.FC<Props> = ({ list, navigateToList }) => {
@@ -20,10 +18,12 @@ export const ListRow: React.FC<Props> = ({ list, navigateToList }) => {
         py={4}
         px={2}
         cursor="pointer"
-        _hover={{ backgroundColor: "gray.100" }}
+        _hover={{
+          fontWeight: "semibold",
+        }}
         onClick={() => navigateToList(list._id)}
       >
-        <Heading size="md">{list.name} </Heading>
+        <Text fontSize="lg">{list.name} </Text>
         <ArrowForwardIcon ml={2} w={4} h={4} />
       </Flex>
       <Divider />

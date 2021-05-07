@@ -1,6 +1,12 @@
 import {
-  Badge,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Box,
+  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -13,6 +19,8 @@ import {
   Icon,
   Image,
   ListItem,
+  Tag,
+  TagLabel,
   Text,
   UnorderedList,
   useDisclosure,
@@ -20,16 +28,18 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
-import logo from "../images/icons/undraw_true_love_cy8x.svg";
+import logo from "../images/icons/landing2.svg";
+import teamUpLogo from "../images/icons/team_up.svg";
 import {
   CreateListItemForm,
   CreateListItemValues,
 } from "../components/CreateItemForm";
 import { List, ListItem as ListSingleItem } from "../type";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import {
   createListItemRequest,
   deleteListItemRequest,
+  deleteListRequest,
   getListDataRequest,
   updateListItem,
 } from "../api/requests";
@@ -37,7 +47,9 @@ import { createToast } from "../utils/utils";
 import { AddFriendForm } from "../components/AddFriendForm";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { ListItemRow } from "../components/ListItemRow";
-import { RepeatIcon } from "@chakra-ui/icons";
+import { DeleteIcon, RepeatIcon } from "@chakra-ui/icons";
+import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { config } from "../config";
 
 interface ParamTypes {
   id: string;
@@ -53,6 +65,10 @@ export const ViewListPage = () => {
   const [loading, setLoading] = React.useState(false);
   const { id } = useParams<ParamTypes>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { user } = useAuthenticatedContext();
+  const [alertDialogOpen, setAlertDialogOpen] = React.useState(false);
+  const alertDialogCancelRef = React.useRef();
+  const history = useHistory();
 
   const [loadingNewItem, setLoadingNewItem] = React.useState(false);
 
@@ -144,7 +160,7 @@ export const ViewListPage = () => {
       };
       await updateListItem(id, listItem._id, updatedListItem);
       await getListData();
-      toast(createToast("Item marked as done 🙌", "success"));
+      toast(createToast("Item moved", "success"));
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
@@ -159,12 +175,41 @@ export const ViewListPage = () => {
     }
   }
 
+  const handleListDelete = async () => {
+    const declaredList = list as List;
+    try {
+      await deleteListRequest(declaredList._id);
+      toast(createToast("List has been deleted successfully", "success"));
+      history.push(config.routes.lists) 
+    } catch (error) {
+      const errorMessage = error.response.data.message;
+      toast(
+        createToast(
+          "Whoops, there has been an error deleting the list.",
+          "error",
+          errorMessage
+        )
+      );
+    } finally {
+      setAlertDialogOpen(false);
+    }
+  };
+
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
       <Card loading={loading} maxHeight="400px">
         <Flex direction="row" align="center" justify="space-between" mb={4}>
           <Heading size="lg">{list ? list.name : "List"}</Heading>
-          <HStack spacing={2}>
+          <HStack spacing={3}>
+            {user._id === list?.createdBy._id ? (
+              <Icon
+                as={DeleteIcon}
+                cursor="pointer"
+                onClick={() => setAlertDialogOpen(true)}
+                w={5}
+                h={5}
+              />
+            ) : null}
             <Icon
               as={RepeatIcon}
               cursor="pointer"
@@ -179,15 +224,15 @@ export const ViewListPage = () => {
               w={6}
               h={6}
             />
-            <Badge
-              onClick={() => toggleActiveItems()}
+            <Tag
+              size={"md"}
+              variant="subtle"
+              colorScheme="teal"
               cursor="pointer"
-              colorScheme={showUndone ? "yellow" : "green"}
-              variant="outline"
-              fontSize="sm"
+              onClick={() => toggleActiveItems()}
             >
-              {showUndone ? "Undone" : "Done"}
-            </Badge>
+              <TagLabel>{showUndone ? "show done" : "show todo"}</TagLabel>
+            </Tag>
           </HStack>
         </Flex>
 
@@ -195,7 +240,7 @@ export const ViewListPage = () => {
           <Box mt={6}>
             <Text>
               {showUndone
-                ? "You do not seem to have any items in this list, maybe create a new one?"
+                ? "You do not have any items."
                 : "You do not have any done items."}
             </Text>
           </Box>
@@ -246,10 +291,42 @@ export const ViewListPage = () => {
                   </Box>
                 )}
               </Box>
+              <Image mt={8} src={teamUpLogo} alt="Login" />
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>
       </Drawer>
+
+      <AlertDialog
+        isOpen={alertDialogOpen}
+        leastDestructiveRef={alertDialogCancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete list
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure? You can not undo this action afterwards.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={alertDialogCancelRef} onClick={() => setAlertDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={() => handleListDelete()}
+                ml={3}
+              >
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Flex>
   );
 };

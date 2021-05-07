@@ -1,10 +1,12 @@
-import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 import { GrRevert } from "react-icons/gr";
 import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
 import { Collapse, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
 import { ListItem } from "../type";
 import { formatDate } from "../utils/utils";
+import { useHistory } from "react-router-dom";
+import { config } from "../config";
 
 interface Props {
   item: ListItem;
@@ -20,6 +22,7 @@ export const ListItemRow: React.FC<Props> = ({
   showUndone,
 }) => {
   const [open, setOpen] = React.useState(false);
+  const history = useHistory();
   return (
     <Box
       cursor="pointer"
@@ -49,20 +52,30 @@ export const ListItemRow: React.FC<Props> = ({
         </Flex>
         <HStack cursor="pointer">
           {showUndone ? (
-            <IconButton
-              variant="outline"
-              colorScheme="teal"
-              size="sm"
-              aria-label="Mark item as done"
-              onClick={() => updateListItemDoneState(item, true)}
-              icon={<CheckIcon />}
-            />
-          ) : (
             <>
               <IconButton
                 variant="outline"
                 colorScheme="teal"
                 size="sm"
+                aria-label="Mark item as done"
+                onClick={() => updateListItemDoneState(item, true)}
+                icon={<CheckIcon />}
+              />
+              <IconButton
+                variant="ghost"
+                size="sm"
+                aria-label="Navigate to item"
+                onClick={() => history.push(config.routes.singleListItemUrl(item._id))}
+                icon={<ArrowForwardIcon />}
+              />
+            </>
+          ) : (
+            <>
+              <IconButton
+                variant="solid"
+                colorScheme="teal"
+                size="sm"
+                color="teal"
                 aria-label="Move item to to-do"
                 onClick={() => updateListItemDoneState(item, false)}
                 icon={<GrRevert />}

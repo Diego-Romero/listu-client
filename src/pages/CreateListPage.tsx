@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
-import logo from "../images/icons/undraw_team_collaboration_8eoc.svg";
+import logo from "../images/icons/landing.svg";
 import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
@@ -107,7 +107,7 @@ export const CreateListPage = () => {
               </Field>
               <Button
                 mt={SPACING_BUTTONS}
-                colorScheme="yellow"
+                colorScheme="teal"
                 variant="outline"
                 isFullWidth
                 type="submit"
@@ -128,7 +128,7 @@ export const CreateListPage = () => {
           )}
         </Formik>
       </Card>
-      <Image mt={4} boxSize="300px" src={logo} alt="Login" />
+      <Image mt={4} boxSize="400px" src={logo} alt="Login" />
     </Flex>
   );
 };

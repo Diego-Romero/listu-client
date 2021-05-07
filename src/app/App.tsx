@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, ChakraProvider, Flex, Grid, theme } from "@chakra-ui/react";
+import { Box, ChakraProvider, extendTheme, Flex, Grid } from "@chakra-ui/react";
 import { NavBar } from "../components/Navbar";
 import { BrowserRouter } from "react-router-dom";
 import { AuthenticatedProvider } from "../context/AuthenticatedContext";
@@ -24,7 +24,7 @@ export const Body: React.FC = ({ children }) => {
       <NavBar />
       <LoadingComponent loading={loading} />
       <Flex
-        p={6}
+        pt={10}
         width="100%"
         justifyContent="center"
         alignItems="center"
@@ -36,6 +36,15 @@ export const Body: React.FC = ({ children }) => {
     </Grid>
   );
 };
+
+const config = {
+  initialColorMode: "dark",
+  useSystemColorMode: false,
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const theme = extendTheme({ config });
 
 export const App = () => {
   return (

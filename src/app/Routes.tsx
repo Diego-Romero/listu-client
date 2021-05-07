@@ -8,6 +8,7 @@ import { FourOFourPage } from "../pages/404Page";
 import { CreateListPage } from "../pages/CreateListPage";
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { Landing } from "../pages/LandingPage";
+import { ListItemPage } from "../pages/ListItemPage";
 import { ListsPage } from "../pages/ListsPage";
 import { Login } from "../pages/LoginPage";
 import { NewFriendPage } from "../pages/NewFriendPage";
@@ -78,6 +79,7 @@ export const Routes = () => {
         component={CreateListPage}
       />
       <PrivateRoute path={config.routes.list} exact component={ViewListPage} />
+      <PrivateRoute path={config.routes.listItem} exact component={ListItemPage} />
       {/* 404 when route is unidentified */}
       <Route>
         <FourOFourPage />

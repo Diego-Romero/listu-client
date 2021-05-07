@@ -21,10 +21,12 @@ export const config = {
     resetPassword: "/password-reset/:token",
     home: "/",
     createList: "/create-list",
+    createItem: "/create-item",
     lists: "/lists",
     list: "/list/:id",
-    createItem: "/create-item",
     singleListUrl: (id: string) => `/list/${id}`,
+    listItem: "/list-item/:id",
+    singleListItemUrl: (id: string) => `/list-item/${id}`,
   },
   validation: {
     email: Yup.string().email("Invalid Email").required(REQUIRED_FIELD_ERROR),
@@ -39,8 +41,8 @@ export const config = {
       .required(REQUIRED_FIELD_ERROR),
   },
   colors: {
-    default: "yellow.400",
-    defaultDark: "yellow.500",
+    default: "teal.500",
+    defaultDark: "teal.500",
     themeDark: "dark",
   },
 };

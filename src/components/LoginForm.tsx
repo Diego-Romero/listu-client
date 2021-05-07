@@ -105,7 +105,7 @@ export const LoginForm: React.FC = () => {
             </Text>
             <Button
               mt={SPACING_BUTTONS - 4}
-              colorScheme="yellow"
+              colorScheme="teal"
               variant="outline"
               isFullWidth
               type="submit"

@@ -101,7 +101,7 @@ export const ResetPasswordForm: React.FC = () => {
             </Field>
             <Button
               mt={SPACING_BUTTONS}
-              colorScheme="yellow"
+              colorScheme="teal"
               variant="outline"
               isFullWidth
               type="submit"

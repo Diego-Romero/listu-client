@@ -41,7 +41,7 @@ export const NavBar: React.FC = () => {
   return (
     <Flex
       direction="row"
-      bg={config.colors.default}
+      bgGradient="linear(to-r, teal.500,green.500)"
       p={4}
       align="center"
       justify="space-between"
@@ -91,21 +91,23 @@ export const NavBar: React.FC = () => {
         </Breadcrumb>
       </Box>
       <HStack>
-        <Breadcrumb fontWeight="medium" fontSize="lg" separator="-">
-          {user !== null ? (
-            <BreadcrumbItem>
-              <BreadcrumbLink onClick={() => logUserOut()}>
-                Logout
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          ) : 
-            <BreadcrumbItem>
-              <BreadcrumbLink as={Link} to={config.routes.login}>
-                Login / Register
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          }
-        </Breadcrumb>
+        <Box display={["none", "none", "block"]}>
+          <Breadcrumb fontWeight="medium" fontSize="lg" separator="-">
+            {user !== null ? (
+              <BreadcrumbItem>
+                <BreadcrumbLink onClick={() => logUserOut()}>
+                  Logout
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink as={Link} to={config.routes.login}>
+                  Login / Register
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
+          </Breadcrumb>
+        </Box>
         <ColorModeSwitcher justifySelf="flex-end" />
       </HStack>
     </Flex>

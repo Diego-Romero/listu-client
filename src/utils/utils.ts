@@ -13,7 +13,7 @@ export function createToast(
     title,
     description,
     status,
-    duration: 6000,
+    duration: 1500,
     isClosable: true,
   };
 }
