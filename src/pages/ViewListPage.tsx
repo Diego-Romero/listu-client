@@ -64,6 +64,7 @@ export const ViewListPage = () => {
       setUndoneItems(listData.data.undone);
       setDoneItems(listData.data.done);
       setActiveItems(listData.data.undone);
+      setShowUndone(true);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
@@ -115,9 +116,8 @@ export const ViewListPage = () => {
     setLoading(true);
     try {
       await deleteListItemRequest(id, itemId);
-      const listData = await getListDataRequest(id);
-      setUndoneItems(listData.data.items);
       toast(createToast("List item deleted", "success"));
+      await getListData();
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
@@ -162,7 +162,7 @@ export const ViewListPage = () => {
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
       <Card loading={loading} maxHeight="400px">
-        <Flex direction="row" align="center" justify="space-between" mb={8}>
+        <Flex direction="row" align="center" justify="space-between" mb={4}>
           <Heading size="lg">{list ? list.name : "List"}</Heading>
           <HStack spacing={2}>
             <Icon

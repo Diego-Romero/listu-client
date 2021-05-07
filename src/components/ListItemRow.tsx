@@ -1,4 +1,4 @@
-import { CheckIcon } from "@chakra-ui/icons";
+import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 import { GrRevert } from "react-icons/gr";
 import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
 import { Collapse, IconButton, Text } from "@chakra-ui/react";
@@ -40,7 +40,6 @@ export const ListItemRow: React.FC<Props> = ({
           alignItems="baseline"
           justifyContent="center"
           cursor="pointer"
-          onClick={() => deleteItem(item._id)}
           zIndex={1}
         >
           <Text fontSize="lg">{item.name} </Text>
@@ -59,14 +58,24 @@ export const ListItemRow: React.FC<Props> = ({
               icon={<CheckIcon />}
             />
           ) : (
-            <IconButton
-              variant="outline"
-              colorScheme="teal"
-              size="sm"
-              aria-label="Move item to to-do"
-              onClick={() => updateListItemDoneState(item, false)}
-              icon={<GrRevert />}
-            />
+            <>
+              <IconButton
+                variant="outline"
+                colorScheme="teal"
+                size="sm"
+                aria-label="Move item to to-do"
+                onClick={() => updateListItemDoneState(item, false)}
+                icon={<GrRevert />}
+              />
+              <IconButton
+                variant="outline"
+                colorScheme="orange"
+                size="sm"
+                aria-label="Delete item"
+                onClick={() => deleteItem(item._id)}
+                icon={<DeleteIcon />}
+              />
+            </>
           )}
         </HStack>
       </Flex>
