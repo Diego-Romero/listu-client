@@ -184,8 +184,8 @@ export const ListItemPage = () => {
                   Update
                 </Button>
                 <Button
-                  mt={3}
-                  variant="outline"
+                  mt={4}
+                  colorScheme="teal"
                   isFullWidth
                   isLoading={props.isSubmitting}
                   onClick={() =>

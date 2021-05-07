@@ -13,17 +13,14 @@ import { Field, Form, Formik } from "formik";
 
 export interface CreateListItemValues {
   name: string;
-  description?: string;
 }
 
 const initialValues: CreateListItemValues = {
   name: "",
-  // description: "",
 };
 
 const validationSchema = Yup.object().shape({
   name: config.validation.name,
-  // description: config.validation.description,
 });
 
 interface Props {
@@ -53,6 +50,7 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                 <InputGroup size="md">
                   <Input
                     pr="4.5rem"
+                    autoFocus
                     type="text"
                     placeholder="Add a new list item"
                     {...field}

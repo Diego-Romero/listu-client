@@ -271,7 +271,7 @@ export const ViewListPage = () => {
 
       <Button
         mt={3}
-        variant="outline"
+        colorScheme="teal"
         isFullWidth
         onClick={() => history.push(config.routes.lists)}
       >
