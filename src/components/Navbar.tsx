@@ -54,7 +54,10 @@ export const NavBar: React.FC = () => {
             Home
           </MenuItem>
           {user !== null ? (
-            <MenuItem onClick={() => logUserOut()}>Logout</MenuItem>
+            <>
+              <MenuItem onClick={() => history.push(config.routes.lists)}>Lists</MenuItem>
+              <MenuItem onClick={() => logUserOut()}>Logout</MenuItem>
+            </>
           ) : (
             <MenuItem onClick={() => history.push(config.routes.login)}>
               Login / Register

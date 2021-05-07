@@ -7,6 +7,7 @@ import { RegisterFriendFormTypes } from "../components/NewFriendForm";
 import { ResetPasswordFormTypes } from "../components/ResetPasswordForm";
 import { config } from "../config";
 import { CreateListValues } from "../pages/CreateListPage";
+import { ListItem } from "../type";
 
 const axiosInstance = axios.create({
   baseURL: config.env.serverUrl,
@@ -49,9 +50,9 @@ export const createListItemRequest = async (values: CreateListItemValues, listId
   return axiosInstance.post(url, values, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
 }
 
-export const markListItemAsDoneRequest = async (listId: string, itemId: string) => {
+export const updateListItem = async (listId: string, itemId: string, listItem: ListItem) => {
   const url =`/lists/${listId}/done/${itemId}`
-  return axiosInstance.patch(url, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
+  return axiosInstance.post(url, listItem, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
 }
 
 export const deleteListItemRequest = async (listId: string, itemId: string) => {

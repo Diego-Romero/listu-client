@@ -50,7 +50,6 @@ export const LoginForm: React.FC = () => {
       const res = await loginRequest(values);
       localStorage.setItem("token", res.data.token);
       login(res.data.user);
-      toast(createToast("Welcome 🙌", "success"));
       history.push(config.routes.lists);
     } catch (e) {
       const errorMessage = e.response.data.message;

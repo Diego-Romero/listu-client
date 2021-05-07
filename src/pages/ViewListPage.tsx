@@ -1,6 +1,6 @@
 import {
+  Badge,
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -9,11 +9,11 @@ import {
   DrawerOverlay,
   Flex,
   Heading,
+  HStack,
   Icon,
   Image,
   ListItem,
   Text,
-  Tooltip,
   UnorderedList,
   useDisclosure,
   useToast,
@@ -21,8 +21,6 @@ import {
 import React from "react";
 import { Card } from "../components/Card";
 import logo from "../images/icons/undraw_true_love_cy8x.svg";
-import { config, SPACING_BUTTONS } from "../config";
-import { useHistory } from "react-router";
 import {
   CreateListItemForm,
   CreateListItemValues,
@@ -33,19 +31,23 @@ import {
   createListItemRequest,
   deleteListItemRequest,
   getListDataRequest,
+  updateListItem,
 } from "../api/requests";
 import { createToast } from "../utils/utils";
 import { AddFriendForm } from "../components/AddFriendForm";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { ListItemRow } from "../components/ListItemRow";
+import { RepeatIcon } from "@chakra-ui/icons";
 
 interface ParamTypes {
   id: string;
 }
 
 export const ViewListPage = () => {
-  const history = useHistory();
-  const [items, setItems] = React.useState<ListSingleItem[]>([]);
+  const [undoneItems, setUndoneItems] = React.useState<ListSingleItem[]>([]);
+  const [doneItems, setDoneItems] = React.useState<ListSingleItem[]>([]);
+  const [activeItems, setActiveItems] = React.useState<ListSingleItem[]>([]);
+  const [showUndone, setShowUndone] = React.useState<boolean>(true);
   const [list, setList] = React.useState<List | undefined>(undefined);
   const toast = useToast();
   const [loading, setLoading] = React.useState(false);
@@ -58,8 +60,10 @@ export const ViewListPage = () => {
     setLoading(true);
     try {
       const listData = await getListDataRequest(id);
-      setList(listData.data);
-      setItems(listData.data.items);
+      setList(listData.data.list);
+      setUndoneItems(listData.data.undone);
+      setDoneItems(listData.data.done);
+      setActiveItems(listData.data.undone);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
@@ -69,7 +73,6 @@ export const ViewListPage = () => {
           errorMessage
         )
       );
-      history.push(config.routes.login);
     } finally {
       setLoading(false);
     }
@@ -98,12 +101,22 @@ export const ViewListPage = () => {
     }
   };
 
+  function toggleActiveItems() {
+    if (showUndone) {
+      setShowUndone(false);
+      setActiveItems(doneItems);
+    } else {
+      setShowUndone(true);
+      setActiveItems(undoneItems);
+    }
+  }
+
   async function deleteItem(itemId: string) {
     setLoading(true);
     try {
       await deleteListItemRequest(id, itemId);
       const listData = await getListDataRequest(id);
-      setItems(listData.data.items);
+      setUndoneItems(listData.data.items);
       toast(createToast("List item deleted", "success"));
     } catch (e) {
       const errorMessage = e.response.data.message;
@@ -119,36 +132,46 @@ export const ViewListPage = () => {
     }
   }
 
-  // async function markItemAsDone(itemId: string) {
-  //   setLoading(true);
-  //   try {
-  //     await deleteListItemRequest(id, itemId);
-  //     const listData = await getListDataRequest(id);
-  //     setItems(listData.data.items);
-  //     toast(createToast("Item marked as done 🙌", "success"));
-  //   } catch (e) {
-  //     const errorMessage = e.response.data.message;
-  //     toast(
-  //       createToast(
-  //         "whoops, there has been an error deleting the item",
-  //         "error",
-  //         errorMessage
-  //       )
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+  async function updateListItemDoneState(
+    listItem: ListSingleItem,
+    done: boolean
+  ) {
+    setLoading(true);
+    try {
+      const updatedListItem: ListSingleItem = {
+        ...listItem,
+        done,
+      };
+      await updateListItem(id, listItem._id, updatedListItem);
+      await getListData();
+      toast(createToast("Item marked as done 🙌", "success"));
+    } catch (e) {
+      const errorMessage = e.response.data.message;
+      toast(
+        createToast(
+          "whoops, there has been an error deleting the item",
+          "error",
+          errorMessage
+        )
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card loading={loading}>
+      <Card loading={loading} maxHeight="400px">
         <Flex direction="row" align="center" justify="space-between" mb={8}>
           <Heading size="lg">{list ? list.name : "List"}</Heading>
-          <Tooltip
-            label="Would you like to invite/remove friends to this list?"
-            aria-label="Invite/remove friends"
-          >
+          <HStack spacing={2}>
+            <Icon
+              as={RepeatIcon}
+              cursor="pointer"
+              onClick={() => getListData()}
+              w={5}
+              h={5}
+            />
             <Icon
               as={AiOutlineUserAdd}
               cursor="pointer"
@@ -156,40 +179,48 @@ export const ViewListPage = () => {
               w={6}
               h={6}
             />
-          </Tooltip>
+            <Badge
+              onClick={() => toggleActiveItems()}
+              cursor="pointer"
+              colorScheme={showUndone ? "yellow" : "green"}
+              variant="outline"
+              fontSize="sm"
+            >
+              {showUndone ? "Undone" : "Done"}
+            </Badge>
+          </HStack>
         </Flex>
-        {loadingNewItem ? (
-          <Heading size="sm" mt={4}>
-            Creating new item...
-          </Heading>
-        ) : (
-          <CreateListItemForm createNewItem={createNewItem} />
-        )}
 
-        {items.length === 0 ? (
+        {activeItems.length === 0 ? (
           <Box mt={6}>
             <Text>
-              You do not seem to have any items in this list, maybe create a new
-              one?
+              {showUndone
+                ? "You do not seem to have any items in this list, maybe create a new one?"
+                : "You do not have any done items."}
             </Text>
           </Box>
         ) : (
           <Box mt={4}>
-            {items.map((item) => (
-              <ListItemRow item={item} key={item._id} deleteItem={deleteItem}/>
+            {activeItems.map((item) => (
+              <ListItemRow
+                item={item}
+                key={item._id}
+                deleteItem={deleteItem}
+                showUndone={showUndone}
+                updateListItemDoneState={updateListItemDoneState}
+              />
             ))}
           </Box>
         )}
-
-        <Button
-          mt={SPACING_BUTTONS}
-          variant="outline"
-          isFullWidth
-          onClick={() => history.push(config.routes.lists)}
-        >
-          Back
-        </Button>
       </Card>
+      <Box my={4}>
+        <Card loading={loadingNewItem}>
+          <Box>
+            <Heading size="sm">Add a new item</Heading>
+            <CreateListItemForm createNewItem={createNewItem} />
+          </Box>
+        </Card>
+      </Box>
       <Image mt={4} boxSize="400px" src={logo} alt="Login" />
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay>
