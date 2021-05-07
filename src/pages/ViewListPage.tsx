@@ -213,7 +213,7 @@ export const ViewListPage = () => {
           </Box>
         )}
       </Card>
-      <Box my={4}>
+      <Box my={6}>
         <Card loading={loadingNewItem}>
           <Box>
             <Heading size="sm">Add a new item</Heading>
