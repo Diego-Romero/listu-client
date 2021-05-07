@@ -41,7 +41,7 @@ import {
   deleteListItemRequest,
   deleteListRequest,
   getListDataRequest,
-  updateListItem,
+  updateListItemRequest,
 } from "../api/requests";
 import { createToast } from "../utils/utils";
 import { AddFriendForm } from "../components/AddFriendForm";
@@ -158,7 +158,7 @@ export const ViewListPage = () => {
         ...listItem,
         done,
       };
-      await updateListItem(id, listItem._id, updatedListItem);
+      await updateListItemRequest(id, listItem._id, updatedListItem);
       await getListData();
       toast(createToast("Item moved", "success"));
     } catch (e) {
@@ -250,6 +250,7 @@ export const ViewListPage = () => {
               <ListItemRow
                 item={item}
                 key={item._id}
+                listId={list?._id}
                 deleteItem={deleteItem}
                 showUndone={showUndone}
                 updateListItemDoneState={updateListItemDoneState}

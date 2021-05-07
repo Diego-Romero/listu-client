@@ -13,6 +13,7 @@ interface Props {
   deleteItem: (id: string) => void;
   updateListItemDoneState: (listItem: ListItem, done: boolean) => void;
   showUndone: boolean;
+  listId: string
 }
 
 export const ListItemRow: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const ListItemRow: React.FC<Props> = ({
   deleteItem,
   updateListItemDoneState,
   showUndone,
+  listId,
 }) => {
   const [open, setOpen] = React.useState(false);
   const history = useHistory();
@@ -65,7 +67,7 @@ export const ListItemRow: React.FC<Props> = ({
                 variant="ghost"
                 size="sm"
                 aria-label="Navigate to item"
-                onClick={() => history.push(config.routes.singleListItemUrl(item._id))}
+                onClick={() => history.push(config.routes.singleListItemUrl(listId, item._id))}
                 icon={<ArrowForwardIcon />}
               />
             </>
@@ -98,7 +100,7 @@ export const ListItemRow: React.FC<Props> = ({
             <Text fontSize="sm">Created by: {item.createdBy.name}</Text>
           </Box>
           {item.description ? (
-            <Text fontSize="md">
+            <Text fontSize="sm">
               <b>Description:</b> {item.description}
             </Text>
           ) : null}

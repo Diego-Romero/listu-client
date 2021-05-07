@@ -51,6 +51,7 @@ export const NewFriendForm: React.FC = () => {
   const { id } = useParams<ParamTypes>();
   const [show, setShow] = React.useState(false);
   const { login } = useAuthenticatedContext();
+
   async function registerFriend(values: RegisterFriendFormTypes, actions) {
     actions.setSubmitting(false);
     try {
@@ -65,6 +66,7 @@ export const NewFriendForm: React.FC = () => {
       );
     }
   }
+
   return (
     <Box>
       <Formik

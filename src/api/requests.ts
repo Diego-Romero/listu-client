@@ -50,7 +50,7 @@ export const createListItemRequest = async (values: CreateListItemValues, listId
   return axiosInstance.post(url, values, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
 }
 
-export const updateListItem = async (listId: string, itemId: string, listItem: ListItem) => {
+export const updateListItemRequest = async (listId: string, itemId: string, listItem: ListItem) => {
   const url =`/lists/${listId}/done/${itemId}`
   return axiosInstance.post(url, listItem, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
 }
@@ -62,6 +62,11 @@ export const deleteListItemRequest = async (listId: string, itemId: string) => {
 
 export const getListDataRequest = async (id: string) => {
   const url =`/lists/${id}`
+  return axiosInstance.get(url, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
+
+}
+export const getListItemRequest = async (id: string) => {
+  const url =`/lists/list-item/${id}`
   return axiosInstance.get(url, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}`}})
 }
 

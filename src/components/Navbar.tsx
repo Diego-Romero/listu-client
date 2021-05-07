@@ -41,6 +41,7 @@ export const NavBar: React.FC = () => {
   return (
     <Flex
       direction="row"
+      color="white"
       bgGradient="linear(to-r, teal.500,green.500)"
       p={4}
       align="center"

@@ -24,7 +24,7 @@ export interface ListItem {
   name: string;
   createdAt: Date;
   createdBy: User;
-  description: string;
+  description?: string;
   done: boolean;
   dateCompleted?: string;
 }

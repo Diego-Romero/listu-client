@@ -82,7 +82,7 @@ export const ForgotPasswordForm: React.FC = () => {
               Reset Password
             </Button>
             <Button
-              mt={SPACING_BUTTONS}
+              mt={SPACING_BUTTONS - 4}
               variant="outline"
               isFullWidth
               isLoading={props.isSubmitting}

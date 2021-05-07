@@ -25,8 +25,8 @@ export const config = {
     lists: "/lists",
     list: "/list/:id",
     singleListUrl: (id: string) => `/list/${id}`,
-    listItem: "/list-item/:id",
-    singleListItemUrl: (id: string) => `/list-item/${id}`,
+    listItem: "/list/:listId/list-item/:listItemId",
+    singleListItemUrl: (listId: string, listItemId: string) => `/list/${listId}/list-item/${listItemId}`,
   },
   validation: {
     email: Yup.string().email("Invalid Email").required(REQUIRED_FIELD_ERROR),
