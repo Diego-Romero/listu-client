@@ -180,7 +180,7 @@ export const ViewListPage = () => {
     try {
       await deleteListRequest(declaredList._id);
       toast(createToast("List has been deleted successfully", "success"));
-      history.push(config.routes.lists) 
+      history.push(config.routes.lists);
     } catch (error) {
       const errorMessage = error.response.data.message;
       toast(
@@ -259,7 +259,7 @@ export const ViewListPage = () => {
           </Box>
         )}
       </Card>
-      <Box my={6}>
+      <Box mt={6} mb={4}>
         <Card loading={loadingNewItem}>
           <Box>
             <Heading size="sm">Add a new item</Heading>
@@ -267,6 +267,15 @@ export const ViewListPage = () => {
           </Box>
         </Card>
       </Box>
+
+      <Button
+        mt={3}
+        variant="outline"
+        isFullWidth
+        onClick={() => history.push(config.routes.lists)}
+      >
+        Back
+      </Button>
       <Image mt={4} boxSize="400px" src={logo} alt="Login" />
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay>
@@ -314,7 +323,10 @@ export const ViewListPage = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={alertDialogCancelRef} onClick={() => setAlertDialogOpen(false)}>
+              <Button
+                ref={alertDialogCancelRef}
+                onClick={() => setAlertDialogOpen(false)}
+              >
                 Cancel
               </Button>
               <Button
