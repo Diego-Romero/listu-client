@@ -11,7 +11,7 @@ export const LoadingComponent: React.FC<Props> = ({ loading }) => {
   return (
     <Flex display={loading ? 'flex': 'none'}>
       <Flex flexDir="column" textAlign="center" alignItems="center" justifyContent="center"  width="100%" height="100%">
-        <CircularProgress isIndeterminate color="yellow.400" />
+        <CircularProgress isIndeterminate color="teal.400" />
         <Heading mt={4} size="md">Loading</Heading>
       </Flex>
     </Flex>
