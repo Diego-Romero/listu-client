@@ -83,7 +83,7 @@ export const CreateListPage = () => {
                     isInvalid={form.errors.name && form.touched.name}
                   >
                     <FormLabel htmlFor="name">Name</FormLabel>
-                    <Input {...field} type="text" />
+                    <Input {...field} type="text" autoFocus />
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                   </FormControl>
                 )}
