@@ -25,6 +25,7 @@ export const Body: React.FC = ({ children }) => {
       <LoadingComponent loading={loading} />
       <Flex
         pt={10}
+        px={4}
         width="100%"
         justifyContent="center"
         alignItems="center"
