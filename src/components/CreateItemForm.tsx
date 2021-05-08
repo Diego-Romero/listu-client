@@ -33,6 +33,8 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
   return (
     <Formik
       initialValues={initialValues}
+      validateOnChange={false}
+      validateOnBlur={false}
       onSubmit={(values, actions) => {
         actions.setSubmitting(false);
         createNewItem(values);
