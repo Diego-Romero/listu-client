@@ -8,6 +8,7 @@ import {
   Link,
   useToast,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import React from "react";
@@ -42,6 +43,7 @@ export const LoginForm: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const { login, logout } = useAuthenticatedContext();
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   async function loginUser(values: LoginFormValues, actions) {
     actions.setSubmitting(false);
     logout();
@@ -76,7 +78,7 @@ export const LoginForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" />
+                  <Input {...field} type="email" autoFocus={isLargerThan480} />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                 </FormControl>
               )}

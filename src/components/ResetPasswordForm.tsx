@@ -8,6 +8,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
@@ -44,6 +45,7 @@ export const ResetPasswordForm: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const [show, setShow] = React.useState(false);
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   const { token } = useParams<ParamTypes>();
   async function register(values: ResetPasswordFormTypes, actions) {
     actions.setSubmitting(false);
@@ -79,6 +81,7 @@ export const ResetPasswordForm: React.FC = () => {
                   <InputGroup>
                     <Input
                       {...field}
+                      autoFocus={isLargerThan480}
                       type={show ? "text" : "password"}
                       pr="4.5rem"
                     />

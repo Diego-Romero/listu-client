@@ -12,6 +12,7 @@ import {
   Stack,
   Textarea,
   useToast,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -52,13 +53,13 @@ export const ListItemPage = () => {
   const { listItemId, listId } = useParams<ParamTypes>();
   const [listItem, setListItem] = React.useState<ListItem | null>(null);
   const toast = useToast();
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
   React.useEffect(() => {
     getListItem();
   }, []);
 
   async function getListItem() {
-    console.log(listId, listItemId);
     setLoading(true);
     try {
       const res = await getListItemRequest(listItemId);
@@ -86,7 +87,6 @@ export const ListItemPage = () => {
     updated.name = values.name;
     updated.description = values.description;
     updated.done = values.done;
-    console.log(updated)
     try {
       await updateListItemRequest(listId, listItemId, updated);
       history.push(config.routes.singleListUrl(listId))
@@ -113,7 +113,6 @@ export const ListItemPage = () => {
             initialValues={initialValues}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              console.log(values);
               updateListItem(values)
             }}
             validationSchema={validationSchema}
@@ -129,7 +128,7 @@ export const ListItemPage = () => {
                       isInvalid={form.errors.name && form.touched.name}
                     >
                       <FormLabel htmlFor="name">Name</FormLabel>
-                      <Input {...field} type="text" />
+                      <Input {...field} type="text" autoFocus={isLargerThan480} />
                       <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                     </FormControl>
                   )}

@@ -199,9 +199,23 @@ export const ViewListPage = () => {
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
       <Card loading={loading} maxHeight="400px">
-        <Flex direction="row" align="center" justify="space-between" mb={4}>
-          <Heading size="lg">{list ? list.name : "List"}</Heading>
+        <Flex direction={['column', 'column', 'row']} align={['start', 'start', 'center']} justify="space-between" mb={4}>
+          <Heading mb={[6, 6, 0]} size="lg" textOverflow="ellipsis">{list ? list.name : "List"}</Heading>
           <HStack spacing={3}>
+            <Icon
+              as={AiOutlineUserAdd}
+              cursor="pointer"
+              onClick={onOpen}
+              w={6}
+              h={6}
+            />
+            <Icon
+              as={RepeatIcon}
+              cursor="pointer"
+              onClick={() => getListData()}
+              w={5}
+              h={5}
+            />
             {user._id === list?.createdBy._id ? (
               <Icon
                 as={DeleteIcon}
@@ -211,20 +225,6 @@ export const ViewListPage = () => {
                 h={5}
               />
             ) : null}
-            <Icon
-              as={RepeatIcon}
-              cursor="pointer"
-              onClick={() => getListData()}
-              w={5}
-              h={5}
-            />
-            <Icon
-              as={AiOutlineUserAdd}
-              cursor="pointer"
-              onClick={onOpen}
-              w={6}
-              h={6}
-            />
             <Tag
               size={"md"}
               variant="subtle"
@@ -251,7 +251,7 @@ export const ViewListPage = () => {
               <ListItemRow
                 item={item}
                 key={item._id}
-                listId={list?._id}
+                listId={list?._id as string}
                 deleteItem={deleteItem}
                 showUndone={showUndone}
                 updateListItemDoneState={updateListItemDoneState}
@@ -260,7 +260,7 @@ export const ViewListPage = () => {
           </Box>
         )}
       </Card>
-      <Box mt={6} mb={4}>
+      <Box mt={6} mb={4} w="100%">
         <Card loading={loadingNewItem}>
           <Box>
             <Heading size="sm">Add a new item</Heading>

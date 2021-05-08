@@ -8,6 +8,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
@@ -44,6 +45,7 @@ const validationSchema = Yup.object().shape({
 
 export const RegisterForm: React.FC = () => {
   const history = useHistory();
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   const toast = useToast();
   const [show, setShow] = React.useState(false);
 
@@ -78,7 +80,7 @@ export const RegisterForm: React.FC = () => {
                   isInvalid={form.errors.name && form.touched.name}
                 >
                   <FormLabel htmlFor="name">Name</FormLabel>
-                  <Input {...field} type="name" />
+                  <Input {...field} type="name" autoFocus={isLargerThan480} />
                   <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                   <FormHelperText>
                     Must be longer than {NAME_MIN_LENGTH} characters.

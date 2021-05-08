@@ -5,6 +5,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import * as Yup from "yup";
@@ -28,6 +29,7 @@ interface Props {
 }
 
 export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   return (
     <Formik
       initialValues={initialValues}
@@ -50,7 +52,7 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                 <InputGroup size="md">
                   <Input
                     pr="4.5rem"
-                    autoFocus
+                    autoFocus={isLargerThan480} // only autofocus on non mobile views
                     type="text"
                     placeholder="Add a new list item"
                     {...field}

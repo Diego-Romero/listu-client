@@ -5,6 +5,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
@@ -12,11 +13,7 @@ import React from "react";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
 import { forgotPasswordRequest } from "../api/requests";
-import {
-  config,
-  SPACING_BUTTONS,
-  SPACING_INPUTS,
-} from "../config";
+import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { createToast } from "../utils/utils";
 
 export interface ForgotPasswordValues {
@@ -34,12 +31,19 @@ const validationSchema = Yup.object().shape({
 export const ForgotPasswordForm: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   async function resetPassword(values: ForgotPasswordValues, actions) {
     actions.setSubmitting(false);
     try {
       const res = await forgotPasswordRequest(values);
-      console.log(res)
-      toast(createToast("Done!", "success", "Please review your emails to reset your password"));
+      console.log(res);
+      toast(
+        createToast(
+          "Done!",
+          "success",
+          "Please review your emails to reset your password"
+        )
+      );
       history.push(config.routes.login);
     } catch (e) {
       const errorMessage = e.response.data.message;
@@ -66,7 +70,7 @@ export const ForgotPasswordForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" />
+                  <Input {...field} type="email" autoFocus={isLargerThan480} />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                 </FormControl>
               )}

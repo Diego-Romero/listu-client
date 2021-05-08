@@ -8,6 +8,7 @@ import {
   Image,
   Input,
   Textarea,
+  useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import React from "react";
@@ -38,6 +39,7 @@ const validationSchema = Yup.object().shape({
 export const CreateListPage = () => {
   const history = useHistory();
   const toast = useToast();
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
   async function createList(values: CreateListValues) {
     try {
@@ -83,7 +85,7 @@ export const CreateListPage = () => {
                     isInvalid={form.errors.name && form.touched.name}
                   >
                     <FormLabel htmlFor="name">Name</FormLabel>
-                    <Input {...field} type="text" autoFocus />
+                    <Input {...field} type="text" autoFocus={isLargerThan480} />
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                   </FormControl>
                 )}

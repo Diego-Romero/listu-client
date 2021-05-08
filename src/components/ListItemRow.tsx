@@ -47,8 +47,8 @@ export const ListItemRow: React.FC<Props> = ({
           cursor="pointer"
           zIndex={1}
         >
-          <Text fontSize="lg">{item.name} </Text>
-          <Text color="gray.500" fontSize="xs" ml={2}>
+          <Text fontSize="lg" textOverflow="ellipsis">{item.name} </Text>
+          <Text color="gray.500" fontSize="xs" ml={2} display={['none', 'none', 'inline-block']}>
             {formatDate(item.createdAt)}
           </Text>
         </Flex>
@@ -59,6 +59,7 @@ export const ListItemRow: React.FC<Props> = ({
                 variant="outline"
                 colorScheme="teal"
                 size="sm"
+                ml={2}
                 aria-label="Mark item as done"
                 onClick={() => updateListItemDoneState(item, true)}
                 icon={<CheckIcon />}
