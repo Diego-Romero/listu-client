@@ -66,8 +66,8 @@ export const RegisterForm: React.FC = () => {
     <Box>
       <Formik
         initialValues={initialValues}
-      validateOnChange={false}
-      validateOnBlur={false}
+        validateOnChange={false}
+        validateOnBlur={false}
         onSubmit={register}
         validationSchema={validationSchema}
       >
@@ -82,7 +82,7 @@ export const RegisterForm: React.FC = () => {
                   isInvalid={form.errors.name && form.touched.name}
                 >
                   <FormLabel htmlFor="name">Name</FormLabel>
-                  <Input {...field} type="name" autoFocus={isLargerThan480} variant="flushed" />
+                  <Input {...field} type="name" autoFocus={isLargerThan480} />
                   <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                   <FormHelperText>
                     Must be longer than {NAME_MIN_LENGTH} characters.
@@ -99,7 +99,7 @@ export const RegisterForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" variant="flushed"  />
+                  <Input {...field} type="email" />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                   <FormHelperText>
                     We will never share your email.
@@ -121,7 +121,6 @@ export const RegisterForm: React.FC = () => {
                       {...field}
                       type={show ? "text" : "password"}
                       pr="4.5rem"
-                      variant="flushed"
                     />
                     <InputRightElement width="4.5rem">
                       <Button

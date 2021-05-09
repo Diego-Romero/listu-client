@@ -57,6 +57,8 @@ export const ForgotPasswordForm: React.FC = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={resetPassword}
+        validateOnChange={false}
+        validateOnBlur={false}
         validationSchema={validationSchema}
       >
         {(props) => (
@@ -70,12 +72,7 @@ export const ForgotPasswordForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input
-                    {...field}
-                    type="email"
-                    autoFocus={isLargerThan480}
-                    variant="flushed"
-                  />
+                  <Input {...field} type="email" autoFocus={isLargerThan480} />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                 </FormControl>
               )}

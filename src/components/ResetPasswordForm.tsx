@@ -65,6 +65,8 @@ export const ResetPasswordForm: React.FC = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={register}
+        validateOnChange={false}
+        validateOnBlur={false}
         validationSchema={validationSchema}
       >
         {(props) => (

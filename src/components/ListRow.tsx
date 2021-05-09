@@ -2,7 +2,6 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Divider, Flex, Box, Text, HStack } from "@chakra-ui/layout";
 import React from "react";
 import { List } from "../type";
-import { shortDateFormat } from "../utils/utils";
 
 interface Props {
   list: List;
@@ -21,12 +20,13 @@ export const ListRow: React.FC<Props> = ({ list, navigateToList }) => {
         cursor="pointer"
         _hover={{
           fontWeight: "semibold",
+          textDecoration: 'underline'
         }}
         onClick={() => navigateToList(list._id)}
       >
         <HStack>
           <Text fontSize="lg">{list.name} </Text>
-          <Text fontSize="x-small">{shortDateFormat(list.createdAt)} </Text>
+          {/* <Text fontSize="x-small">{shortDateFormat(list.createdAt)} </Text> */}
         </HStack>
         <ArrowForwardIcon ml={2} w={4} h={4} />
       </Flex>

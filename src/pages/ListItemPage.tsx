@@ -132,7 +132,6 @@ export const ListItemPage = () => {
                         {...field}
                         type="text"
                         autoFocus={isLargerThan480}
-                        variant="flushed"
                       />
                       <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                     </FormControl>
@@ -148,7 +147,7 @@ export const ListItemPage = () => {
                       }
                     >
                       <FormLabel htmlFor="description">Description</FormLabel>
-                      <Textarea size="sm" {...field} variant="flushed" />
+                      <Textarea size="sm" {...field} />
                       <FormErrorMessage>
                         {form.errors.description}
                       </FormErrorMessage>
@@ -162,12 +161,7 @@ export const ListItemPage = () => {
                       mt={SPACING_INPUTS}
                       isInvalid={form.errors.done && form.touched.done}
                     >
-                      <Checkbox
-                        size="md"
-                        colorScheme="teal"
-                        {...field}
-                        variant="flushed"
-                      >
+                      <Checkbox size="md" colorScheme="teal" {...field}>
                         Done
                       </Checkbox>
                       <FormErrorMessage>{form.errors.done}</FormErrorMessage>
@@ -192,19 +186,22 @@ export const ListItemPage = () => {
                 >
                   Update
                 </Button>
+                <Button
+                  mt={4}
+                  isFullWidth
+                  colorScheme="teal"
+                  variant="solid"
+                  onClick={() =>
+                    history.push(config.routes.singleListUrl(listId))
+                  }
+                >
+                  Back
+                </Button>
               </Form>
             )}
           </Formik>
         )}
       </Card>
-      <Button
-        mt={6}
-        isFullWidth
-        variant="solid"
-        onClick={() => history.push(config.routes.singleListUrl(listId))}
-      >
-        Back
-      </Button>
       <Image mt={4} boxSize="400px" src={logo} alt="Login" />
     </Flex>
   );

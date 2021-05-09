@@ -80,7 +80,7 @@ export const LoginForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" autoFocus={isLargerThan480} variant="flushed" />
+                  <Input {...field} type="email" autoFocus={isLargerThan480}  />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                 </FormControl>
               )}
@@ -94,7 +94,7 @@ export const LoginForm: React.FC = () => {
                   isInvalid={form.errors.password && form.touched.password}
                 >
                   <FormLabel htmlFor="password">Password</FormLabel>
-                  <Input {...field} type="password" variant="flushed"/>
+                  <Input {...field} type="password" />
                   <FormErrorMessage>{form.errors.password}</FormErrorMessage>
                 </FormControl>
               )}
