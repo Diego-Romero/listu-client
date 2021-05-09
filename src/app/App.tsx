@@ -11,6 +11,7 @@ import {
 } from "../context/LoadingContext";
 import { LoadingComponent } from "../components/Loading";
 
+
 export const Body: React.FC = ({ children }) => {
   const { loading } = useLoadingContext();
   return (
@@ -38,14 +39,14 @@ export const Body: React.FC = ({ children }) => {
   );
 };
 
-const config = {
+const themeConfig = {
   initialColorMode: "dark",
   useSystemColorMode: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const theme = extendTheme({ config });
+const theme = extendTheme({ config: themeConfig });
 
 export const App = () => {
   return (

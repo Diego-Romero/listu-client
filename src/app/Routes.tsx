@@ -1,5 +1,11 @@
 import React from "react";
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  Redirect,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import { getUserRequest } from "../api/requests";
 import { config } from "../config";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
@@ -16,10 +22,18 @@ import { NewFriendPage } from "../pages/NewFriendPage";
 import { ResetPasswordPage } from "../pages/ResetPasswordPage";
 import { ViewListPage } from "../pages/ViewListPage";
 
+import ReactGA from "react-ga";
+ReactGA.initialize(config.env.gaId as string);
+
 export const Routes = () => {
   const { user, logout, login } = useAuthenticatedContext();
   const { setLoading } = useLoadingContext();
   const history = useHistory();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    ReactGA.send(["pageview", location.pathname]);
+  }, [location]);
 
   const fetchUser = async () => {
     try {
