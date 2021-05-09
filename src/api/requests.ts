@@ -6,6 +6,7 @@ import { LoginFormValues } from "../components/LoginForm";
 import { RegisterFriendFormTypes } from "../components/NewFriendForm";
 import { ResetPasswordFormTypes } from "../components/ResetPasswordForm";
 import { config } from "../config";
+import { ContactFormValues } from "../pages/ContactPage";
 import { CreateListValues } from "../pages/CreateListPage";
 import { ListItem } from "../type";
 
@@ -87,5 +88,10 @@ export const forgotPasswordRequest = async (values: ForgotPasswordValues) => {
 
 export const resetPasswordRequest = async (values: ResetPasswordFormTypes, token: string) => {
   const url =`/user/reset-password/${token}`
+  return axiosInstance.post(url, values)
+}
+
+export const sendContactMessageRequest = async (values: ContactFormValues) => {
+  const url =`/user/contact`
   return axiosInstance.post(url, values)
 }

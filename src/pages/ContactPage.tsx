@@ -7,6 +7,7 @@ import {
   Heading,
   Image,
   Input,
+  Text,
   Textarea,
   useMediaQuery,
   useToast,
@@ -19,21 +20,20 @@ import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
 import { createToast } from "../utils/utils";
+import { sendContactMessageRequest } from "../api/requests";
 
 export interface ContactFormValues {
-  name: string;
   message: string;
   email: string;
 }
 
 const initialValues: ContactFormValues = {
-  name: "",
   message: "",
   email: "",
 };
 
 const validationSchema = Yup.object().shape({
-  name: config.validation.name,
+  email: config.validation.email,
   description: config.validation.description,
 });
 
@@ -43,10 +43,8 @@ export const ContactPage = () => {
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
   async function submitMessage(values: ContactFormValues) {
-    console.log(values);
     try {
-      // todo: add request to server
-      // await createListRequest(values);
+      await sendContactMessageRequest(values);
       toast(
         createToast(
           "Whoop 🙌",
@@ -54,7 +52,7 @@ export const ContactPage = () => {
           "Thank you for submitting your message, I will try to get back to you as soon as possible."
         )
       );
-      history.push(config.routes.lists);
+      history.push(config.routes.home);
     } catch (_err) {
       toast(
         createToast(
@@ -72,6 +70,7 @@ export const ContactPage = () => {
         <Heading mt={2} size="lg" textAlign="center" mb={4}>
           Contact
         </Heading>
+        <Text fontSize="sm" color='gray'>Thank you so much for taking the time to reach me, I would love to hear any feedback from you that could help me improve this platform.</Text>
 
         <Formik
           initialValues={initialValues}
@@ -85,26 +84,13 @@ export const ContactPage = () => {
         >
           {(props) => (
             <Form>
-              <Field name="name">
-                {({ field, form }) => (
-                  <FormControl
-                    id="name"
-                    mt={SPACING_INPUTS}
-                    isRequired
-                    isInvalid={form.errors.name && form.touched.name}
-                  >
-                    <FormLabel htmlFor="name">Name</FormLabel>
-                    <Input {...field} type="text" autoFocus={isLargerThan480} />
-                    <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
               <Field name="email">
                 {({ field, form }) => (
                   <FormControl
-                    id="name"
+                    id="email"
+                    isRequired
                     mt={SPACING_INPUTS}
-                    isInvalid={form.errors.name && form.touched.name}
+                    isInvalid={form.errors.email && form.touched.email}
                   >
                     <FormLabel htmlFor="name">Email</FormLabel>
                     <Input {...field} type="email" />
