@@ -70,7 +70,12 @@ export const ForgotPasswordForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" autoFocus={isLargerThan480} />
+                  <Input
+                    {...field}
+                    type="email"
+                    autoFocus={isLargerThan480}
+                    variant="flushed"
+                  />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                 </FormControl>
               )}
@@ -87,7 +92,8 @@ export const ForgotPasswordForm: React.FC = () => {
             </Button>
             <Button
               mt={SPACING_BUTTONS - 4}
-              variant="outline"
+              variant="solid"
+              colorScheme="teal"
               isFullWidth
               isLoading={props.isSubmitting}
               onClick={() => history.push(config.routes.login)}

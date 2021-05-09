@@ -11,6 +11,7 @@ import {
   MenuItem,
   MenuList,
   Tooltip,
+  useColorMode,
   useToast,
 } from "@chakra-ui/react";
 import * as React from "react";
@@ -26,6 +27,7 @@ export const NavBar: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const { user, logout } = useAuthenticatedContext();
+  const { colorMode } = useColorMode();
   async function logUserOut() {
     try {
       logout();
@@ -58,7 +60,9 @@ export const NavBar: React.FC = () => {
             size="lg"
             variant="ghost"
           />
-          <MenuList>
+          <MenuList 
+            color={colorMode === 'light' ? 'black' : 'white'}
+          >
             <MenuItem onClick={() => history.push(config.routes.home)}>
               Home
             </MenuItem>
