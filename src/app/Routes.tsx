@@ -5,6 +5,7 @@ import { config } from "../config";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import { useLoadingContext } from "../context/LoadingContext";
 import { FourOFourPage } from "../pages/404Page";
+import { ContactPage } from "../pages/ContactPage";
 import { CreateListPage } from "../pages/CreateListPage";
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { Landing } from "../pages/LandingPage";
@@ -62,6 +63,9 @@ export const Routes = () => {
       <Route path={config.routes.login} exact>
         <Login />
       </Route>
+      <Route path={config.routes.contact} exact>
+        <ContactPage />
+      </Route>
       <Route path={config.routes.forgotPassword} exact>
         <ForgotPasswordPage />
       </Route>
@@ -79,7 +83,11 @@ export const Routes = () => {
         component={CreateListPage}
       />
       <PrivateRoute path={config.routes.list} exact component={ViewListPage} />
-      <PrivateRoute path={config.routes.listItem} exact component={ListItemPage} />
+      <PrivateRoute
+        path={config.routes.listItem}
+        exact
+        component={ListItemPage}
+      />
       {/* 404 when route is unidentified */}
       <Route>
         <FourOFourPage />

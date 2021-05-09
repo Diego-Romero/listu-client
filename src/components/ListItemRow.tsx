@@ -1,5 +1,4 @@
-import { ArrowForwardIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
-import { GrRevert } from "react-icons/gr";
+import { ArrowBackIcon, ArrowForwardIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
 import { Collapse, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
@@ -47,8 +46,15 @@ export const ListItemRow: React.FC<Props> = ({
           cursor="pointer"
           zIndex={1}
         >
-          <Text fontSize="lg" textOverflow="ellipsis">{item.name} </Text>
-          <Text color="gray.500" fontSize="xs" ml={2} display={['none', 'none', 'inline-block']}>
+          <Text fontSize="lg" textOverflow="ellipsis">
+            {item.name}{" "}
+          </Text>
+          <Text
+            color="gray.500"
+            fontSize="xs"
+            ml={2}
+            display={["none", "none", "inline-block"]}
+          >
             {formatDate(item.createdAt)}
           </Text>
         </Flex>
@@ -56,7 +62,7 @@ export const ListItemRow: React.FC<Props> = ({
           {showUndone ? (
             <>
               <IconButton
-                variant="outline"
+                variant="ghost"
                 colorScheme="teal"
                 size="sm"
                 ml={2}
@@ -65,31 +71,35 @@ export const ListItemRow: React.FC<Props> = ({
                 icon={<CheckIcon />}
               />
               <IconButton
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 aria-label="Navigate to item"
-                onClick={() => history.push(config.routes.singleListItemUrl(listId, item._id))}
+                onClick={() =>
+                  history.push(
+                    config.routes.singleListItemUrl(listId, item._id)
+                  )
+                }
                 icon={<ArrowForwardIcon />}
               />
             </>
           ) : (
             <>
               <IconButton
-                variant="solid"
+                variant="ghost"
+                colorScheme="red"
+                size="sm"
+                aria-label="Delete item"
+                onClick={() => deleteItem(item._id)}
+                icon={<DeleteIcon />}
+              />
+              <IconButton
+                variant="ghost"
                 colorScheme="teal"
                 size="sm"
                 color="teal"
                 aria-label="Move item to to-do"
                 onClick={() => updateListItemDoneState(item, false)}
-                icon={<GrRevert />}
-              />
-              <IconButton
-                variant="outline"
-                colorScheme="orange"
-                size="sm"
-                aria-label="Delete item"
-                onClick={() => deleteItem(item._id)}
-                icon={<DeleteIcon />}
+                icon={<ArrowBackIcon />}
               />
             </>
           )}

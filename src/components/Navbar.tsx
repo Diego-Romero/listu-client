@@ -10,6 +10,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import * as React from "react";
@@ -19,6 +20,7 @@ import { config } from "../config";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import { createToast } from "../utils/utils";
+import { IoMdExit } from "react-icons/io";
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
@@ -60,6 +62,9 @@ export const NavBar: React.FC = () => {
             <MenuItem onClick={() => history.push(config.routes.home)}>
               Home
             </MenuItem>
+            <MenuItem onClick={() => history.push(config.routes.contact)}>
+              Contact
+            </MenuItem>
             {user !== null ? (
               <>
                 <MenuItem onClick={() => history.push(config.routes.lists)}>
@@ -82,6 +87,11 @@ export const NavBar: React.FC = () => {
               Home
             </BreadcrumbLink>
           </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink as={Link} to={config.routes.contact}>
+              Contact
+            </BreadcrumbLink>
+          </BreadcrumbItem>
           {user !== null ? (
             <BreadcrumbItem>
               <BreadcrumbLink as={Link} to={config.routes.lists}>
@@ -92,24 +102,30 @@ export const NavBar: React.FC = () => {
         </Breadcrumb>
       </Box>
       <HStack>
+        <ColorModeSwitcher justifySelf="flex-end" />
         <Box display={["none", "none", "block"]}>
-          <Breadcrumb fontWeight="medium" fontSize="lg" separator="-">
-            {user !== null ? (
-              <BreadcrumbItem>
-                <BreadcrumbLink onClick={() => logUserOut()}>
-                  Logout
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            ) : (
+          {user !== null ? (
+            <Tooltip label="Logout" aria-label="Logout">
+              <IconButton
+                size="md"
+                variant="ghost"
+                color="current"
+                fontSize="2xl"
+                onClick={() => logUserOut()}
+                icon={<IoMdExit />}
+                aria-label={`Logout`}
+              />
+            </Tooltip>
+          ) : (
+            <Breadcrumb fontWeight="medium" fontSize="lg" separator="-">
               <BreadcrumbItem>
                 <BreadcrumbLink as={Link} to={config.routes.login}>
                   Login / Register
                 </BreadcrumbLink>
               </BreadcrumbItem>
-            )}
-          </Breadcrumb>
+            </Breadcrumb>
+          )}
         </Box>
-        <ColorModeSwitcher justifySelf="flex-end" />
       </HStack>
     </Flex>
   );

@@ -7,12 +7,12 @@ import {
 import React from "react";
 import { Card } from "../components/Card";
 import { NewFriendForm } from "../components/NewFriendForm";
-import logo from "../images/icons/undraw_join_of2w.svg";
+import logo from "../images/icons/join.svg";
 
 export const NewFriendPage = () => {
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card maxW={"500px"}>
+      <Card >
         <Heading mb={4} size="lg">Register</Heading>
         <Text><b>Note:</b> Your email has already been saved</Text>
         <NewFriendForm />

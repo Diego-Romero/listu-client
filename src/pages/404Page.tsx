@@ -1,15 +1,27 @@
-import { VStack, Heading, Image } from "@chakra-ui/react";
+import { VStack, Heading, Image, Text, Box, Button } from "@chakra-ui/react";
 import React from "react";
-import logo from "../images/icons/undraw_team_collaboration_8eoc.svg";
+import { useHistory } from "react-router-dom";
+import { config } from "../config";
+import logo from "../images/icons/sleeping.svg";
 
 export const FourOFourPage: React.FC = () => {
+  const history = useHistory();
   return (
-    <VStack spacing={6} mt={8} textAlign="center">
-      <Heading as="h1" size="lg">
-        Whoopsy daisy! We have encountered an error and are working on fixing
-        it.
-      </Heading>
-      <Image mt={4} boxSize="400px" src={logo} alt="Error" />
+    <VStack spacing={12} textAlign="center">
+      <Box>
+        <Heading as="h1" size="lg">
+          Yikes!
+        </Heading>
+        <Text mt={4}>This page does not exist...</Text>
+        <Button
+          mt={4}
+          colorScheme="teal"
+          onClick={() => history.push(config.routes.home)}
+        >
+          Navigate Home
+        </Button>
+      </Box>
+      <Image mt={12} boxSize="400px" src={logo} alt="Error" />
     </VStack>
   );
 };

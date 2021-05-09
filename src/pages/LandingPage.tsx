@@ -29,7 +29,6 @@ export const Landing: React.FC = () => {
         </Button>
       ) : (
         <Button
-          variant="outline"
           colorScheme="teal"
           size="lg"
           mb={4}
@@ -38,7 +37,7 @@ export const Landing: React.FC = () => {
           Lists
         </Button>
       )}
-      <Image mt={2} boxSize={["300px", "450px"]} src={logo} alt="Login" />
+      <Image mt={2} boxSize={["300px", "550px"]} src={logo} alt="Login" />
     </VStack>
   );
 };

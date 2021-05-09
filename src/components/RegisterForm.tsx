@@ -66,6 +66,8 @@ export const RegisterForm: React.FC = () => {
     <Box>
       <Formik
         initialValues={initialValues}
+      validateOnChange={false}
+      validateOnBlur={false}
         onSubmit={register}
         validationSchema={validationSchema}
       >
@@ -146,6 +148,15 @@ export const RegisterForm: React.FC = () => {
               isLoading={props.isSubmitting}
             >
               Register
+            </Button>
+            <Button
+              mt={SPACING_BUTTONS - 4}
+              colorScheme="teal"
+              isFullWidth
+              isLoading={props.isSubmitting}
+              onClick={() => history.push(config.routes.home)}
+            >
+              Back
             </Button>
           </Form>
         )}

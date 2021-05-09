@@ -13,22 +13,23 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
-import logo from "../images/icons/landing.svg";
+import logo from "../images/icons/contact.svg";
 import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
-import { createListRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
 
-export interface CreateListValues {
+export interface ContactFormValues {
   name: string;
-  description: string;
+  message: string;
+  email: string;
 }
 
-const initialValues: CreateListValues = {
+const initialValues: ContactFormValues = {
   name: "",
-  description: "",
+  message: "",
+  email: "",
 };
 
 const validationSchema = Yup.object().shape({
@@ -36,16 +37,22 @@ const validationSchema = Yup.object().shape({
   description: config.validation.description,
 });
 
-export const CreateListPage = () => {
+export const ContactPage = () => {
   const history = useHistory();
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
-  async function createList(values: CreateListValues) {
+  async function submitMessage(values: ContactFormValues) {
+    console.log(values);
     try {
-      await createListRequest(values);
+      // todo: add request to server
+      // await createListRequest(values);
       toast(
-        createToast("Whoop 🙌", "success", "Your new list is ready to go.")
+        createToast(
+          "Whoop 🙌",
+          "success",
+          "Thank you for submitting your message, I will try to get back to you as soon as possible."
+        )
       );
       history.push(config.routes.lists);
     } catch (_err) {
@@ -53,7 +60,7 @@ export const CreateListPage = () => {
         createToast(
           "Yikes..",
           "error",
-          "There has been an error creating your list, please try again later."
+          "There has been an error submitting your message please try again later."
         )
       );
     }
@@ -63,7 +70,7 @@ export const CreateListPage = () => {
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
       <Card>
         <Heading mt={2} size="lg" textAlign="center" mb={4}>
-          Create a list
+          Contact
         </Heading>
 
         <Formik
@@ -72,7 +79,7 @@ export const CreateListPage = () => {
           validateOnBlur={false}
           onSubmit={(values, actions) => {
             actions.setSubmitting(false);
-            createList(values);
+            submitMessage(values);
           }}
           validationSchema={validationSchema}
         >
@@ -92,16 +99,28 @@ export const CreateListPage = () => {
                   </FormControl>
                 )}
               </Field>
-              <Field name="description">
+              <Field name="email">
                 {({ field, form }) => (
                   <FormControl
-                    id="description"
+                    id="name"
                     mt={SPACING_INPUTS}
-                    isInvalid={
-                      form.errors.description && form.touched.description
-                    }
+                    isInvalid={form.errors.name && form.touched.name}
                   >
-                    <FormLabel htmlFor="description">Description</FormLabel>
+                    <FormLabel htmlFor="name">Email</FormLabel>
+                    <Input {...field} type="email" />
+                    <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="message">
+                {({ field, form }) => (
+                  <FormControl
+                    id="message"
+                    isRequired
+                    mt={SPACING_INPUTS}
+                    isInvalid={form.errors.message && form.touched.message}
+                  >
+                    <FormLabel htmlFor="description">Message</FormLabel>
                     <Textarea size="sm" {...field} />
                     <FormErrorMessage>
                       {form.errors.description}
@@ -117,16 +136,16 @@ export const CreateListPage = () => {
                 type="submit"
                 isLoading={props.isSubmitting}
               >
-                Create
+                Send
               </Button>
               <Button
-                mt={3}
-                variant="outline"
+                mt={SPACING_BUTTONS - 4}
+                colorScheme="teal"
                 isFullWidth
                 isLoading={props.isSubmitting}
-                onClick={() => history.push(config.routes.lists)}
+                onClick={() => history.push(config.routes.home)}
               >
-                Back
+                Go to home
               </Button>
             </Form>
           )}

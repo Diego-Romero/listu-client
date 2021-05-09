@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
-import logo from "../images/icons/lists-image.svg";
+import logo from "../images/icons/landing-teal.svg";
 import { useHistory } from "react-router";
 import { config, SPACING_BUTTONS } from "../config";
 import { User } from "../type";

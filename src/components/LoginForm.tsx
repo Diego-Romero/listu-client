@@ -65,6 +65,8 @@ export const LoginForm: React.FC = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={loginUser}
+      validateOnChange={false}
+      validateOnBlur={false}
         validationSchema={validationSchema}
       >
         {(props) => (
@@ -114,6 +116,16 @@ export const LoginForm: React.FC = () => {
               isLoading={props.isSubmitting}
             >
               Login
+            </Button>
+            <Button
+              mt={SPACING_BUTTONS - 4}
+              colorScheme="teal"
+              // variant="outline"
+              isFullWidth
+              isLoading={props.isSubmitting}
+              onClick={() => history.push(config.routes.home)}
+            >
+              Back
             </Button>
           </Form>
         )}

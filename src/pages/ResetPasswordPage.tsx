@@ -6,7 +6,7 @@ import {
 import React from "react";
 import { Card } from "../components/Card";
 import { ResetPasswordForm } from "../components/ResetPasswordForm";
-import logo from "../images/icons/undraw_join_of2w.svg";
+import logo from "../images/icons/team_up.svg";
 
 export const ResetPasswordPage = () => {
   return (
