@@ -11,7 +11,6 @@ import {
 } from "../context/LoadingContext";
 import { LoadingComponent } from "../components/Loading";
 
-
 export const Body: React.FC = ({ children }) => {
   const { loading } = useLoadingContext();
   return (

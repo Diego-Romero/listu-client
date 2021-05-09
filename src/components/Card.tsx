@@ -10,10 +10,10 @@ interface Props {
 export const Card: React.FC<Props> = ({
   children,
   loading = false,
-  maxHeight = 'auto'
+  maxHeight = "auto",
 }) => (
   <Box
-    width={['100%', '500px']}
+    width={["100%", "500px"]}
     borderStyle="solid"
     borderRadius="12px"
     maxHeight={maxHeight}
@@ -23,8 +23,6 @@ export const Card: React.FC<Props> = ({
     borderColor="gray.200"
     borderWidth="1px"
   >
-    {loading ? <LoadingComponent loading={loading}/> : 
-      <Box>{ children }</Box> 
-    }
+    {loading ? <LoadingComponent loading={loading} /> : <Box>{children}</Box>}
   </Box>
 );

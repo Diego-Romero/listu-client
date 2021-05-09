@@ -65,8 +65,8 @@ export const LoginForm: React.FC = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={loginUser}
-      validateOnChange={false}
-      validateOnBlur={false}
+        validateOnChange={false}
+        validateOnBlur={false}
         validationSchema={validationSchema}
       >
         {(props) => (
@@ -80,7 +80,7 @@ export const LoginForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" autoFocus={isLargerThan480}  />
+                  <Input {...field} type="email" autoFocus={isLargerThan480} />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                 </FormControl>
               )}

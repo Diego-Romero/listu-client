@@ -20,7 +20,7 @@ export const ListRow: React.FC<Props> = ({ list, navigateToList }) => {
         cursor="pointer"
         _hover={{
           fontWeight: "semibold",
-          textDecoration: 'underline'
+          textDecoration: "underline",
         }}
         onClick={() => navigateToList(list._id)}
       >

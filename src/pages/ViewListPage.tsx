@@ -199,8 +199,15 @@ export const ViewListPage = () => {
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
       <Card loading={loading} maxHeight="400px">
-        <Flex direction={['column', 'column', 'row']} align={['start', 'start', 'center']} justify="space-between" mb={4}>
-          <Heading mb={[6, 6, 0]} size="lg" textOverflow="ellipsis">{list ? list.name : "List"}</Heading>
+        <Flex
+          direction={["column", "column", "row"]}
+          align={["start", "start", "center"]}
+          justify="space-between"
+          mb={4}
+        >
+          <Heading mb={[6, 6, 0]} size="lg" textOverflow="ellipsis">
+            {list ? list.name : "List"}
+          </Heading>
           <HStack spacing={3}>
             <Icon
               as={AiOutlineUserAdd}

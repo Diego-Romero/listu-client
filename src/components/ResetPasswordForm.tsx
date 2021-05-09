@@ -51,7 +51,13 @@ export const ResetPasswordForm: React.FC = () => {
     actions.setSubmitting(false);
     try {
       await resetPasswordRequest(values, token);
-      toast(createToast("Whoop 🙌", "success", "You can now log in with your new password"));
+      toast(
+        createToast(
+          "Whoop 🙌",
+          "success",
+          "You can now log in with your new password"
+        )
+      );
       history.push(config.routes.login);
     } catch (e) {
       const errorMessage = e.response.data.message;

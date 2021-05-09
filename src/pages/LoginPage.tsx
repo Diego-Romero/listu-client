@@ -16,7 +16,7 @@ import logo from "../images/icons/join.svg";
 export const Login = () => {
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card >
+      <Card>
         <Tabs size="lg" isFitted colorScheme="teal">
           <TabList>
             <Tab>Login</Tab>

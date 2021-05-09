@@ -60,9 +60,7 @@ export const NavBar: React.FC = () => {
             size="lg"
             variant="ghost"
           />
-          <MenuList 
-            color={colorMode === 'light' ? 'black' : 'white'}
-          >
+          <MenuList color={colorMode === "light" ? "black" : "white"}>
             <MenuItem onClick={() => history.push(config.routes.home)}>
               Home
             </MenuItem>

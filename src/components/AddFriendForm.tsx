@@ -32,35 +32,30 @@ const validationSchema = Yup.object().shape({
 });
 
 interface Props {
-  refreshList: () => void
+  refreshList: () => void;
 }
 
 export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(false);
   const { id } = useParams<ParamTypes>();
   const toast = useToast();
 
   const addFriend = async (values: AddFriendFormValues, resetForm: any) => {
-    setLoading(true)
+    setLoading(true);
     try {
       const res = await addFriendRequest(values, id);
-      toast(
-        createToast(
-          res.data.message,
-          "success"
-        )
-        );
-        resetForm()
-        refreshList()
+      toast(createToast(res.data.message, "success"));
+      resetForm();
+      refreshList();
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
         createToast("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
   return (
     <Box>
       <Formik
@@ -95,7 +90,7 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
               type="submit"
               isLoading={props.isSubmitting || loading}
             >
-              Invite friend 
+              Invite friend
             </Button>
           </Form>
         )}

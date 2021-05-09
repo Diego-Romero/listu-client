@@ -114,10 +114,7 @@ export const ListItemRow: React.FC<Props> = ({
         <Stack px={2} pb={4} spacing={2}>
           <Box>
             <Text fontSize="sm">Created by: {item.createdBy.name}</Text>
-            <Text
-              color="gray.500"
-              fontSize="sm"
-            >
+            <Text color="gray.500" fontSize="sm">
               {longDateFormat(item.createdAt)}
             </Text>
           </Box>
@@ -132,4 +129,3 @@ export const ListItemRow: React.FC<Props> = ({
     </Box>
   );
 };
-
