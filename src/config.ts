@@ -13,7 +13,7 @@ export const SPACING_BUTTONS = 8;
 export const config = {
   env: {
     serverUrl: process.env.REACT_APP_SERVER_URL,
-    gaId: process.env.RGA_ID,
+    gaId: process.env.REACT_APP_GA_ID,
   },
   routes: {
     login: "/login",
