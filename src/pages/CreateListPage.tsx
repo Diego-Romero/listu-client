@@ -87,7 +87,7 @@ export const CreateListPage = () => {
                     isInvalid={form.errors.name && form.touched.name}
                   >
                     <FormLabel htmlFor="name">Name</FormLabel>
-                    <Input {...field} type="text" autoFocus={isLargerThan480} />
+                    <Input {...field} type="text" autoFocus={isLargerThan480} variant="flushed" />
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                   </FormControl>
                 )}
@@ -102,7 +102,7 @@ export const CreateListPage = () => {
                     }
                   >
                     <FormLabel htmlFor="description">Description</FormLabel>
-                    <Textarea size="sm" {...field} />
+                    <Textarea size="sm" {...field} variant="flushed" />
                     <FormErrorMessage>
                       {form.errors.description}
                     </FormErrorMessage>
@@ -119,19 +119,18 @@ export const CreateListPage = () => {
               >
                 Create
               </Button>
-              <Button
-                mt={3}
-                variant="outline"
-                isFullWidth
-                isLoading={props.isSubmitting}
-                onClick={() => history.push(config.routes.lists)}
-              >
-                Back
-              </Button>
             </Form>
           )}
         </Formik>
       </Card>
+      <Button
+        mt={6}
+        isFullWidth
+        variant="solid"
+        onClick={() => history.push(config.routes.lists)}
+      >
+        Back
+      </Button>
       <Image mt={4} boxSize="400px" src={logo} alt="Login" />
     </Flex>
   );

@@ -20,7 +20,7 @@ import { getListItemRequest, updateListItemRequest } from "../api/requests";
 import { Card } from "../components/Card";
 import logo from "../images/icons/landing2.svg";
 import { ListItem } from "../type";
-import { createToast, formatDate } from "../utils/utils";
+import { createToast, shortDateFormat } from "../utils/utils";
 import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
@@ -82,14 +82,14 @@ export const ListItemPage = () => {
   }
 
   async function updateListItem(values: UpdateListItemValues) {
-    setLoading(true)
-    const updated = {...listItem} as ListItem;
+    setLoading(true);
+    const updated = { ...listItem } as ListItem;
     updated.name = values.name;
     updated.description = values.description;
     updated.done = values.done;
     try {
       await updateListItemRequest(listId, listItemId, updated);
-      history.push(config.routes.singleListUrl(listId))
+      history.push(config.routes.singleListUrl(listId));
       toast(createToast("Item updated", "success"));
     } catch (e) {
       const errorMessage = e.response.data.message;
@@ -113,7 +113,7 @@ export const ListItemPage = () => {
             initialValues={initialValues}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              updateListItem(values)
+              updateListItem(values);
             }}
             validationSchema={validationSchema}
           >
@@ -128,7 +128,12 @@ export const ListItemPage = () => {
                       isInvalid={form.errors.name && form.touched.name}
                     >
                       <FormLabel htmlFor="name">Name</FormLabel>
-                      <Input {...field} type="text" autoFocus={isLargerThan480} />
+                      <Input
+                        {...field}
+                        type="text"
+                        autoFocus={isLargerThan480}
+                        variant="flushed"
+                      />
                       <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                     </FormControl>
                   )}
@@ -143,7 +148,7 @@ export const ListItemPage = () => {
                       }
                     >
                       <FormLabel htmlFor="description">Description</FormLabel>
-                      <Textarea size="sm" {...field} />
+                      <Textarea size="sm" {...field} variant="flushed" />
                       <FormErrorMessage>
                         {form.errors.description}
                       </FormErrorMessage>
@@ -157,7 +162,12 @@ export const ListItemPage = () => {
                       mt={SPACING_INPUTS}
                       isInvalid={form.errors.done && form.touched.done}
                     >
-                      <Checkbox size="md" colorScheme="green" {...field}>
+                      <Checkbox
+                        size="md"
+                        colorScheme="teal"
+                        {...field}
+                        variant="flushed"
+                      >
                         Done
                       </Checkbox>
                       <FormErrorMessage>{form.errors.done}</FormErrorMessage>
@@ -166,7 +176,7 @@ export const ListItemPage = () => {
                 </Field>
                 <Stack mt={4}>
                   <Text fontSize="sm" color="gray">
-                    Created: {formatDate(listItem!.createdAt)}
+                    Created: {shortDateFormat(listItem!.createdAt)}
                   </Text>
                   <Text fontSize="sm" color="gray">
                     Created by: {listItem!.createdBy.name}
@@ -182,22 +192,19 @@ export const ListItemPage = () => {
                 >
                   Update
                 </Button>
-                <Button
-                  mt={4}
-                  colorScheme="teal"
-                  isFullWidth
-                  isLoading={props.isSubmitting}
-                  onClick={() =>
-                    history.push(config.routes.singleListUrl(listId))
-                  }
-                >
-                  Back
-                </Button>
               </Form>
             )}
           </Formik>
         )}
       </Card>
+      <Button
+        mt={6}
+        isFullWidth
+        variant="solid"
+        onClick={() => history.push(config.routes.singleListUrl(listId))}
+      >
+        Back
+      </Button>
       <Image mt={4} boxSize="400px" src={logo} alt="Login" />
     </Flex>
   );

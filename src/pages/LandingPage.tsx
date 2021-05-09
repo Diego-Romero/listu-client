@@ -11,7 +11,12 @@ export const Landing: React.FC = () => {
 
   return (
     <VStack spacing={6} mt={8} textAlign="center">
-      <Heading as="h1" size="2xl">
+      <Heading
+        as="h1"
+        size="4xl"
+        bgClip="text"
+        bgGradient="linear(to-r, teal.500,green.500)"
+      >
         Listu
       </Heading>
       <Text fontSize="xl">
@@ -21,6 +26,11 @@ export const Landing: React.FC = () => {
         <Button
           variant="outline"
           colorScheme="teal"
+          color="white"
+          bgGradient="linear(to-r, teal.500,green.500)"
+          _hover={{
+            bgGradient: "linear(to-r, teal.400, green.400)",
+          }}
           size="lg"
           mb={4}
           onClick={() => history.push(config.routes.login)}
@@ -31,6 +41,11 @@ export const Landing: React.FC = () => {
         <Button
           colorScheme="teal"
           size="lg"
+          color="white"
+          bgGradient="linear(to-r, teal.500,green.500)"
+          _hover={{
+            bgGradient: "linear(to-r, teal.400, green.400)",
+          }}
           mb={4}
           onClick={() => history.push(config.routes.lists)}
         >

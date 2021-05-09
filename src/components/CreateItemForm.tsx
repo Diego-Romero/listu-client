@@ -57,6 +57,7 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                     autoFocus={isLargerThan480} // only autofocus on non mobile views
                     type="text"
                     placeholder="Add a new list item"
+                    variant="flushed"
                     {...field}
                   />
                   <InputRightElement width="4.5rem">

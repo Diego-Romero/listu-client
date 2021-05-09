@@ -33,7 +33,6 @@ export const ListsPage = () => {
     history.push(url);
   };
 
-
   const fetchUser = async () => {
     setLoading(true);
     try {
@@ -60,11 +59,7 @@ export const ListsPage = () => {
         </Heading>
         {user !== null && user.lists.length > 0 ? (
           user.lists.map((list) => (
-            <ListRow
-              list={list}
-              key={list._id}
-              navigateToList={handleClick}
-            />
+            <ListRow list={list} key={list._id} navigateToList={handleClick} />
           ))
         ) : (
           <Box>
@@ -83,6 +78,14 @@ export const ListsPage = () => {
         >
           Create a new list
         </Button>
+        {/* <Button
+          mt={3}
+          variant="solid"
+          isFullWidth
+          onClick={() => history.push(config.routes.home)}
+        >
+          Home
+        </Button> */}
       </Card>
       <Image mt={4} boxSize="350px" src={logo} alt="Login" />
     </Flex>

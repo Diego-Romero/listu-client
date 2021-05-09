@@ -7,7 +7,6 @@ import {
   Heading,
   Image,
   Input,
-  Text,
   Textarea,
   useMediaQuery,
   useToast,
@@ -34,22 +33,24 @@ const initialValues: ContactFormValues = {
 
 const validationSchema = Yup.object().shape({
   email: config.validation.email,
-  description: config.validation.description,
+  message: config.validation.description,
 });
 
 export const ContactPage = () => {
   const history = useHistory();
   const toast = useToast();
+  const [loading, setLoading] = React.useState(false);
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
   async function submitMessage(values: ContactFormValues) {
+    setLoading(true);
     try {
       await sendContactMessageRequest(values);
       toast(
         createToast(
-          "Whoop 🙌",
+          "Thank you!",
           "success",
-          "Thank you for submitting your message, I will try to get back to you as soon as possible."
+          "I will try to get back to you as soon as possible."
         )
       );
       history.push(config.routes.home);
@@ -61,17 +62,17 @@ export const ContactPage = () => {
           "There has been an error submitting your message please try again later."
         )
       );
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card>
+      <Card loading={loading}>
         <Heading mt={2} size="lg" textAlign="center" mb={4}>
           Contact
         </Heading>
-        <Text fontSize="sm" color='gray'>Thank you so much for taking the time to reach me, I would love to hear any feedback from you that could help me improve this platform.</Text>
-
         <Formik
           initialValues={initialValues}
           validateOnChange={false}
@@ -93,7 +94,12 @@ export const ContactPage = () => {
                     isInvalid={form.errors.email && form.touched.email}
                   >
                     <FormLabel htmlFor="name">Email</FormLabel>
-                    <Input {...field} type="email" />
+                    <Input
+                      {...field}
+                      type="email"
+                      variant="flushed"
+                      autoFocus={isLargerThan480}
+                    />
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                   </FormControl>
                 )}
@@ -106,8 +112,13 @@ export const ContactPage = () => {
                     mt={SPACING_INPUTS}
                     isInvalid={form.errors.message && form.touched.message}
                   >
-                    <FormLabel htmlFor="description">Message</FormLabel>
-                    <Textarea size="sm" {...field} />
+                    <FormLabel htmlFor="message">Message</FormLabel>
+                    <Textarea
+                      variant="flushed"
+                      placeholder="Thanks a lot for taking the time to reach me, please let me know how this platform could help you or your team be more productive."
+                      size="md"
+                      {...field}
+                    />
                     <FormErrorMessage>
                       {form.errors.description}
                     </FormErrorMessage>

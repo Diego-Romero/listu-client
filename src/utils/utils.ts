@@ -1,7 +1,11 @@
 import moment from "moment";
 
-export function formatDate(date: Date) {
-  return moment(date).format("Do MMM YYYY")
+export function shortDateFormat(date: Date) {
+  return moment(date).format("Do-MMM");
+}
+
+export function longDateFormat(date: Date) {
+  return moment(date).format("h:mm a Do-MMM-YYYY");
 }
 
 export function createToast(
@@ -11,9 +15,10 @@ export function createToast(
 ) {
   return {
     title,
+    position: "bottom",
     description,
     status,
-    duration: 1500,
+    duration: 2000,
     isClosable: true,
   };
 }

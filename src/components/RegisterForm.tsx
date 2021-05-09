@@ -82,7 +82,7 @@ export const RegisterForm: React.FC = () => {
                   isInvalid={form.errors.name && form.touched.name}
                 >
                   <FormLabel htmlFor="name">Name</FormLabel>
-                  <Input {...field} type="name" autoFocus={isLargerThan480} />
+                  <Input {...field} type="name" autoFocus={isLargerThan480} variant="flushed" />
                   <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                   <FormHelperText>
                     Must be longer than {NAME_MIN_LENGTH} characters.
@@ -99,7 +99,7 @@ export const RegisterForm: React.FC = () => {
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" />
+                  <Input {...field} type="email" variant="flushed"  />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                   <FormHelperText>
                     We will never share your email.
@@ -121,6 +121,7 @@ export const RegisterForm: React.FC = () => {
                       {...field}
                       type={show ? "text" : "password"}
                       pr="4.5rem"
+                      variant="flushed"
                     />
                     <InputRightElement width="4.5rem">
                       <Button
@@ -152,6 +153,7 @@ export const RegisterForm: React.FC = () => {
             <Button
               mt={SPACING_BUTTONS - 4}
               colorScheme="teal"
+              // variant="ghost"
               isFullWidth
               isLoading={props.isSubmitting}
               onClick={() => history.push(config.routes.home)}

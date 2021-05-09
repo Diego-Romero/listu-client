@@ -1,9 +1,14 @@
-import { ArrowBackIcon, ArrowForwardIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
+import {
+  ArrowBackIcon,
+  ArrowForwardIcon,
+  CheckIcon,
+  DeleteIcon,
+} from "@chakra-ui/icons";
 import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
 import { Collapse, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
 import { ListItem } from "../type";
-import { formatDate } from "../utils/utils";
+import { longDateFormat, shortDateFormat } from "../utils/utils";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
 
@@ -12,7 +17,7 @@ interface Props {
   deleteItem: (id: string) => void;
   updateListItemDoneState: (listItem: ListItem, done: boolean) => void;
   showUndone: boolean;
-  listId: string
+  listId: string;
 }
 
 export const ListItemRow: React.FC<Props> = ({
@@ -51,11 +56,11 @@ export const ListItemRow: React.FC<Props> = ({
           </Text>
           <Text
             color="gray.500"
-            fontSize="xs"
+            fontSize="x-small"
             ml={2}
             display={["none", "none", "inline-block"]}
           >
-            {formatDate(item.createdAt)}
+            {shortDateFormat(item.createdAt)}
           </Text>
         </Flex>
         <HStack cursor="pointer">
@@ -109,6 +114,12 @@ export const ListItemRow: React.FC<Props> = ({
         <Stack px={2} pb={4} spacing={2}>
           <Box>
             <Text fontSize="sm">Created by: {item.createdBy.name}</Text>
+            <Text
+              color="gray.500"
+              fontSize="sm"
+            >
+              {longDateFormat(item.createdAt)}
+            </Text>
           </Box>
           {item.description ? (
             <Text fontSize="sm">
