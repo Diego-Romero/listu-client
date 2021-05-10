@@ -21,8 +21,8 @@ import { Login } from "../pages/LoginPage";
 import { NewFriendPage } from "../pages/NewFriendPage";
 import { ResetPasswordPage } from "../pages/ResetPasswordPage";
 import { ViewListPage } from "../pages/ViewListPage";
-
 import ReactGA from "react-ga";
+
 ReactGA.initialize(config.env.gaId as string);
 
 export const Routes = () => {
@@ -32,7 +32,7 @@ export const Routes = () => {
   const location = useLocation();
 
   React.useEffect(() => {
-    ReactGA.send(["pageview", location.pathname]);
+    ReactGA.pageview(window.location.pathname)
   }, [location]);
 
   const fetchUser = async () => {

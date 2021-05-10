@@ -24,6 +24,7 @@ import {
 import { useHistory } from "react-router";
 import { registerRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
+import ReactGA from 'react-ga';
 
 export interface RegisterFormTypes {
   email: string;
@@ -53,6 +54,10 @@ export const RegisterForm: React.FC = () => {
     actions.setSubmitting(false);
     try {
       await registerRequest(values);
+      ReactGA.event({
+        category: config.googleAnalytics.users,
+        action: 'user created'
+      })
       toast(createToast("Whoop 🙌, you can now login!", "success"));
       history.push(config.routes.home);
     } catch (e) {

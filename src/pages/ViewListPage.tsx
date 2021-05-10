@@ -51,6 +51,7 @@ import { ListItemRow } from "../components/ListItemRow";
 import { DeleteIcon, RepeatIcon } from "@chakra-ui/icons";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import { config } from "../config";
+import ReactGA from 'react-ga';
 
 interface ParamTypes {
   id: string;
@@ -104,6 +105,10 @@ export const ViewListPage = () => {
     setLoadingNewItem(true);
     try {
       await createListItemRequest(body, id);
+      ReactGA.event({
+        category: config.googleAnalytics.lists,
+        action: 'list created'
+      })
       await getListData();
     } catch (e) {
       const errorMessage = e.response.data.message;

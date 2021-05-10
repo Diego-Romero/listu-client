@@ -43,6 +43,10 @@ export const config = {
       .max(50, REQUIRED_FIELD_TOO_LONG_TEXT)
       .required(REQUIRED_FIELD_ERROR),
   },
+  googleAnalytics: {
+    lists: 'lists',
+    users: 'users'
+  },
   colors: {
     default: "teal.500",
     defaultDark: "teal.500",

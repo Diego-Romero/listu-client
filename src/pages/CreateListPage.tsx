@@ -20,6 +20,7 @@ import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
 import { createListRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
+import ReactGA from 'react-ga';
 
 export interface CreateListValues {
   name: string;
@@ -44,6 +45,10 @@ export const CreateListPage = () => {
   async function createList(values: CreateListValues) {
     try {
       await createListRequest(values);
+      ReactGA.event({
+        category: config.googleAnalytics.lists,
+        action: 'list created'
+      })
       toast(
         createToast("Whoop 🙌", "success", "Your new list is ready to go.")
       );
