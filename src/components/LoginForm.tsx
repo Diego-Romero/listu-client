@@ -64,7 +64,7 @@ export const LoginForm: React.FC<Props> = ({ setLoading }) => {
         createToast("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   }
   return (
