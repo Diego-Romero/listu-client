@@ -2,9 +2,15 @@ import { Flex, Heading, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
 import { NewFriendForm } from "../components/NewFriendForm";
+import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import logo from "../images/icons/join.svg";
 
 export const NewFriendPage = () => {
+  const { logout } = useAuthenticatedContext();
+  React.useEffect(() => {
+    logout();
+    localStorage.removeItem('token')
+  }, [])
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
       <Card>

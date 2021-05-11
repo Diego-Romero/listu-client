@@ -97,7 +97,6 @@ export const ContactPage = () => {
                     <Input
                       {...field}
                       type="email"
-                      variant="flushed"
                       autoFocus={isLargerThan480}
                     />
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
@@ -114,7 +113,6 @@ export const ContactPage = () => {
                   >
                     <FormLabel htmlFor="message">Message</FormLabel>
                     <Textarea
-                      variant="flushed"
                       rows={6}
                       placeholder="Thanks a lot for taking the time to reach me, please let me know how this platform could help you or your team be more productive."
                       size="md"
