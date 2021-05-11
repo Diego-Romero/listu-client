@@ -3,7 +3,7 @@ import React from "react";
 import { useHistory } from "react-router";
 import { config } from "../config";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
-import logo from "../images/icons/landing.svg";
+import logo from "../images/icons/landing-teal.svg";
 
 export const Landing: React.FC = () => {
   const history = useHistory();
