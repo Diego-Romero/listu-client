@@ -24,12 +24,16 @@ import {
 import { useHistory } from "react-router";
 import { registerRequest } from "../api/requests";
 import { createToast } from "../utils/utils";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 
 export interface RegisterFormTypes {
   email: string;
   password: string;
   name: string;
+}
+
+interface Props {
+  setLoading: (boolean) => void;
 }
 
 const initialValues: RegisterFormTypes = {
@@ -44,7 +48,7 @@ const validationSchema = Yup.object().shape({
   name: config.validation.name,
 });
 
-export const RegisterForm: React.FC = () => {
+export const RegisterForm: React.FC<Props> = ({ setLoading }) => {
   const history = useHistory();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   const toast = useToast();
@@ -52,12 +56,13 @@ export const RegisterForm: React.FC = () => {
 
   async function register(values: RegisterFormTypes, actions) {
     actions.setSubmitting(false);
+    setLoading(true);
     try {
       await registerRequest(values);
       ReactGA.event({
         category: config.googleAnalytics.users,
-        action: 'user created'
-      })
+        action: "user created",
+      });
       toast(createToast("Whoop 🙌, you can now login!", "success"));
       history.push(config.routes.home);
     } catch (e) {
@@ -65,6 +70,8 @@ export const RegisterForm: React.FC = () => {
       toast(
         createToast("Yikes... There has been an error", "error", errorMessage)
       );
+    } finally {
+      setLoading(false);
     }
   }
   return (

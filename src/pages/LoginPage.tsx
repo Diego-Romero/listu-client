@@ -14,9 +14,10 @@ import { RegisterForm } from "../components/RegisterForm";
 import logo from "../images/icons/join.svg";
 
 export const Login = () => {
+  const [loading, setLoading] = React.useState(false);
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card>
+      <Card loading={loading}>
         <Tabs size="lg" isFitted colorScheme="teal">
           <TabList>
             <Tab>Login</Tab>
@@ -25,10 +26,10 @@ export const Login = () => {
 
           <TabPanels>
             <TabPanel>
-              <LoginForm />
+              <LoginForm setLoading={setLoading}/>
             </TabPanel>
             <TabPanel>
-              <RegisterForm />
+              <RegisterForm setLoading={setLoading} />
             </TabPanel>
           </TabPanels>
         </Tabs>

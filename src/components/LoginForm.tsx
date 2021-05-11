@@ -29,6 +29,10 @@ export interface LoginFormValues {
   password: string;
 }
 
+interface Props {
+  setLoading: (boolean) => void;
+}
+
 const initialValues = {
   email: "",
   password: "",
@@ -39,12 +43,13 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required(REQUIRED_FIELD_ERROR),
 });
 
-export const LoginForm: React.FC = () => {
+export const LoginForm: React.FC<Props> = ({ setLoading }) => {
   const history = useHistory();
   const toast = useToast();
   const { login, logout } = useAuthenticatedContext();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   async function loginUser(values: LoginFormValues, actions) {
+    setLoading(true);
     actions.setSubmitting(false);
     logout();
     localStorage.removeItem("token");
@@ -58,6 +63,8 @@ export const LoginForm: React.FC = () => {
       toast(
         createToast("Yikes... There has been an error", "error", errorMessage)
       );
+    } finally {
+      setLoading(true);
     }
   }
   return (
