@@ -4,10 +4,10 @@ import { CreateListItemValues } from "../components/CreateItemForm";
 import { ForgotPasswordValues } from "../components/ForgotPasswordForm";
 import { LoginFormValues } from "../components/LoginForm";
 import { RegisterFriendFormTypes } from "../components/NewFriendForm";
-import { ResetPasswordFormTypes } from "../components/ResetPasswordForm";
 import { config } from "../config";
 import { ContactFormValues } from "../pages/ContactPage";
 import { CreateListValues } from "../pages/CreateListPage";
+import { ResetPasswordFormTypes } from "../pages/ResetPasswordPage";
 import { ListItem } from "../type";
 
 const axiosInstance = axios.create({
@@ -131,4 +131,17 @@ export const resetPasswordRequest = async (
 export const sendContactMessageRequest = async (values: ContactFormValues) => {
   const url = `/user/contact`;
   return axiosInstance.post(url, values);
+};
+
+export const getSignedUrlRequest = async (
+  listId: string,
+  listItemId: string,
+  fileName: string
+) => {
+  const url = `/lists/${listId}/${listItemId}/upload`;
+  return axiosInstance.post(url, { name: fileName });
+};
+
+export const putFileToS3 = async (file: File, url: string) => {
+  return axios.put(url, file);
 };

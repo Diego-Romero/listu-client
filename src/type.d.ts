@@ -27,6 +27,7 @@ export interface ListItem {
   description?: string;
   done: boolean;
   dateCompleted?: string;
+  attachmentUrl: string;
 }
 export interface User {
   _id: string;

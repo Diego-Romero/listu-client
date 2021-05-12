@@ -13,10 +13,18 @@ import {
   Textarea,
   useToast,
   useMediaQuery,
+  Box,
+  HStack,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { getListItemRequest, updateListItemRequest } from "../api/requests";
+import {
+  getListItemRequest,
+  getSignedUrlRequest,
+  putFileToS3,
+  updateListItemRequest,
+} from "../api/requests";
 import { Card } from "../components/Card";
 import logo from "../images/icons/landing2.svg";
 import { ListItem } from "../type";
@@ -24,6 +32,8 @@ import { createToast, shortDateFormat } from "../utils/utils";
 import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
+import { AttachmentIcon, ExternalLinkIcon, InfoIcon } from "@chakra-ui/icons";
+import { useDropzone } from "react-dropzone";
 
 export interface UpdateListItemValues {
   name: string;
@@ -50,14 +60,61 @@ interface ParamTypes {
 export const ListItemPage = () => {
   const [loading, setLoading] = React.useState(false);
   const history = useHistory();
+  const [loadingFileUpload, setLoadingFileUpload] = React.useState(false);
   const { listItemId, listId } = useParams<ParamTypes>();
   const [listItem, setListItem] = React.useState<ListItem | null>(null);
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
+  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+    noClick: true,
+    noKeyboard: true,
+    accept: "image/*",
+    maxFiles: 1,
+    maxSize: 5242880, // 5mb
+  });
 
   React.useEffect(() => {
     getListItem();
   }, []);
+
+  async function uploadFile() {
+    setLoadingFileUpload(true);
+    try {
+      const file = acceptedFiles[0];
+      const fileExtension = file.type.split("/")[1];
+      const fileName = `${listItemId}.${fileExtension}`;
+      const getSignedUrl = await getSignedUrlRequest(
+        listId,
+        listItemId,
+        fileName
+      );
+      const url = getSignedUrl.data.url as string;
+      await putFileToS3(file, url);
+      getListItem();
+    } catch (e) {
+      if (e.response) {
+        const errorMessage = e.response.data.message;
+        toast(
+          createToast("Yikes... There has been an error", "error", errorMessage)
+        );
+      } else {
+        toast(
+          createToast(
+            "Yikes... There has been an error uploading your file",
+            "error"
+          )
+        );
+      }
+    } finally {
+      setLoadingFileUpload(false);
+    }
+  }
+
+  React.useEffect(() => {
+    if (acceptedFiles.length === 1) {
+      uploadFile();
+    }
+  }, [acceptedFiles]);
 
   async function getListItem() {
     setLoading(true);
@@ -161,13 +218,47 @@ export const ListItemPage = () => {
                       mt={SPACING_INPUTS}
                       isInvalid={form.errors.done && form.touched.done}
                     >
-                      <Checkbox size="md" colorScheme="teal" {...field}>
-                        Done
+                      <Checkbox size="lg" colorScheme="teal" {...field}>
+                        Mark as done
                       </Checkbox>
                       <FormErrorMessage>{form.errors.done}</FormErrorMessage>
                     </FormControl>
                   )}
                 </Field>
+                <HStack mt={4}>
+                  <InfoIcon h={4} w={4} color="gray" />
+                  <Text fontSize="sm" color="gray">
+                    You are only able to upload images smaller than 5mb
+                  </Text>
+                </HStack>
+                <ButtonGroup variant="outline" spacing="4" mt={4} mb={4}>
+                  {listItem.attachmentUrl ? (
+                    <Button
+                      rightIcon={<ExternalLinkIcon />}
+                      colorScheme="teal"
+                      variant="solid"
+                      as="a"
+                      href={listItem.attachmentUrl}
+                    >
+                      Download image
+                    </Button>
+                  ) : null}
+                  <Button
+                    rightIcon={<AttachmentIcon />}
+                    colorScheme="teal"
+                    variant="outline"
+                    isLoading={loadingFileUpload}
+                    loadingText="Uploading.."
+                    onClick={open}
+                  >
+                    {listItem.attachmentUrl
+                      ? `Update image`
+                      : "Attach an image"}
+                  </Button>
+                </ButtonGroup>
+                <Box {...getRootProps({ className: "dropzone" })}>
+                  <input {...getInputProps()} />
+                </Box>
                 <Stack mt={4}>
                   <Text fontSize="sm" color="gray">
                     Created: {shortDateFormat(listItem!.createdAt)}
