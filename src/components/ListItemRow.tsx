@@ -3,9 +3,10 @@ import {
   ArrowForwardIcon,
   CheckIcon,
   DeleteIcon,
+  ExternalLinkIcon,
 } from "@chakra-ui/icons";
 import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
-import { Collapse, IconButton, Text } from "@chakra-ui/react";
+import { Collapse, IconButton, Link, Text } from "@chakra-ui/react";
 import React from "react";
 import { ListItem } from "../type";
 import { longDateFormat, shortDateFormat } from "../utils/utils";
@@ -122,6 +123,11 @@ export const ListItemRow: React.FC<Props> = ({
             <Text fontSize="sm">
               <b>Description:</b> {item.description}
             </Text>
+          ) : null}
+          {item.attachmentUrl ? (
+            <Link color="gray" fontSize="sm" href={item.attachmentUrl} isExternal>
+              Download Image <ExternalLinkIcon mx="2px" />
+            </Link>
           ) : null}
         </Stack>
       </Collapse>
