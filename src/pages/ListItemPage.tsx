@@ -15,7 +15,6 @@ import {
   useMediaQuery,
   Box,
   HStack,
-  ButtonGroup,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -225,28 +224,34 @@ export const ListItemPage = () => {
                     </FormControl>
                   )}
                 </Field>
+                {listItem.attachmentUrl ? (
+                  <Box>
+                    <Button
+                      rightIcon={<ExternalLinkIcon />}
+                      colorScheme="teal"
+                      mt={4}
+                      variant="outline"
+                      as="a"
+                      isFullWidth={false}
+                      href={listItem.attachmentUrl}
+                    >
+                      Download image
+                    </Button>
+                  </Box>
+                ) : null}
+                <Box>
                 <HStack mt={4}>
                   <InfoIcon h={4} w={4} color="gray" />
                   <Text fontSize="sm" color="gray">
                     You are only able to upload images smaller than 5mb
                   </Text>
                 </HStack>
-                <ButtonGroup variant="outline" spacing="4" mt={4} mb={4}>
-                  {listItem.attachmentUrl ? (
-                    <Button
-                      rightIcon={<ExternalLinkIcon />}
-                      colorScheme="teal"
-                      variant="solid"
-                      as="a"
-                      href={listItem.attachmentUrl}
-                    >
-                      Download image
-                    </Button>
-                  ) : null}
                   <Button
                     rightIcon={<AttachmentIcon />}
-                    colorScheme="teal"
-                    variant="outline"
+                    colorScheme="gray"
+                    mt={4}
+                    isFullWidth={false}
+                    variant="solid"
                     isLoading={loadingFileUpload}
                     loadingText="Uploading.."
                     onClick={open}
@@ -255,7 +260,7 @@ export const ListItemPage = () => {
                       ? `Update image`
                       : "Attach an image"}
                   </Button>
-                </ButtonGroup>
+                </Box>
                 <Box {...getRootProps({ className: "dropzone" })}>
                   <input {...getInputProps()} />
                 </Box>
