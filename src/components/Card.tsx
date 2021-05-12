@@ -13,7 +13,7 @@ export const Card: React.FC<Props> = ({
   maxHeight = "auto",
 }) => (
   <Box
-    width={["100%", "500px"]}
+    width={["100%", "500px", "600px"]}
     borderStyle="solid"
     borderRadius="12px"
     maxHeight={maxHeight}

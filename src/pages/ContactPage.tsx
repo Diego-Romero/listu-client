@@ -114,7 +114,7 @@ export const ContactPage = () => {
                     <FormLabel htmlFor="message">Message</FormLabel>
                     <Textarea
                       rows={6}
-                      placeholder="Thanks a lot for taking the time to reach me, please let me know how this platform could help you or your team be more productive."
+                      placeholder="Thanks a lot for providing feedback, it is incredibly valuable to me :)"
                       size="md"
                       {...field}
                     />

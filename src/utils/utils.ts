@@ -5,7 +5,7 @@ export function shortDateFormat(date: Date) {
 }
 
 export function longDateFormat(date: Date) {
-  return moment(date).format("h:mm a Do-MMM-YYYY");
+  return moment(date).format("Do-MMM-YYYY h:mm a");
 }
 
 export function createToast(

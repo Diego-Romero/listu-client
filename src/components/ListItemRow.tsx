@@ -32,6 +32,7 @@ export const ListItemRow: React.FC<Props> = ({
   const history = useHistory();
   return (
     <Box
+      width="100%"
       cursor="pointer"
       onClick={() => setOpen(!open)}
       _hover={{
@@ -52,16 +53,8 @@ export const ListItemRow: React.FC<Props> = ({
           cursor="pointer"
           zIndex={1}
         >
-          <Text fontSize="lg" textOverflow="ellipsis">
+          <Text fontSize="lg" noOfLines={1}>
             {item.name}{" "}
-          </Text>
-          <Text
-            color="gray.500"
-            fontSize="x-small"
-            ml={2}
-            display={["none", "none", "inline-block"]}
-          >
-            {shortDateFormat(item.createdAt)}
           </Text>
         </Flex>
         <HStack cursor="pointer">
@@ -114,7 +107,8 @@ export const ListItemRow: React.FC<Props> = ({
       <Collapse in={open} animateOpacity>
         <Stack px={2} pb={4} spacing={2}>
           <Box>
-            <Text fontSize="sm">Created by: {item.createdBy.name}</Text>
+            <Text fontSize="sm"><b>Name:</b> {item.name}</Text>
+            <Text fontSize="sm"><b>Created by:</b> {item.createdBy.name}</Text>
             <Text color="gray.500" fontSize="sm">
               {longDateFormat(item.createdAt)}
             </Text>

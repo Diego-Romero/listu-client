@@ -27,7 +27,7 @@ import {
 import { Card } from "../components/Card";
 import logo from "../images/icons/landing2.svg";
 import { ListItem } from "../type";
-import { createToast, shortDateFormat } from "../utils/utils";
+import { createToast, longDateFormat, shortDateFormat } from "../utils/utils";
 import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
@@ -266,10 +266,7 @@ export const ListItemPage = () => {
                 </Box>
                 <Stack mt={4}>
                   <Text fontSize="sm" color="gray">
-                    Created: {shortDateFormat(listItem!.createdAt)}
-                  </Text>
-                  <Text fontSize="sm" color="gray">
-                    Created by: {listItem!.createdBy.name}
+                    Created by <b>{listItem!.createdBy.name}</b> on the {longDateFormat(listItem!.createdAt)}
                   </Text>
                 </Stack>
                 <Button
