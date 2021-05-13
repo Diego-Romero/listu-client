@@ -32,7 +32,7 @@ export const Routes = () => {
   const location = useLocation();
 
   React.useEffect(() => {
-    ReactGA.pageview(window.location.pathname)
+    ReactGA.pageview(window.location.pathname);
   }, [location]);
 
   const fetchUser = async () => {
