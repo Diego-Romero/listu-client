@@ -9,7 +9,7 @@ import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
 import { Collapse, IconButton, Link, Text } from "@chakra-ui/react";
 import React from "react";
 import { ListItem } from "../type";
-import { longDateFormat, shortDateFormat } from "../utils/utils";
+import { longDateFormat } from "../utils/utils";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
 

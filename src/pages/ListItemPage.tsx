@@ -27,7 +27,7 @@ import {
 import { Card } from "../components/Card";
 import logo from "../images/icons/landing2.svg";
 import { ListItem } from "../type";
-import { createToast, longDateFormat, shortDateFormat } from "../utils/utils";
+import { createToast, longDateFormat } from "../utils/utils";
 import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
