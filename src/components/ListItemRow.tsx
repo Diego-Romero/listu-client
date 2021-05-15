@@ -17,7 +17,11 @@ import { config } from "../config";
 interface Props {
   item: ListItem;
   deleteItem: (id: string) => void;
-  updateListItemDoneState: (event: React.MouseEvent, listItem: ListItem, done: boolean) => void;
+  updateListItemDoneState: (
+    event: React.MouseEvent,
+    listItem: ListItem,
+    done: boolean
+  ) => void;
   showUndone: boolean;
   listId: string;
 }
@@ -36,10 +40,7 @@ export const ListItemRow: React.FC<Props> = ({
     setOpen(!open);
   }
   return (
-    <Box
-      width="100%"
-      cursor="pointer"
-    >
+    <Box width="100%" cursor="pointer">
       <Flex
         flexDir="row"
         alignItems="center"
@@ -92,7 +93,10 @@ export const ListItemRow: React.FC<Props> = ({
                 colorScheme="red"
                 size="sm"
                 aria-label="Delete item"
-                onClick={() => deleteItem(item._id)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  deleteItem(item._id);
+                }}
                 icon={<DeleteIcon />}
               />
               <IconButton
@@ -101,7 +105,7 @@ export const ListItemRow: React.FC<Props> = ({
                 size="sm"
                 color="teal"
                 aria-label="Move item to to-do"
-                onClick={() => updateListItemDoneState(item, false)}
+                onClick={(event) => updateListItemDoneState(event, item, false)}
                 icon={<ArrowBackIcon />}
               />
             </>
