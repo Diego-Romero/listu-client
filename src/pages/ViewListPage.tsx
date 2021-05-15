@@ -155,9 +155,11 @@ export const ViewListPage = () => {
   }
 
   async function updateListItemDoneState(
+    event: React.MouseEvent,
     listItem: ListSingleItem,
     done: boolean
   ) {
+    event.stopPropagation();
     setLoading(true);
     try {
       const updatedListItem: ListSingleItem = {

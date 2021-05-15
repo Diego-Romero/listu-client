@@ -17,7 +17,7 @@ import { config } from "../config";
 interface Props {
   item: ListItem;
   deleteItem: (id: string) => void;
-  updateListItemDoneState: (listItem: ListItem, done: boolean) => void;
+  updateListItemDoneState: (event: React.MouseEvent, listItem: ListItem, done: boolean) => void;
   showUndone: boolean;
   listId: string;
 }
@@ -73,7 +73,7 @@ export const ListItemRow: React.FC<Props> = ({
                 size="sm"
                 ml={2}
                 aria-label="Mark item as done"
-                onClick={() => updateListItemDoneState(item, true)}
+                onClick={(event) => updateListItemDoneState(event, item, true)}
                 icon={<CheckIcon />}
               />
               <IconButton
