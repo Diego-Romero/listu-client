@@ -39,12 +39,6 @@ export const ListItemRow: React.FC<Props> = ({
     <Box
       width="100%"
       cursor="pointer"
-      onClick={() =>
-        history.push(config.routes.singleListItemUrl(listId, item._id))
-      }
-      _hover={{
-        fontWeight: "semibold",
-      }}
     >
       <Flex
         flexDir="row"
@@ -52,6 +46,12 @@ export const ListItemRow: React.FC<Props> = ({
         justifyContent="space-between"
         py={4}
         px={2}
+        onClick={() =>
+          history.push(config.routes.singleListItemUrl(listId, item._id))
+        }
+        _hover={{
+          fontWeight: "semibold",
+        }}
       >
         <Flex
           flexDir="row"
@@ -108,7 +108,7 @@ export const ListItemRow: React.FC<Props> = ({
           )}
         </HStack>
       </Flex>
-      <Collapse in={open} animateOpacity>
+      <Collapse in={open} animateOpacity onClick={() => setOpen(false)}>
         <Stack px={2} pb={4} spacing={2}>
           <Box>
             <Text fontSize="sm">
@@ -122,8 +122,10 @@ export const ListItemRow: React.FC<Props> = ({
             </Text>
           </Box>
           {item.description ? (
-            <Text fontSize="sm">
-              <b>Description:</b> {item.description}
+            <Text fontSize="sm" whiteSpace="pre-wrap">
+              <strong>Description:</strong>
+              <br />
+              {item.description}
             </Text>
           ) : null}
           {item.attachmentUrl ? (
@@ -132,6 +134,7 @@ export const ListItemRow: React.FC<Props> = ({
               fontSize="sm"
               href={item.attachmentUrl}
               isExternal
+              onClick={(event) => event.stopPropagation()}
             >
               Download Image <ExternalLinkIcon mx="2px" />
             </Link>
