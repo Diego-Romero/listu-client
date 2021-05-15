@@ -1,6 +1,5 @@
 import {
   ArrowBackIcon,
-  ArrowForwardIcon,
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
