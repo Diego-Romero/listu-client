@@ -35,8 +35,7 @@ export const config = {
     email: Yup.string().email("Invalid Email").required(REQUIRED_FIELD_ERROR),
     name: Yup.string()
       .min(2, REQUIRED_FIELD_TOO_SHORT_TEXT)
-      .max(1000, REQUIRED_FIELD_TOO_LONG_TEXT)
-      .required(REQUIRED_FIELD_TOO_SHORT_TEXT),
+      .max(1000, REQUIRED_FIELD_TOO_LONG_TEXT),
     description: Yup.string().max(500, REQUIRED_FIELD_TOO_LONG_TEXT),
     password: Yup.string()
       .min(6, REQUIRED_FIELD_TOO_SHORT_TEXT)

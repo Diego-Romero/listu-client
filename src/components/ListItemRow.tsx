@@ -2,6 +2,8 @@ import {
   ArrowBackIcon,
   ArrowForwardIcon,
   CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   DeleteIcon,
   ExternalLinkIcon,
 } from "@chakra-ui/icons";
@@ -30,11 +32,17 @@ export const ListItemRow: React.FC<Props> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const history = useHistory();
+  function toggleOpenState(event: React.MouseEvent) {
+    event.stopPropagation();
+    setOpen(!open);
+  }
   return (
     <Box
       width="100%"
       cursor="pointer"
-      onClick={() => setOpen(!open)}
+      onClick={() =>
+        history.push(config.routes.singleListItemUrl(listId, item._id))
+      }
       _hover={{
         fontWeight: "semibold",
       }}
@@ -72,13 +80,10 @@ export const ListItemRow: React.FC<Props> = ({
               <IconButton
                 variant="outline"
                 size="sm"
+                zIndex={10}
                 aria-label="Navigate to item"
-                onClick={() =>
-                  history.push(
-                    config.routes.singleListItemUrl(listId, item._id)
-                  )
-                }
-                icon={<ArrowForwardIcon />}
+                onClick={(event) => toggleOpenState(event)}
+                icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
               />
             </>
           ) : (
@@ -107,8 +112,12 @@ export const ListItemRow: React.FC<Props> = ({
       <Collapse in={open} animateOpacity>
         <Stack px={2} pb={4} spacing={2}>
           <Box>
-            <Text fontSize="sm"><b>Name:</b> {item.name}</Text>
-            <Text fontSize="sm"><b>Created by:</b> {item.createdBy.name}</Text>
+            <Text fontSize="sm">
+              <b>Name:</b> {item.name}
+            </Text>
+            <Text fontSize="sm">
+              <b>Created by:</b> {item.createdBy.name}
+            </Text>
             <Text color="gray.500" fontSize="sm">
               {longDateFormat(item.createdAt)}
             </Text>
@@ -119,7 +128,12 @@ export const ListItemRow: React.FC<Props> = ({
             </Text>
           ) : null}
           {item.attachmentUrl ? (
-            <Link color="gray" fontSize="sm" href={item.attachmentUrl} isExternal>
+            <Link
+              color="gray"
+              fontSize="sm"
+              href={item.attachmentUrl}
+              isExternal
+            >
               Download Image <ExternalLinkIcon mx="2px" />
             </Link>
           ) : null}
