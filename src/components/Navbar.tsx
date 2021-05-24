@@ -1,33 +1,24 @@
 import {
   Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   Flex,
   HStack,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Tooltip,
-  useColorMode,
   useToast,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { config } from "../config";
-import { HamburgerIcon } from "@chakra-ui/icons";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import { createToast } from "../utils/utils";
-import { IoMdExit } from "react-icons/io";
+import { IoMdLogOut, IoMdHome, IoMdLogIn } from "react-icons/io";
+import { AiOutlineUnorderedList } from "react-icons/ai";
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const { user, logout } = useAuthenticatedContext();
-  const { colorMode } = useColorMode();
   async function logUserOut() {
     try {
       logout();
@@ -51,61 +42,33 @@ export const NavBar: React.FC = () => {
       align="center"
       justify="space-between"
     >
-      <Box display={["block", "block", "none"]}>
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label="Options"
-            icon={<HamburgerIcon fontSize="2xl" />}
-            size="lg"
+      {/* desktop view */}
+      <Box >
+        {user !== null ? (
+          <IconButton
+            size="md"
             variant="ghost"
+            color="current"
+            fontSize="2xl"
+            onClick={() => history.push(config.routes.lists)}
+            icon={<AiOutlineUnorderedList />}
+            aria-label={`Go to lists`}
           />
-          <MenuList color={colorMode === "light" ? "black" : "white"}>
-            <MenuItem onClick={() => history.push(config.routes.home)}>
-              Home
-            </MenuItem>
-            <MenuItem onClick={() => history.push(config.routes.contact)}>
-              Contact
-            </MenuItem>
-            {user !== null ? (
-              <>
-                <MenuItem onClick={() => history.push(config.routes.lists)}>
-                  Lists
-                </MenuItem>
-                <MenuItem onClick={() => logUserOut()}>Logout</MenuItem>
-              </>
-            ) : (
-              <MenuItem onClick={() => history.push(config.routes.login)}>
-                Login / Register
-              </MenuItem>
-            )}
-          </MenuList>
-        </Menu>
-      </Box>
-      <Box display={["none", "none", "block"]}>
-        <Breadcrumb fontWeight="medium" fontSize="lg" separator="-">
-          <BreadcrumbItem>
-            <BreadcrumbLink as={Link} to={config.routes.home}>
-              Home
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink as={Link} to={config.routes.contact}>
-              Contact
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          {user !== null ? (
-            <BreadcrumbItem>
-              <BreadcrumbLink as={Link} to={config.routes.lists}>
-                Lists
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          ) : null}
-        </Breadcrumb>
+        ) : (
+          <IconButton
+            size="md"
+            variant="ghost"
+            color="current"
+            fontSize="2xl"
+            onClick={() => history.push(config.routes.home)}
+            icon={<IoMdHome />}
+            aria-label={`Go to home`}
+          />
+        )}
       </Box>
       <HStack>
         <ColorModeSwitcher justifySelf="flex-end" />
-        <Box display={["none", "none", "block"]}>
+        <Box >
           {user !== null ? (
             <Tooltip label="Logout" aria-label="Logout">
               <IconButton
@@ -114,18 +77,22 @@ export const NavBar: React.FC = () => {
                 color="current"
                 fontSize="2xl"
                 onClick={() => logUserOut()}
-                icon={<IoMdExit />}
+                icon={<IoMdLogOut />}
                 aria-label={`Logout`}
               />
             </Tooltip>
           ) : (
-            <Breadcrumb fontWeight="medium" fontSize="lg" separator="-">
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to={config.routes.login}>
-                  Login / Register
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
+            <Tooltip label="Login" aria-label="Login">
+              <IconButton
+                size="md"
+                variant="ghost"
+                color="current"
+                fontSize="2xl"
+                onClick={() => history.push(config.routes.login)}
+                icon={<IoMdLogIn />}
+                aria-label={`Login`}
+              />
+            </Tooltip>
           )}
         </Box>
       </HStack>
