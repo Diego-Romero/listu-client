@@ -7,7 +7,7 @@ import { config, PASSWORD_MIN_LENGTH, SPACING_BUTTONS, SPACING_INPUTS } from "..
 import { useHistory, useParams } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import { resetPasswordRequest } from "../api/requests";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 
 export interface ResetPasswordFormTypes {
   password: string;
@@ -39,7 +39,7 @@ export const ResetPasswordPage = () => {
     try {
       await resetPasswordRequest(values, token);
       toast(
-        createToast(
+        toastConfig(
           "Whoop 🙌",
           "success",
           "You can now log in with your new password"
@@ -49,7 +49,7 @@ export const ResetPasswordPage = () => {
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast("Yikes... There has been an error", "error", errorMessage)
+        toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
       setLoading(false);

@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { addFriendRequest } from "../api/requests";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 
 export interface AddFriendFormValues {
   email: string;
@@ -44,13 +44,13 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
     setLoading(true);
     try {
       const res = await addFriendRequest(values, id);
-      toast(createToast(res.data.message, "success"));
+      toast(toastConfig(res.data.message, "success"));
       resetForm();
       refreshList();
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast("Yikes... There has been an error", "error", errorMessage)
+        toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
       setLoading(false);

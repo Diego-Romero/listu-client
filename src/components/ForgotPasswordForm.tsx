@@ -14,7 +14,7 @@ import { useHistory } from "react-router";
 import * as Yup from "yup";
 import { forgotPasswordRequest } from "../api/requests";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 
 export interface ForgotPasswordValues {
   email: string;
@@ -38,7 +38,7 @@ export const ForgotPasswordForm: React.FC = () => {
       const res = await forgotPasswordRequest(values);
       console.log(res);
       toast(
-        createToast(
+        toastConfig(
           "Done!",
           "success",
           "Please review your emails to reset your password"
@@ -48,7 +48,7 @@ export const ForgotPasswordForm: React.FC = () => {
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast("Yikes... There has been an error", "error", errorMessage)
+        toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     }
   }

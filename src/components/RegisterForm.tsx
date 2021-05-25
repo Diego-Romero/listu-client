@@ -23,7 +23,7 @@ import {
 } from "../config";
 import { useHistory } from "react-router";
 import { registerRequest } from "../api/requests";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 import ReactGA from "react-ga";
 
 export interface RegisterFormTypes {
@@ -63,12 +63,12 @@ export const RegisterForm: React.FC<Props> = ({ setLoading }) => {
         category: config.googleAnalytics.users,
         action: "user created",
       });
-      toast(createToast("Whoop 🙌, you can now login!", "success"));
+      toast(toastConfig("Whoop 🙌, you can now login!", "success"));
       history.push(config.routes.home);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast("Yikes... There has been an error", "error", errorMessage)
+        toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
       setLoading(false);

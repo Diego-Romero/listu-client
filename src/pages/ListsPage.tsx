@@ -14,7 +14,7 @@ import { useHistory } from "react-router";
 import { config, SPACING_BUTTONS } from "../config";
 import { User } from "../type";
 import { getUserRequest } from "../api/requests";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 import { ListRow } from "../components/ListRow";
 
 export const ListsPage = () => {
@@ -40,7 +40,7 @@ export const ListsPage = () => {
       setUser(data);
     } catch (_err) {
       toast(
-        createToast(
+        toastConfig(
           "Whoops, there has been an error fetching your lists",
           "error"
         )

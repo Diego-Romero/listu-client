@@ -22,7 +22,7 @@ import {
 } from "../config";
 import { useHistory } from "react-router";
 import { registerFriendRequest } from "../api/requests";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import { useParams } from "react-router-dom";
 
@@ -57,12 +57,12 @@ export const NewFriendForm: React.FC = () => {
     try {
       const res = await registerFriendRequest(values, id);
       login(res.data);
-      toast(createToast("Whoop 🙌, you can now login!", "success"));
+      toast(toastConfig("Whoop 🙌, you can now login!", "success"));
       history.push(config.routes.login);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast("Yikes... There has been an error", "error", errorMessage)
+        toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     }
   }

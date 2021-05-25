@@ -18,7 +18,7 @@ import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 import { sendContactMessageRequest } from "../api/requests";
 
 export interface ContactFormValues {
@@ -47,7 +47,7 @@ export const ContactPage = () => {
     try {
       await sendContactMessageRequest(values);
       toast(
-        createToast(
+        toastConfig(
           "Thank you!",
           "success",
           "I will try to get back to you as soon as possible."
@@ -56,7 +56,7 @@ export const ContactPage = () => {
       history.push(config.routes.home);
     } catch (_err) {
       toast(
-        createToast(
+        toastConfig(
           "Yikes..",
           "error",
           "There has been an error submitting your message please try again later."

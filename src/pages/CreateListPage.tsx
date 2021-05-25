@@ -19,7 +19,7 @@ import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
 import { createListRequest } from "../api/requests";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 import ReactGA from 'react-ga';
 
 export interface CreateListValues {
@@ -50,12 +50,12 @@ export const CreateListPage = () => {
         action: 'list created'
       })
       toast(
-        createToast("Whoop 🙌", "success", "Your new list is ready to go.")
+        toastConfig("Whoop 🙌", "success", "Your new list is ready to go.")
       );
       history.push(config.routes.lists);
     } catch (_err) {
       toast(
-        createToast(
+        toastConfig(
           "Yikes..",
           "error",
           "There has been an error creating your list, please try again later."

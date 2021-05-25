@@ -22,7 +22,7 @@ import {
   SPACING_INPUTS,
 } from "../config";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 
 export interface LoginFormValues {
   email: string;
@@ -61,7 +61,7 @@ export const LoginForm: React.FC<Props> = ({ setLoading }) => {
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast("Yikes... There has been an error", "error", errorMessage)
+        toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
       setLoading(false);

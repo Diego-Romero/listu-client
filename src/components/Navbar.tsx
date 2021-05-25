@@ -11,7 +11,7 @@ import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 import { IoMdLogOut, IoMdHome, IoMdLogIn } from "react-icons/io";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 
@@ -23,12 +23,12 @@ export const NavBar: React.FC = () => {
     try {
       logout();
       localStorage.removeItem("token");
-      toast(createToast("See you soon!", "success"));
+      toast(toastConfig("See you soon!", "success"));
       history.push(config.routes.home);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast("Yikes... There has been an error", "error", errorMessage)
+        toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     }
   }

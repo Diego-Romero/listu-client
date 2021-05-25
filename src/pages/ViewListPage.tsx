@@ -20,8 +20,6 @@ import {
   Icon,
   Image,
   ListItem,
-  Tag,
-  TagLabel,
   Text,
   UnorderedList,
   useDisclosure,
@@ -44,7 +42,7 @@ import {
   getListDataRequest,
   updateListItemRequest,
 } from "../api/requests";
-import { createToast } from "../utils/utils";
+import { toastConfig } from "../utils/utils";
 import { AddFriendForm } from "../components/AddFriendForm";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { ListItemRow } from "../components/ListItemRow";
@@ -60,8 +58,6 @@ interface ParamTypes {
 export const ViewListPage = () => {
   const [undoneItems, setUndoneItems] = React.useState<ListSingleItem[]>([]);
   const [doneItems, setDoneItems] = React.useState<ListSingleItem[]>([]);
-  const [activeItems, setActiveItems] = React.useState<ListSingleItem[]>([]);
-  const [showUndone, setShowUndone] = React.useState<boolean>(true);
   const [list, setList] = React.useState<List | undefined>(undefined);
   const toast = useToast();
   const [loading, setLoading] = React.useState(false);
@@ -72,8 +68,6 @@ export const ViewListPage = () => {
   const alertDialogCancelRef = React.useRef();
   const history = useHistory();
 
-  const [loadingNewItem, setLoadingNewItem] = React.useState(false);
-
   async function getListData() {
     setLoading(true);
     try {
@@ -81,12 +75,10 @@ export const ViewListPage = () => {
       setList(listData.data.list);
       setUndoneItems(listData.data.undone);
       setDoneItems(listData.data.done);
-      setActiveItems(listData.data.undone);
-      setShowUndone(true);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast(
+        toastConfig(
           "whoops, there has been an error fetching the list",
           "error",
           errorMessage
@@ -102,7 +94,6 @@ export const ViewListPage = () => {
   }, []);
 
   const createNewItem = async (body: CreateListItemValues) => {
-    setLoadingNewItem(true);
     try {
       await createListItemRequest(body, id);
       ReactGA.event({
@@ -113,37 +104,25 @@ export const ViewListPage = () => {
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast(
+        toastConfig(
           "Whoops, there has been an error creating the item :(",
           "error",
           errorMessage
         )
       );
-    } finally {
-      setLoadingNewItem(false);
     }
   };
-
-  function toggleActiveItems() {
-    if (showUndone) {
-      setShowUndone(false);
-      setActiveItems(doneItems);
-    } else {
-      setShowUndone(true);
-      setActiveItems(undoneItems);
-    }
-  }
 
   async function deleteItem(itemId: string) {
     setLoading(true);
     try {
       await deleteListItemRequest(id, itemId);
-      toast(createToast("List item deleted", "success"));
+      toast(toastConfig("List item deleted", "success"));
       await getListData();
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast(
+        toastConfig(
           "whoops, there has been an error deleting the item",
           "error",
           errorMessage
@@ -168,11 +147,11 @@ export const ViewListPage = () => {
       };
       await updateListItemRequest(id, listItem._id, updatedListItem);
       await getListData();
-      toast(createToast("Item moved", "success"));
+      toast(toastConfig("Item moved", "success"));
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
-        createToast(
+        toastConfig(
           "whoops, there has been an error deleting the item",
           "error",
           errorMessage
@@ -187,12 +166,12 @@ export const ViewListPage = () => {
     const declaredList = list as List;
     try {
       await deleteListRequest(declaredList._id);
-      toast(createToast("List has been deleted successfully", "success"));
+      toast(toastConfig("List has been deleted successfully", "success"));
       history.push(config.routes.lists);
     } catch (error) {
       const errorMessage = error.response.data.message;
       toast(
-        createToast(
+        toastConfig(
           "Whoops, there has been an error deleting the list.",
           "error",
           errorMessage
@@ -239,34 +218,23 @@ export const ViewListPage = () => {
                 h={5}
               />
             ) : null}
-            {/* <Tag
-              size={"md"}
-              variant="subtle"
-              colorScheme="teal"
-              cursor="pointer"
-              onClick={() => toggleActiveItems()}
-            >
-              <TagLabel>{showUndone ? "show done" : "show todo"}</TagLabel>
-            </Tag> */}
           </HStack>
         </Flex>
         <CreateListItemForm createNewItem={createNewItem} />
 
-        {activeItems.length === 0 ? (
+        {undoneItems.length === 0 ? (
           <Box mt={6}>
-            <Text>
-              You do not have any items.
-            </Text>
+            <Text>You do not have any items.</Text>
           </Box>
         ) : (
           <Box mt={4}>
-            {activeItems.map((item) => (
+            {undoneItems.map((item) => (
               <ListItemRow
                 item={item}
                 key={item._id}
                 listId={list?._id as string}
                 deleteItem={deleteItem}
-                showUndone={showUndone}
+                showUndone
                 updateListItemDoneState={updateListItemDoneState}
               />
             ))}
