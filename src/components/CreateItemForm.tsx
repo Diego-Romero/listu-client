@@ -62,9 +62,11 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                   />
                   <InputRightElement width="4.5rem">
                     <Button
-                      h="1.75rem"
+                      h="1.5rem"
                       size="sm"
                       type="submit"
+                      variant="solid"
+                      colorScheme="teal"
                       isLoading={props.isSubmitting}
                     >
                       Add

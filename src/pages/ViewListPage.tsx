@@ -51,7 +51,7 @@ import { ListItemRow } from "../components/ListItemRow";
 import { DeleteIcon, RepeatIcon } from "@chakra-ui/icons";
 import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import { config } from "../config";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 
 interface ParamTypes {
   id: string;
@@ -107,8 +107,8 @@ export const ViewListPage = () => {
       await createListItemRequest(body, id);
       ReactGA.event({
         category: config.googleAnalytics.lists,
-        action: 'list created'
-      })
+        action: "list created",
+      });
       await getListData();
     } catch (e) {
       const errorMessage = e.response.data.message;
@@ -205,14 +205,14 @@ export const ViewListPage = () => {
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card loading={loading} maxHeight="400px">
+      <Card loading={loading} maxHeight="70vh">
         <Flex
           direction={["column", "column", "row"]}
           align={["start", "start", "center"]}
           justify="space-between"
-          mb={4}
+          mb={8}
         >
-          <Heading mb={[6, 6, 0]} size="lg" textOverflow="ellipsis">
+          <Heading mb={[6, 6, 0]} size="md" textOverflow="ellipsis">
             {list ? list.name : "List"}
           </Heading>
           <HStack spacing={3}>
@@ -239,7 +239,7 @@ export const ViewListPage = () => {
                 h={5}
               />
             ) : null}
-            <Tag
+            {/* <Tag
               size={"md"}
               variant="subtle"
               colorScheme="teal"
@@ -247,16 +247,15 @@ export const ViewListPage = () => {
               onClick={() => toggleActiveItems()}
             >
               <TagLabel>{showUndone ? "show done" : "show todo"}</TagLabel>
-            </Tag>
+            </Tag> */}
           </HStack>
         </Flex>
+        <CreateListItemForm createNewItem={createNewItem} />
 
         {activeItems.length === 0 ? (
           <Box mt={6}>
             <Text>
-              {showUndone
-                ? "You do not have any items."
-                : "You do not have any done items."}
+              You do not have any items.
             </Text>
           </Box>
         ) : (
@@ -271,20 +270,22 @@ export const ViewListPage = () => {
                 updateListItemDoneState={updateListItemDoneState}
               />
             ))}
+            {doneItems.map((item) => (
+              <ListItemRow
+                item={item}
+                key={item._id}
+                listId={list?._id as string}
+                deleteItem={deleteItem}
+                showUndone={false}
+                updateListItemDoneState={updateListItemDoneState}
+              />
+            ))}
           </Box>
         )}
       </Card>
-      <Box mt={6} mb={4} w="100%">
-        <Card loading={loadingNewItem}>
-          <Box>
-            <Heading size="sm">Add a new item</Heading>
-            <CreateListItemForm createNewItem={createNewItem} />
-          </Box>
-        </Card>
-      </Box>
 
       <Button
-        mt={3}
+        mt={6}
         isFullWidth
         onClick={() => history.push(config.routes.lists)}
       >

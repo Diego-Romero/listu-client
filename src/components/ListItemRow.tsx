@@ -13,6 +13,7 @@ import { ListItem } from "../type";
 import { longDateFormat } from "../utils/utils";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
+import { IoMdUndo } from 'react-icons/io'
 
 interface Props {
   item: ListItem;
@@ -50,6 +51,8 @@ export const ListItemRow: React.FC<Props> = ({
         onClick={() =>
           history.push(config.routes.singleListItemUrl(listId, item._id))
         }
+        color={!showUndone ? "gray.500" : "inherit"}
+        textDecoration={!showUndone ? "line-through" : "inherit"}
         _hover={{
           fontWeight: "semibold",
         }}
@@ -69,6 +72,14 @@ export const ListItemRow: React.FC<Props> = ({
           {showUndone ? (
             <>
               <IconButton
+                variant="outline"
+                size="sm"
+                zIndex={10}
+                aria-label="Navigate to item"
+                onClick={(event) => toggleOpenState(event)}
+                icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              />
+              <IconButton
                 variant="ghost"
                 colorScheme="teal"
                 size="sm"
@@ -77,17 +88,18 @@ export const ListItemRow: React.FC<Props> = ({
                 onClick={(event) => updateListItemDoneState(event, item, true)}
                 icon={<CheckIcon />}
               />
-              <IconButton
-                variant="outline"
-                size="sm"
-                zIndex={10}
-                aria-label="Navigate to item"
-                onClick={(event) => toggleOpenState(event)}
-                icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              />
             </>
           ) : (
             <>
+              <IconButton
+                variant="ghost"
+                colorScheme="teal"
+                size="sm"
+                color="gray"
+                aria-label="Move item to to-do"
+                onClick={(event) => updateListItemDoneState(event, item, false)}
+                icon={<IoMdUndo />}
+              />
               <IconButton
                 variant="ghost"
                 colorScheme="red"
@@ -98,15 +110,6 @@ export const ListItemRow: React.FC<Props> = ({
                   deleteItem(item._id);
                 }}
                 icon={<DeleteIcon />}
-              />
-              <IconButton
-                variant="ghost"
-                colorScheme="teal"
-                size="sm"
-                color="teal"
-                aria-label="Move item to to-do"
-                onClick={(event) => updateListItemDoneState(event, item, false)}
-                icon={<ArrowBackIcon />}
               />
             </>
           )}

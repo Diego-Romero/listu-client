@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
           </Link>
         </Heading>
         <Text>
-          <Link to={config.routes.contact} as={NavLink} textDecoration="underline" >
+          <Link to={config.routes.contact} as={NavLink} textDecoration="underline">
             get in touch
           </Link>
         </Text>
