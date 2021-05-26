@@ -109,7 +109,7 @@ export const InviteFriendModal: React.FC<Props> = ({
                   mt={4}
                   mb={6}
                   colorScheme="teal"
-                  variant="outline"
+                  variant="solid"
                   isFullWidth
                   type="submit"
                   isLoading={props.isSubmitting || loading}
@@ -122,17 +122,25 @@ export const InviteFriendModal: React.FC<Props> = ({
           <Divider />
           <Box mt={8} mb={4}>
             <Box mb={4}>
-              <Heading size="sm">List created by </Heading>
-              <Text mt={2}>
-                {list.createdBy.name} - {list.createdBy.email}
-              </Text>
+              {list.createdBy.email ? (
+                <Box>
+                  <Heading size="sm">List created by </Heading>
+                  <Text mt={2}>
+                    {list.createdBy.name} - {list.createdBy.email}
+                  </Text>
+                </Box>
+              ) : null}
             </Box>
-            <Heading size="sm">Current people in this list</Heading>
-            <UnorderedList mt={2}>
-              {list?.users.map((user) => (
-                <ListItem key={user._id}>{user.email}</ListItem>
-              ))}
-            </UnorderedList>
+            {list.users.length > 1 ? (
+              <Box>
+                <Heading size="sm">Current people in this list</Heading>
+                <UnorderedList mt={2}>
+                  {list?.users.map((user) => (
+                    <ListItem key={user._id}>{user.email}</ListItem>
+                  ))}
+                </UnorderedList>
+              </Box>
+            ) : null}
           </Box>
         </ModalBody>
       </ModalContent>

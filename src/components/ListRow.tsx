@@ -2,16 +2,17 @@ import { DragHandleIcon, EditIcon } from "@chakra-ui/icons";
 import { Divider, Flex, Box, Text, HStack } from "@chakra-ui/layout";
 import { IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
 import React from "react";
-import { List } from "../type";
+import { List, User } from "../type";
 import { UpdateListModal } from "./UpdateListModal";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { InviteFriendModal } from "./InviteFriendModal";
 
 interface Props {
   list: List;
+  user: User;
 }
 
-export const ListRow: React.FC<Props> = ({ list }) => {
+export const ListRow: React.FC<Props> = ({ list, user }) => {
   const {
     isOpen: isUpdateListModalOpen,
     onOpen: onUpdateListModalOpen,
@@ -74,6 +75,7 @@ export const ListRow: React.FC<Props> = ({ list }) => {
         modalOpen={isUpdateListModalOpen}
         modalClose={onUpdateListModalClose}
         list={list}
+        user={user}
       />
       <InviteFriendModal
         modalOpen={isInviteFriendModalOpen}

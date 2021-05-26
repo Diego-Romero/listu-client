@@ -60,7 +60,7 @@ export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose, lists})
         action: "list created",
       });
       toast(
-        toastConfig("Whoop 🙌", "success", "Your new list is ready to go.")
+        toastConfig("Whoop 🙌", "info", "Your new list is ready to go.")
       );
       lists.push(res.data as List)
       modalClose();

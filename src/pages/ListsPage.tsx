@@ -1,6 +1,7 @@
 import {
   Flex,
   Heading,
+  Text,
   Box,
   Button,
   Grid,
@@ -22,6 +23,7 @@ import { LoadingComponent } from "../components/Loading";
 
 export const ListsPage = () => {
   const { navBarOpen, setNavBarOpen } = useUiContext();
+  const { user } = useUserContext();
   const [loadingScreen, setLoadingScreen] = React.useState(false);
   const [lists, setLists] = React.useState<List[]>([]);
   const {
@@ -65,7 +67,7 @@ export const ListsPage = () => {
           {navBarOpen ? (
             <Grid
               height="100%"
-              width={['100vw', '100vw', '40vw', '35vw', '25vw']}
+              width={["100vw", "100vw", "40vw", "35vw", "25vw"]}
               templateRows="auto 1fr auto"
               boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
               borderRightColor="gray.200"
@@ -78,11 +80,15 @@ export const ListsPage = () => {
                 </Flex>
                 <Divider />
               </Box>
-              <Stack overflowY="auto" maxH="70vh">
-                {lists.map((list) => (
-                  <ListRow key={list._id} list={list} />
-                ))}
-              </Stack>
+              {lists.length === 0 ? (
+                <Text size="sm" textAlign="center" mt={6}>You do not have any lists</Text>
+              ) : (
+                <Stack overflowY="auto" maxH="70vh">
+                  {lists.map((list) => (
+                    <ListRow key={list._id} list={list} user={user} />
+                  ))}
+                </Stack>
+              )}
               <Box p={4}>
                 <Button
                   colorScheme="teal"

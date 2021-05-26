@@ -5,6 +5,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Box,
   Button,
   Divider,
   FormControl,
@@ -28,7 +29,7 @@ import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { deleteListRequest, updateListRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
-import { List } from "../type";
+import { List, User } from "../type";
 import { useHistory } from "react-router-dom";
 
 export interface CreateListValues {
@@ -45,12 +46,14 @@ interface Props {
   modalOpen: boolean;
   modalClose: () => void;
   list: List;
+  user: User;
 }
 
 export const UpdateListModal: React.FC<Props> = ({
   modalOpen,
   modalClose,
   list,
+  user,
 }) => {
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
@@ -152,7 +155,7 @@ export const UpdateListModal: React.FC<Props> = ({
                       }
                     >
                       <FormLabel htmlFor="description">Description</FormLabel>
-                      <Textarea size="sm" {...field} rows={6}  />
+                      <Textarea size="sm" {...field} rows={6} />
                       <FormErrorMessage>
                         {form.errors.description}
                       </FormErrorMessage>
@@ -161,7 +164,7 @@ export const UpdateListModal: React.FC<Props> = ({
                 </Field>
                 <Button
                   mt={4}
-                  colorScheme="green"
+                  colorScheme="teal"
                   variant="solid"
                   isFullWidth
                   type="submit"
@@ -183,18 +186,22 @@ export const UpdateListModal: React.FC<Props> = ({
               </Form>
             )}
           </Formik>
-          <Divider />
-          <Button
-            mt={4}
-            mb={4}
-            colorScheme="red"
-            variant="outline"
-            isFullWidth
-            isLoading={loading}
-            onClick={onDeleteAlertOpen}
-          >
-            Delete List
-          </Button>
+          {list.createdBy._id === user._id ? (
+            <Box>
+              <Divider />
+              <Button
+                mt={4}
+                mb={4}
+                colorScheme="red"
+                variant="outline"
+                isFullWidth
+                isLoading={loading}
+                onClick={onDeleteAlertOpen}
+              >
+                Delete List
+              </Button>
+            </Box>
+          ) : null}
         </ModalBody>
       </ModalContent>
       <AlertDialog

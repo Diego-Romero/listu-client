@@ -13,8 +13,11 @@ export const Footer: React.FC = () => {
         alignContent="center"
         justifyContent="center"
         p="4"
-        bgGradient="linear(to-r, teal.400,green.400)"
-        color="white"
+        // borderRightColor="gray.200"
+        // borderTopWidth="1px"
+        boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
+        bgGradient="linear(to-r, teal.400,green.300)"
+        color="black"
       >
         <Stack direction={["column", "column", "row"]} alignItems="center">
           <Heading size="sm">
@@ -28,10 +31,7 @@ export const Footer: React.FC = () => {
             {/* <Badge ml={4} colorScheme="teal">BETA</Badge> */}
           </Heading>
           <Text>
-            <Link
-              textDecoration="underline"
-              onClick={onOpen}
-            >
+            <Link textDecoration="underline" onClick={onOpen}>
               get in touch
             </Link>
           </Text>
