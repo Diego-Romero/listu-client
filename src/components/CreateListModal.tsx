@@ -22,6 +22,7 @@ import { createListRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
 import ReactGA from "react-ga";
 import { useUiContext } from "../context/UiContext";
+import { List } from "../type";
 
 export interface CreateListValues {
   name: string;
@@ -41,9 +42,10 @@ const validationSchema = Yup.object().shape({
 interface Props {
   modalOpen: boolean;
   modalClose: () => void;
+  lists: List[];
 }
 
-export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose}) => {
+export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose, lists}) => {
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   const { setLoading } = useUiContext();
@@ -51,7 +53,8 @@ export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose}) => {
   async function createList(values: CreateListValues) {
     setLoading(true)
     try {
-      await createListRequest(values);
+      const res = await createListRequest(values);
+      console.log(res, res.data)
       ReactGA.event({
         category: config.googleAnalytics.lists,
         action: "list created",
@@ -59,6 +62,8 @@ export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose}) => {
       toast(
         toastConfig("Whoop 🙌", "success", "Your new list is ready to go.")
       );
+      lists.push(res.data as List)
+      modalClose();
     } catch (_err) {
       toast(
         toastConfig(

@@ -57,6 +57,13 @@ export const createListRequest = async (values: CreateListValues) => {
   });
 };
 
+export const updateListRequest = async (values: CreateListValues, id: string) => {
+  const url = `/lists/${id}`;
+  return axiosInstance.patch(url, values, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+};
+
 export const createListItemRequest = async (
   values: CreateListItemValues,
   listId: string

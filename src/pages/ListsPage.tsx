@@ -24,7 +24,6 @@ export const ListsPage = () => {
   const { navBarOpen, setNavBarOpen } = useUiContext();
   const [loadingScreen, setLoadingScreen] = React.useState(false);
   const [lists, setLists] = React.useState<List[]>([]);
-  const [activeListOnModal, setActiveListOnModa] = React.useState<List | null>(null);
   const {
     isOpen: isCreateListModalOpen,
     onOpen: onCreateListModalOpen,
@@ -103,6 +102,7 @@ export const ListsPage = () => {
       <CreateListModal
         modalOpen={isCreateListModalOpen}
         modalClose={onCreateListModalClose}
+        lists={lists}
       />
     </Box>
   );

@@ -26,9 +26,8 @@ import React from "react";
 import * as Yup from "yup";
 import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
-import { createListRequest, deleteListRequest } from "../api/requests";
+import { deleteListRequest, updateListRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
-import ReactGA from "react-ga";
 import { List } from "../type";
 import { useHistory } from "react-router-dom";
 
@@ -62,51 +61,49 @@ export const UpdateListModal: React.FC<Props> = ({
     onClose: onDeleteAlertClose,
   } = useDisclosure();
   const history = useHistory();
+  const [loading, setLoading] = React.useState(false);
 
   const initialValues: CreateListValues = {
     name: list.name,
     description: list.description as string,
   };
 
-  async function updateList(values: CreateListValues, actions) {
+  async function updateList(values: CreateListValues) {
+    setLoading(true);
     try {
-      await createListRequest(values);
-      ReactGA.event({
-        category: config.googleAnalytics.lists,
-        action: "list created",
-      });
-      toast(
-        toastConfig("Whoop 🙌", "success", "Your new list is ready to go.")
-      );
+      await updateListRequest(values, list._id);
+      toast(toastConfig("Whoop 🙌", "info", "List updated"));
+      history.push(config.routes.lists);
     } catch (_err) {
       toast(
         toastConfig(
           "Yikes..",
-          "error",
-          "There has been an error creating your list, please try again later."
+          "warning",
+          "There has been an error updating your list, please try again later."
         )
       );
     } finally {
-      actions.setSubmitting(false);
+      setLoading(false);
     }
   }
 
   const handleListDelete = async () => {
+    setLoading(true);
     const declaredList = list as List;
     try {
       await deleteListRequest(declaredList._id);
       toast(toastConfig("List has been deleted successfully", "info"));
       history.push(config.routes.lists);
-    } catch (error) {
-      const errorMessage = error.response.data.message;
+    } catch (_error) {
       toast(
         toastConfig(
           "Whoops, there has been an error deleting the list.",
-          "warning",
-          errorMessage
+          "warning"
         )
       );
-    } 
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -122,11 +119,11 @@ export const UpdateListModal: React.FC<Props> = ({
             validateOnBlur={false}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              updateList(values, actions);
+              updateList(values);
             }}
             validationSchema={validationSchema}
           >
-            {(props) => (
+            {() => (
               <Form>
                 <Field name="name">
                   {({ field, form }) => (
@@ -155,7 +152,7 @@ export const UpdateListModal: React.FC<Props> = ({
                       }
                     >
                       <FormLabel htmlFor="description">Description</FormLabel>
-                      <Textarea size="sm" {...field} />
+                      <Textarea size="sm" {...field} rows={6}  />
                       <FormErrorMessage>
                         {form.errors.description}
                       </FormErrorMessage>
@@ -168,7 +165,7 @@ export const UpdateListModal: React.FC<Props> = ({
                   variant="solid"
                   isFullWidth
                   type="submit"
-                  isLoading={props.isSubmitting}
+                  isLoading={loading}
                 >
                   Update
                 </Button>
@@ -178,6 +175,7 @@ export const UpdateListModal: React.FC<Props> = ({
                   colorScheme="gray"
                   variant="outline"
                   isFullWidth
+                  isLoading={loading}
                   onClick={() => modalClose()}
                 >
                   Cancel
@@ -192,6 +190,7 @@ export const UpdateListModal: React.FC<Props> = ({
             colorScheme="red"
             variant="outline"
             isFullWidth
+            isLoading={loading}
             onClick={onDeleteAlertOpen}
           >
             Delete List
@@ -214,10 +213,7 @@ export const UpdateListModal: React.FC<Props> = ({
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button
-                ref={alertDialogCancelRef}
-                onClick={onDeleteAlertClose}
-              >
+              <Button ref={alertDialogCancelRef} onClick={onDeleteAlertClose}>
                 Cancel
               </Button>
               <Button

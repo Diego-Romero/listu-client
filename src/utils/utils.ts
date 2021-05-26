@@ -16,7 +16,7 @@ export function toastConfig(
 ): UseToastOptions {
   return {
     title,
-    position: "top",
+    position: "bottom",
     description,
     status,
     duration: 2000,
