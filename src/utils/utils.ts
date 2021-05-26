@@ -11,12 +11,12 @@ export function longDateFormat(date: Date) {
 
 export function toastConfig(
   title: string,
-  status: "success" | "error" | "info",
+  status: "success" | "error" | "info" | "warning",
   description = ""
 ): UseToastOptions {
   return {
     title,
-    position: "bottom",
+    position: "top",
     description,
     status,
     duration: 2000,

@@ -20,7 +20,6 @@ import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { sendContactMessageRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
-import { useHistory } from "react-router-dom";
 
 export interface ContactFormValues {
   message: string;
@@ -46,13 +45,10 @@ export const ContactFormModal: React.FC<Props> = ({
   modalOpen,
   modalClose,
 }) => {
-  const history = useHistory();
   const toast = useToast();
-  const [loading, setLoading] = React.useState(false);
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
   async function submitMessage(values: ContactFormValues, actions) {
-    setLoading(true);
     try {
       await sendContactMessageRequest(values);
       toast(
@@ -68,12 +64,10 @@ export const ContactFormModal: React.FC<Props> = ({
       toast(
         toastConfig(
           "Yikes..",
-          "error",
+          "warning",
           "There has been an error submitting your message please try again later."
         )
       );
-    } finally {
-      setLoading(false);
     }
   }
 

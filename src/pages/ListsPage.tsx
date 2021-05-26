@@ -24,6 +24,7 @@ export const ListsPage = () => {
   const { navBarOpen, setNavBarOpen } = useUiContext();
   const [loadingScreen, setLoadingScreen] = React.useState(false);
   const [lists, setLists] = React.useState<List[]>([]);
+  const [activeListOnModal, setActiveListOnModa] = React.useState<List | null>(null);
   const {
     isOpen: isCreateListModalOpen,
     onOpen: onCreateListModalOpen,
@@ -58,13 +59,14 @@ export const ListsPage = () => {
       ) : (
         <Grid
           height="100%"
-          templateColumns={navBarOpen ? "350px 1fr" : "1fr"}
+          templateColumns={navBarOpen ? "auto 1fr" : "1fr"}
           width="100vw"
           position="relative"
         >
           {navBarOpen ? (
             <Grid
               height="100%"
+              width={['100vw', '100vw', '40vw', '35vw', '25vw']}
               templateRows="auto 1fr auto"
               boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
               borderRightColor="gray.200"
