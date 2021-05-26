@@ -123,7 +123,7 @@ export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose, lists})
                       }
                     >
                       <FormLabel htmlFor="description">Description</FormLabel>
-                      <Textarea size="sm" {...field} />
+                      <Textarea size="sm" {...field} rows={6} />
                       <FormErrorMessage>
                         {form.errors.description}
                       </FormErrorMessage>

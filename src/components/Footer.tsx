@@ -13,11 +13,9 @@ export const Footer: React.FC = () => {
         alignContent="center"
         justifyContent="center"
         p="4"
-        // borderRightColor="gray.200"
-        // borderTopWidth="1px"
         boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
         bgGradient="linear(to-r, teal.400,green.300)"
-        color="black"
+        color="white"
       >
         <Stack direction={["column", "column", "row"]} alignItems="center">
           <Heading size="sm">
