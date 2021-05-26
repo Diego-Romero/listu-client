@@ -1,18 +1,13 @@
 import * as React from "react";
-import { Box, ChakraProvider, extendTheme, Flex, Grid } from "@chakra-ui/react";
+import { Box, ChakraProvider, extendTheme, Grid } from "@chakra-ui/react";
 import { NavBar } from "../components/Navbar";
 import { BrowserRouter } from "react-router-dom";
-import { AuthenticatedProvider } from "../context/AuthenticatedContext";
+import { UserContextProvider } from "../context/UserContext";
 import { Routes } from "./Routes";
 import { Footer } from "../components/Footer";
-import {
-  LoadingContextProvider,
-  useLoadingContext,
-} from "../context/LoadingContext";
-import { LoadingComponent } from "../components/Loading";
+import { UiContextProvider } from "../context/UiContext";
 
 export const Body: React.FC = ({ children }) => {
-  const { loading } = useLoadingContext();
   return (
     <Grid
       height="100vh"
@@ -22,17 +17,9 @@ export const Body: React.FC = ({ children }) => {
       gridTemplateAreas="'header' 'main' 'footer'"
     >
       <NavBar />
-      <LoadingComponent loading={loading} />
-      <Flex
-        pt={10}
-        px={4}
-        width="100%"
-        justifyContent="center"
-        alignItems="center"
-        display={loading ? "none" : "flex"}
-      >
-        <Box maxW="960px">{children}</Box>
-      </Flex>
+      <Box height="100%" width="100%">
+        {children}
+      </Box>
       <Footer />
     </Grid>
   );
@@ -52,14 +39,14 @@ export const App = () => {
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         {/* Contexts should go here */}
-        <AuthenticatedProvider>
-          <LoadingContextProvider>
+        <UserContextProvider>
+          <UiContextProvider>
             {/* End of contexts */}
             <Body>
               <Routes />
             </Body>
-          </LoadingContextProvider>
-        </AuthenticatedProvider>
+          </UiContextProvider>
+        </UserContextProvider>
       </BrowserRouter>
     </ChakraProvider>
   );

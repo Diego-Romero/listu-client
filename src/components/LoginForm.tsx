@@ -21,7 +21,7 @@ import {
   SPACING_BUTTONS,
   SPACING_INPUTS,
 } from "../config";
-import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { useUserContext } from "../context/UserContext";
 import { toastConfig } from "../utils/utils";
 
 export interface LoginFormValues {
@@ -46,17 +46,16 @@ const validationSchema = Yup.object().shape({
 export const LoginForm: React.FC<Props> = ({ setLoading }) => {
   const history = useHistory();
   const toast = useToast();
-  const { login, logout } = useAuthenticatedContext();
+  const { setUser } = useUserContext();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   async function loginUser(values: LoginFormValues, actions) {
     setLoading(true);
     actions.setSubmitting(false);
-    logout();
     localStorage.removeItem("token");
     try {
       const res = await loginRequest(values);
       localStorage.setItem("token", res.data.token);
-      login(res.data.user);
+      setUser(res.data.user);
       history.push(config.routes.lists);
     } catch (e) {
       const errorMessage = e.response.data.message;

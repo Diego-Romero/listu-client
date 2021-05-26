@@ -1,34 +1,43 @@
-import { Badge, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Link, Stack } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Link, Stack, useDisclosure } from "@chakra-ui/react";
 import React from "react";
-import { config } from "../config";
-import { Link as NavLink } from "react-router-dom";
+import { ContactFormModal } from "./ContactFormModal";
 
 export const Footer: React.FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Flex
-      width="100%"
-      textAlign="center"
-      alignContent="center"
-      justifyContent="center"
-      p="6"
-    >
-      <Stack>
-        <Heading size="sm">
-          Made with ☕️ {"_"} by{" "}
-          <Link href="https://www.linkedin.com/in/dev-diego-romero/" isExternal>
-            Diego Romero
-          </Link>
-        </Heading>
-        <Text>
-          <Link to={config.routes.contact} as={NavLink} textDecoration="underline">
-            get in touch
-          </Link>
-        </Text>
-        <Flex alignItems="center" justifyContent="center" pt={2}>
-          <Badge colorScheme="teal">BETA</Badge>
-        </Flex>
-      </Stack>
-    </Flex>
+    <Box>
+      <Flex
+        width="100%"
+        textAlign="center"
+        alignContent="center"
+        justifyContent="center"
+        p="4"
+        bgGradient="linear(to-r, teal.400,green.400)"
+        color="white"
+      >
+        <Stack direction={["column", "column", "row"]} alignItems="center">
+          <Heading size="sm">
+            Made with ☕️ {"_"} by{" "}
+            <Link
+              href="https://www.linkedin.com/in/dev-diego-romero/"
+              isExternal
+            >
+              Diego Romero
+            </Link>
+            {/* <Badge ml={4} colorScheme="teal">BETA</Badge> */}
+          </Heading>
+          <Text>
+            <Link
+              textDecoration="underline"
+              onClick={onOpen}
+            >
+              get in touch
+            </Link>
+          </Text>
+        </Stack>
+      </Flex>
+      <ContactFormModal modalOpen={isOpen} modalClose={onClose} />
+    </Box>
   );
 };

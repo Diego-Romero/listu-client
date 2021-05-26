@@ -2,12 +2,11 @@ import { VStack, Heading, Text, Button, Image } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router";
 import { config } from "../config";
-import { useAuthenticatedContext } from "../context/AuthenticatedContext";
 import logo from "../images/icons/landing-teal.svg";
 
 export const Landing: React.FC = () => {
   const history = useHistory();
-  const { user } = useAuthenticatedContext();
+  const token = localStorage.getItem("token");
 
   return (
     <VStack spacing={6} mt={8} textAlign="center">
@@ -22,7 +21,7 @@ export const Landing: React.FC = () => {
       <Text fontSize="xl">
         The app to help you and your friends share lists.
       </Text>
-      {user === null ? (
+      {!token ? (
         <Button
           variant="outline"
           colorScheme="teal"

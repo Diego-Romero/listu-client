@@ -17,7 +17,6 @@ export const config = {
   },
   routes: {
     login: "/login",
-    contact: "/contact",
     newFriend: "/new-friend/:id",
     forgotPassword: "/forgot-password",
     resetPassword: "/password-reset/:token",

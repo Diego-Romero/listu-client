@@ -1,14 +1,12 @@
-import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Divider, Flex, Box, Text, HStack } from "@chakra-ui/layout";
 import React from "react";
 import { List } from "../type";
 
 interface Props {
   list: List;
-  navigateToList: (id: string) => void;
 }
 
-export const ListRow: React.FC<Props> = ({ list, navigateToList }) => {
+export const ListRow: React.FC<Props> = ({ list }) => {
   return (
     <Box>
       <Flex
@@ -16,19 +14,17 @@ export const ListRow: React.FC<Props> = ({ list, navigateToList }) => {
         alignItems="center"
         justifyContent="space-between"
         py={4}
-        px={2}
+        px={4}
         cursor="pointer"
         _hover={{
           fontWeight: "semibold",
           textDecoration: "underline",
         }}
-        onClick={() => navigateToList(list._id)}
+        onClick={() => console.log('hola')}
       >
         <HStack>
-          <Text fontSize="lg">{list.name} </Text>
-          {/* <Text fontSize="x-small">{shortDateFormat(list.createdAt)} </Text> */}
+          <Text fontSize="lg" noOfLines={1} >{list.name} </Text>
         </HStack>
-        <ArrowForwardIcon ml={2} w={4} h={4} />
       </Flex>
       <Divider />
     </Box>

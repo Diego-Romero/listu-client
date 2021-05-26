@@ -47,7 +47,7 @@ import { AddFriendForm } from "../components/AddFriendForm";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { ListItemRow } from "../components/ListItemRow";
 import { DeleteIcon, RepeatIcon } from "@chakra-ui/icons";
-import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { useUserContext } from "../context/UserContext";
 import { config } from "../config";
 import ReactGA from "react-ga";
 
@@ -63,7 +63,7 @@ export const ViewListPage = () => {
   const [loading, setLoading] = React.useState(false);
   const { id } = useParams<ParamTypes>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { user } = useAuthenticatedContext();
+  const { user } = useUserContext();
   const [alertDialogOpen, setAlertDialogOpen] = React.useState(false);
   const alertDialogCancelRef = React.useRef();
   const history = useHistory();

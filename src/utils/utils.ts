@@ -11,7 +11,7 @@ export function longDateFormat(date: Date) {
 
 export function toastConfig(
   title: string,
-  status: "success" | "error",
+  status: "success" | "error" | "info",
   description = ""
 ): UseToastOptions {
   return {

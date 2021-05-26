@@ -23,7 +23,7 @@ import {
 import { useHistory } from "react-router";
 import { registerFriendRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
-import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { useUserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 
 export interface RegisterFriendFormTypes {
@@ -50,7 +50,7 @@ export const NewFriendForm: React.FC = () => {
   const toast = useToast();
   const { id } = useParams<ParamTypes>();
   const [show, setShow] = React.useState(false);
-  const { login } = useAuthenticatedContext();
+  const { login } = useUserContext();
 
   async function registerFriend(values: RegisterFriendFormTypes, actions) {
     actions.setSubmitting(false);

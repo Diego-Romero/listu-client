@@ -10,20 +10,26 @@ import * as React from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
-import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { useUserContext } from "../context/UserContext";
 import { toastConfig } from "../utils/utils";
 import { IoMdLogOut, IoMdHome, IoMdLogIn } from "react-icons/io";
 import { AiOutlineUnorderedList } from "react-icons/ai";
+import { useLocation } from "react-router-dom";
+import { useUiContext } from "../context/UiContext";
+import { FiSidebar } from 'react-icons/fi'
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
-  const { user, logout } = useAuthenticatedContext();
+  const { user, removeUser } = useUserContext();
+  const { navBarOpen, setNavBarOpen } = useUiContext();
+
+  const location = useLocation();
+
   async function logUserOut() {
     try {
-      logout();
+      removeUser();
       localStorage.removeItem("token");
-      toast(toastConfig("See you soon!", "success"));
       history.push(config.routes.home);
     } catch (e) {
       const errorMessage = e.response.data.message;
@@ -33,27 +39,49 @@ export const NavBar: React.FC = () => {
     }
   }
 
+  function isOnListPage(): boolean {
+    return config.routes.lists === location.pathname;
+  }
+
   return (
     <Flex
       direction="row"
       color="white"
-      bgGradient="linear(to-r, teal.500,green.500)"
+      bgGradient="linear(to-r, teal.400,green.400)"
       p={4}
       align="center"
       justify="space-between"
     >
-      {/* desktop view */}
-      <Box >
+      <Box>
         {user !== null ? (
-          <IconButton
-            size="md"
-            variant="ghost"
-            color="current"
-            fontSize="2xl"
-            onClick={() => history.push(config.routes.lists)}
-            icon={<AiOutlineUnorderedList />}
-            aria-label={`Go to lists`}
-          />
+          <>
+            {isOnListPage() ? (
+              <Tooltip label="Toggle side nav" aria-label="Toggle side nav">
+                <IconButton
+                  size="md"
+                  variant="ghost"
+                  color="current"
+                  fontSize="2xl"
+                  isActive={navBarOpen}
+                  onClick={() => setNavBarOpen(!navBarOpen)}
+                  icon={<FiSidebar />}
+                  aria-label={`Toggle side nav`}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip label="Go to lists" aria-label="go to lists">
+                <IconButton
+                  size="md"
+                  variant="ghost"
+                  color="current"
+                  fontSize="2xl"
+                  onClick={() => history.push(config.routes.lists)}
+                  icon={<AiOutlineUnorderedList />}
+                  aria-label={`Go to lists`}
+                />
+              </Tooltip>
+            )}
+          </>
         ) : (
           <IconButton
             size="md"
@@ -68,7 +96,7 @@ export const NavBar: React.FC = () => {
       </Box>
       <HStack>
         <ColorModeSwitcher justifySelf="flex-end" />
-        <Box >
+        <Box>
           {user !== null ? (
             <Tooltip label="Logout" aria-label="Logout">
               <IconButton

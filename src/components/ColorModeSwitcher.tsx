@@ -17,7 +17,7 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
 
   return (
     <Tooltip
-      label="Toggle dark/light mode"
+      label="Toggle light/dark mode"
       aria-label="Toggle dark or light mode"
     >
       <IconButton

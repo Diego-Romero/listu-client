@@ -1,93 +1,107 @@
 import {
   Flex,
-  Text,
   Heading,
-  Image,
   Box,
   Button,
+  Grid,
+  CloseButton,
+  Stack,
+  Divider,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import React from "react";
-import { Card } from "../components/Card";
-import logo from "../images/icons/landing.svg";
-import { useHistory } from "react-router";
-import { config, SPACING_BUTTONS } from "../config";
-import { User } from "../type";
+import { ListRow } from "../components/ListRow";
+import { useUserContext } from "../context/UserContext";
+import { CreateListModal } from "../components/CreateListModal";
+import { useUiContext } from "../context/UiContext";
 import { getUserRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
-import { ListRow } from "../components/ListRow";
+import { List } from "../type";
+import { LoadingComponent } from "../components/Loading";
 
 export const ListsPage = () => {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(false);
-
+  const { navBarOpen, setNavBarOpen } = useUiContext();
+  const [loadingScreen, setLoadingScreen] = React.useState(false);
+  const [lists, setLists] = React.useState<List[]>([]);
+  const {
+    isOpen: isCreateListModalOpen,
+    onOpen: onCreateListModalOpen,
+    onClose: onCreateListModalClose,
+  } = useDisclosure();
+  const { setUser, removeUser } = useUserContext();
   const toast = useToast();
-  const history = useHistory();
 
-  React.useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const handleClick = (id) => {
-    const url = config.routes.singleListUrl(id);
-    history.push(url);
-  };
-
-  const fetchUser = async () => {
-    setLoading(true);
+  const fetchLists = async () => {
+    setLoadingScreen(true);
     try {
-      const { data } = await getUserRequest();
-      setUser(data);
-    } catch (_err) {
-      toast(
-        toastConfig(
-          "Whoops, there has been an error fetching your lists",
-          "error"
-        )
-      );
-      history.push(config.routes.login);
-    } finally {
-      setLoading(false);
+      const req = await getUserRequest();
+      setUser(req.data);
+      setLists(req.data.lists);
+      setLoadingScreen(false);
+    } catch (e) {
+      const errorMessage = e.response.data.message;
+      toast(toastConfig("whoops, please log in again", "error", errorMessage));
+      removeUser(); // logout the user if can't fetch the details
     }
   };
 
+  React.useEffect(() => {
+    // hook to check if user has been authenticated
+    fetchLists();
+  }, []);
+
   return (
-    <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card loading={loading}>
-        <Heading mt={2} size="lg" textAlign="center" mb={4}>
-          Your lists
-        </Heading>
-        {user !== null && user.lists.length > 0 ? (
-          user.lists.map((list) => (
-            <ListRow list={list} key={list._id} navigateToList={handleClick} />
-          ))
-        ) : (
-          <Box>
-            <Text>
-              You do not seem to have any lists, maybe create a new one?
-            </Text>
-          </Box>
-        )}
-        <Button
-          mt={SPACING_BUTTONS}
-          colorScheme="teal"
-          variant="outline"
-          isFullWidth
-          type="submit"
-          onClick={() => history.push(config.routes.createList)}
+    <Box height="100%">
+      {loadingScreen ? (
+        <LoadingComponent />
+      ) : (
+        <Grid
+          height="100%"
+          templateColumns={navBarOpen ? "350px 1fr" : "1fr"}
+          width="100vw"
+          position="relative"
         >
-          Create a new list
-        </Button>
-        {/* <Button
-          mt={3}
-          variant="solid"
-          isFullWidth
-          onClick={() => history.push(config.routes.home)}
-        >
-          Home
-        </Button> */}
-      </Card>
-      <Image mt={4} boxSize="350px" src={logo} alt="Login" />
-    </Flex>
+          {navBarOpen ? (
+            <Grid
+              height="100%"
+              templateRows="auto 1fr auto"
+              boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
+              borderRightColor="gray.200"
+              borderRightWidth="1px"
+            >
+              <Box>
+                <Flex alignItems="center" justifyContent="space-between" p={4}>
+                  <Heading size="md">Lists</Heading>
+                  <CloseButton onClick={() => setNavBarOpen(false)} />
+                </Flex>
+                <Divider />
+              </Box>
+              <Stack overflowY="auto" maxH="70vh">
+                {lists.map((list) => (
+                  <ListRow key={list._id} list={list} />
+                ))}
+              </Stack>
+              <Box p={4}>
+                <Button
+                  colorScheme="teal"
+                  variant="outline"
+                  isFullWidth
+                  onClick={onCreateListModalOpen}
+                >
+                  New List
+                </Button>
+              </Box>
+            </Grid>
+          ) : null}
+          {/* navbar */}
+          <Flex>body</Flex>
+        </Grid>
+      )}
+      <CreateListModal
+        modalOpen={isCreateListModalOpen}
+        modalClose={onCreateListModalClose}
+      />
+    </Box>
   );
 };

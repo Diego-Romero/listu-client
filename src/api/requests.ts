@@ -6,7 +6,7 @@ import { LoginFormValues } from "../components/LoginForm";
 import { RegisterFriendFormTypes } from "../components/NewFriendForm";
 import { config } from "../config";
 import { ContactFormValues } from "../pages/ContactPage";
-import { CreateListValues } from "../pages/CreateListPage";
+import { CreateListValues } from "../components/CreateListModal";
 import { ResetPasswordFormTypes } from "../pages/ResetPasswordPage";
 import { ListItem } from "../type";
 

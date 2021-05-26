@@ -2,11 +2,11 @@ import { Flex, Heading, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
 import { NewFriendForm } from "../components/NewFriendForm";
-import { useAuthenticatedContext } from "../context/AuthenticatedContext";
+import { useUserContext } from "../context/UserContext";
 import logo from "../images/icons/join.svg";
 
 export const NewFriendPage = () => {
-  const { logout } = useAuthenticatedContext();
+  const { logout } = useUserContext();
   React.useEffect(() => {
     logout();
     localStorage.removeItem('token')
