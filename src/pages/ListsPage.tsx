@@ -3,7 +3,7 @@ import React from "react";
 import { useUserContext } from "../context/UserContext";
 import { useUiContext } from "../context/UiContext";
 import { getUserRequest } from "../api/requests";
-import { toastConfig } from "../utils/utils";
+import { sortListsBasedOnPreviousOrder, toastConfig } from "../utils/utils";
 import { List } from "../type";
 import { LoadingComponent } from "../components/Loading";
 import { SideNav } from "../components/SideNav";
@@ -19,8 +19,11 @@ export const ListsPage = () => {
     setLoadingScreen(true);
     try {
       const req = await getUserRequest();
-      setUser(req.data);
-      setLists(req.data.lists);
+      const user = req.data;
+      const lists = req.data.lists;
+      const sortedLists = sortListsBasedOnPreviousOrder(lists);
+      setUser(user);
+      setLists(sortedLists);
       setLoadingScreen(false);
     } catch (e) {
       const errorMessage = e.response.data.message;

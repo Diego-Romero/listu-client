@@ -13,11 +13,12 @@ import {
 import React from "react";
 import { useUiContext } from "../context/UiContext";
 import { useUserContext } from "../context/UserContext";
-import { List, User } from "../type";
+import { List, listOrderType, User } from "../type";
 import { CreateListModal } from "./CreateListModal";
 import { ListRow } from "./ListRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { reorder } from "../utils/utils";
+import { config } from "../config";
 
 interface Props {
   lists: List[];
@@ -46,6 +47,18 @@ export const SideNav: React.FC<Props> = ({ lists, setLists }) => {
     );
 
     setLists(items);
+
+    // persist the current order in local storage, so when page loads the order remains
+    const listsOrder: listOrderType = {};
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      listsOrder[item._id] = i;
+    }
+
+    localStorage.setItem(
+      config.localStorage.listsOrder,
+      JSON.stringify(listsOrder)
+    );
   }
 
   return (

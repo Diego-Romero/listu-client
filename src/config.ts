@@ -11,6 +11,10 @@ export const SPACING_INPUTS = 4;
 export const SPACING_BUTTONS = 8;
 
 export const config = {
+  localStorage: { 
+    token: 'token',
+    listsOrder: 'listsOrder'
+  },
   env: {
     serverUrl: process.env.REACT_APP_SERVER_URL,
     gaId: process.env.REACT_APP_GA_ID,

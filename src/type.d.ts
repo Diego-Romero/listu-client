@@ -23,3 +23,5 @@ export interface User {
   createdAt: string;
   lists: List[];
 }
+
+export type listOrderType = { [key: string]: number };
