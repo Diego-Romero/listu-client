@@ -13,15 +13,18 @@ import {
 import React from "react";
 import { useUiContext } from "../context/UiContext";
 import { useUserContext } from "../context/UserContext";
-import { List } from "../type";
+import { List, User } from "../type";
 import { CreateListModal } from "./CreateListModal";
 import { ListRow } from "./ListRow";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { reorder } from "../utils/utils";
 
 interface Props {
   lists: List[];
+  setLists: (lists: List[]) => void;
 }
 
-export const SideNav: React.FC<Props> = ({ lists }) => {
+export const SideNav: React.FC<Props> = ({ lists, setLists }) => {
   const { setNavBarOpen } = useUiContext();
   const { user } = useUserContext();
   const {
@@ -29,6 +32,22 @@ export const SideNav: React.FC<Props> = ({ lists }) => {
     onOpen: onCreateListModalOpen,
     onClose: onCreateListModalClose,
   } = useDisclosure();
+
+  function onDragEnd(result) {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const items: List[] = reorder(
+      lists,
+      result.source.index,
+      result.destination.index
+    );
+
+    setLists(items);
+  }
+
   return (
     <Grid
       height="100%"
@@ -50,11 +69,28 @@ export const SideNav: React.FC<Props> = ({ lists }) => {
           You do not have any lists
         </Text>
       ) : (
-        <Stack overflowY="auto" maxH="70vh">
-          {lists.map((list) => (
-            <ListRow key={list._id} list={list} user={user} />
-          ))}
-        </Stack>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="lists">
+            {(provided) => (
+              <Stack
+                overflowY="auto"
+                maxH="70vh"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {lists.map((list, index) => (
+                  <ListRow
+                    key={list._id}
+                    list={list}
+                    user={user as User}
+                    index={index}
+                  />
+                ))}
+                {provided.placeholder}
+              </Stack>
+            )}
+          </Droppable>
+        </DragDropContext>
       )}
       <Box p={4}>
         <Button

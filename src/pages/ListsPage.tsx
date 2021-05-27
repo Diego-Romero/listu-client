@@ -1,9 +1,4 @@
-import {
-  Flex,
-  Box,
-  Grid,
-  useToast,
-} from "@chakra-ui/react";
+import { Flex, Box, Grid, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useUserContext } from "../context/UserContext";
 import { useUiContext } from "../context/UiContext";
@@ -50,7 +45,7 @@ export const ListsPage = () => {
           width="100vw"
           position="relative"
         >
-          {navBarOpen ? <SideNav lists={lists} /> : null}
+          {navBarOpen ? <SideNav lists={lists} setLists={setLists} /> : null}
           {/* navbar */}
           <Flex>body</Flex>
         </Grid>

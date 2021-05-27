@@ -6,13 +6,15 @@ import { List, User } from "../type";
 import { UpdateListModal } from "./UpdateListModal";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { InviteFriendModal } from "./InviteFriendModal";
+import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
   list: List;
   user: User;
+  index: number;
 }
 
-export const ListRow: React.FC<Props> = ({ list, user }) => {
+export const ListRow: React.FC<Props> = ({ list, user, index }) => {
   const {
     isOpen: isUpdateListModalOpen,
     onOpen: onUpdateListModalOpen,
@@ -24,64 +26,72 @@ export const ListRow: React.FC<Props> = ({ list, user }) => {
     onClose: onInviteFriendModalClose,
   } = useDisclosure();
   return (
-    <Box>
-      <Flex
-        flexDir="row"
-        alignItems="center"
-        justifyContent="space-between"
-        py={4}
-        px={4}
-      >
-        <HStack>
-          <DragHandleIcon cursor="grab" />
-          <Text
-            fontSize="md"
-            noOfLines={1}
-            cursor="pointer"
-            _hover={{
-              fontWeight: "semibold",
-              textDecoration: "underline",
-            }}
-            onClick={() => console.log("hola")}
+    <Draggable key={list._id} draggableId={list._id} index={index}>
+      {(provided) => (
+        <Box
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <Flex
+            flexDir="row"
+            alignItems="center"
+            justifyContent="space-between"
+            py={4}
+            px={4}
           >
-            {list.name}{" "}
-          </Text>
-        </HStack>
-        <HStack>
-          <Tooltip label="Invite friends to this list">
-            <IconButton
-              aria-label="Invite friends to this list"
-              icon={<AiOutlineUserAdd />}
-              size="sm"
-              isRound
-              variant="outline"
-              onClick={onInviteFriendModalOpen}
-            />
-          </Tooltip>
-          <Tooltip label="Update list info">
-            <IconButton
-              aria-label="Update list"
-              icon={<EditIcon />}
-              size="sm"
-              isRound
-              variant="outline"
-              onClick={onUpdateListModalOpen}
-            />
-          </Tooltip>
-        </HStack>
-      </Flex>
-      <Divider />
-      <UpdateListModal
-        modalOpen={isUpdateListModalOpen}
-        modalClose={onUpdateListModalClose}
-        list={list}
-        user={user}
-      />
-      <InviteFriendModal
-        modalOpen={isInviteFriendModalOpen}
-        modalClose={onInviteFriendModalClose}
-        list={list}
-      />
-    </Box>
+            <HStack>
+              <DragHandleIcon cursor="grab" />
+              <Text
+                fontSize="md"
+                noOfLines={1}
+                cursor="pointer"
+                _hover={{
+                  fontWeight: "semibold",
+                  textDecoration: "underline",
+                }}
+                onClick={() => console.log("hola")}
+              >
+                {list.name}{" "}
+              </Text>
+            </HStack>
+            <HStack>
+              <Tooltip label="Invite friends to this list">
+                <IconButton
+                  aria-label="Invite friends to this list"
+                  icon={<AiOutlineUserAdd />}
+                  size="sm"
+                  isRound
+                  variant="outline"
+                  onClick={onInviteFriendModalOpen}
+                />
+              </Tooltip>
+              <Tooltip label="Update list info">
+                <IconButton
+                  aria-label="Update list"
+                  icon={<EditIcon />}
+                  size="sm"
+                  isRound
+                  variant="outline"
+                  onClick={onUpdateListModalOpen}
+                />
+              </Tooltip>
+            </HStack>
+          </Flex>
+          <Divider />
+          <UpdateListModal
+            modalOpen={isUpdateListModalOpen}
+            modalClose={onUpdateListModalClose}
+            list={list}
+            user={user}
+          />
+          <InviteFriendModal
+            modalOpen={isInviteFriendModalOpen}
+            modalClose={onInviteFriendModalClose}
+            list={list}
+          />
+        </Box>
+      )}
+    </Draggable>
   );
 };

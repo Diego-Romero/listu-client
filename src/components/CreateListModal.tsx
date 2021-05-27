@@ -78,7 +78,7 @@ export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose, lists})
   }
 
   return (
-    <Modal isOpen={modalOpen} onClose={modalClose} size="lg" >
+    <Modal isOpen={modalOpen} onClose={modalClose} size="sm" >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>New List</ModalHeader>

@@ -110,7 +110,7 @@ export const UpdateListModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal isOpen={modalOpen} onClose={modalClose} size="lg">
+    <Modal isOpen={modalOpen} onClose={modalClose} size="sm">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Update List</ModalHeader>

@@ -71,7 +71,7 @@ export const InviteFriendModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal isOpen={modalOpen} onClose={modalClose} size="lg">
+    <Modal isOpen={modalOpen} onClose={modalClose} size="sm">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Invite a friend</ModalHeader>
