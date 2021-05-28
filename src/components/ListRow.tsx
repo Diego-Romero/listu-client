@@ -1,30 +1,33 @@
-import { DragHandleIcon, EditIcon } from "@chakra-ui/icons";
-import { Divider, Flex, Box, Text, HStack } from "@chakra-ui/layout";
-import { IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { DragHandleIcon, EditIcon, StarIcon } from "@chakra-ui/icons";
+import { Divider, Box, Text, HStack } from "@chakra-ui/layout";
+import { Grid, IconButton, Tooltip, useColorMode, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { List, User } from "../type";
 import { UpdateListModal } from "./UpdateListModal";
-import { AiOutlineUserAdd } from "react-icons/ai";
-import { InviteFriendModal } from "./InviteFriendModal";
 import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
   list: List;
   user: User;
   index: number;
+  toggleActiveLists: (listId: string) => void;
+  active: boolean;
 }
 
-export const ListRow: React.FC<Props> = ({ list, user, index }) => {
+export const ListRow: React.FC<Props> = ({
+  list,
+  user,
+  index,
+  toggleActiveLists,
+  active,
+}) => {
   const {
     isOpen: isUpdateListModalOpen,
     onOpen: onUpdateListModalOpen,
     onClose: onUpdateListModalClose,
   } = useDisclosure();
-  const {
-    isOpen: isInviteFriendModalOpen,
-    onOpen: onInviteFriendModalOpen,
-    onClose: onInviteFriendModalClose,
-  } = useDisclosure();
+  const { colorMode } = useColorMode();
+
   return (
     <Draggable key={list._id} draggableId={list._id} index={index}>
       {(provided) => (
@@ -32,63 +35,61 @@ export const ListRow: React.FC<Props> = ({ list, user, index }) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          _hover={{
+            fontWeight: "semibold",
+            textDecoration: "underline",
+            bgColor: colorMode === 'light' ? 'gray.100' : "gray.900"
+          }}
         >
-          <Flex
-            flexDir="row"
+          <Grid
+            gridTemplateColumns="auto 1fr auto"
             alignItems="center"
-            justifyContent="space-between"
+            justifyContent="center"
             py={4}
             px={4}
           >
+            <DragHandleIcon cursor="grab" />
+            <Text
+              fontSize="md"
+              ml={2}
+              noOfLines={1}
+              onClick={() => toggleActiveLists(list._id)}
+              cursor="pointer"
+            >
+              {list.name}{" "}
+            </Text>
             <HStack>
-              <DragHandleIcon cursor="grab" />
-              <Text
-                fontSize="md"
-                noOfLines={1}
-                cursor="pointer"
-                _hover={{
-                  fontWeight: "semibold",
-                  textDecoration: "underline",
-                }}
-                onClick={() => console.log("hola")}
-              >
-                {list.name}{" "}
-              </Text>
-            </HStack>
-            <HStack>
-              <Tooltip label="Invite friends to this list">
-                <IconButton
-                  aria-label="Invite friends to this list"
-                  icon={<AiOutlineUserAdd />}
-                  size="sm"
-                  isRound
-                  variant="outline"
-                  onClick={onInviteFriendModalOpen}
-                />
-              </Tooltip>
+              {/* <Text fontSize="sm">
+                <Kbd>CMD</Kbd> + <Kbd>{index}</Kbd>
+              </Text> */}
               <Tooltip label="Update list info">
                 <IconButton
                   aria-label="Update list"
                   icon={<EditIcon />}
                   size="sm"
                   isRound
-                  variant="outline"
                   onClick={onUpdateListModalOpen}
                 />
               </Tooltip>
+              <Tooltip label="Display list">
+                <IconButton
+                  aria-label="Update list"
+                  icon={<StarIcon />}
+                  size="sm"
+                  variant={active ? "solid" : "outline"}
+                  colorScheme={active ? colorMode === 'dark' ? 'teal' : 'teal' : "gray"}
+                  isRound
+                  onClick={() => toggleActiveLists(list._id)}
+                />
+              </Tooltip>
             </HStack>
-          </Flex>
+          </Grid>
           <Divider />
           <UpdateListModal
             modalOpen={isUpdateListModalOpen}
             modalClose={onUpdateListModalClose}
             list={list}
             user={user}
-          />
-          <InviteFriendModal
-            modalOpen={isInviteFriendModalOpen}
-            modalClose={onInviteFriendModalClose}
-            list={list}
           />
         </Box>
       )}

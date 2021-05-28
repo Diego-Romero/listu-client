@@ -34,16 +34,40 @@ export function reorder(list: any[], startIndex: number, endIndex: number) {
   return result;
 }
 
+/**
+ * based on previous stored order in local storage, we would like to return them in that order,
+ * if there are other lists that didn't exist there put them in a separate list at the end
+ */
 export function sortListsBasedOnPreviousOrder(lists: List[]): List[] {
   const orderString = localStorage.getItem(config.localStorage.listsOrder);
   // if no previous order exists, then ust return the list of lists
   if (!orderString) return lists;
   const orderObject: listOrderType = JSON.parse(orderString);
-  const result = new Array(lists.length).fill(null);
+  let listsWithOrder = new Array(lists.length).fill(null);
+  const otherLists: List[] = [];
   for (const list of lists) {
     const index = orderObject[list._id];
-    result[index] = list;
+    if (index) listsWithOrder[index] = list;
+    else otherLists.push(list);
+  }
+  listsWithOrder = listsWithOrder.filter((l) => l !== null);
+
+  return [...listsWithOrder, ...otherLists];
+}
+
+export function storeListOrderInLocalStorage(items: List[]): void {
+  const listsOrder: listOrderType = {};
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    listsOrder[item._id] = i;
   }
 
-  return result;
+  localStorage.setItem(
+    config.localStorage.listsOrder,
+    JSON.stringify(listsOrder)
+  );
+}
+
+export function storeActiveListInLocalStorage(listId): void {
+  localStorage.setItem(config.localStorage.activeList, listId);
 }

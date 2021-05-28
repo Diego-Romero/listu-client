@@ -13,19 +13,25 @@ import {
 import React from "react";
 import { useUiContext } from "../context/UiContext";
 import { useUserContext } from "../context/UserContext";
-import { List, listOrderType, User } from "../type";
+import { List, User } from "../type";
 import { CreateListModal } from "./CreateListModal";
 import { ListRow } from "./ListRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { reorder } from "../utils/utils";
-import { config } from "../config";
+import { reorder, storeListOrderInLocalStorage } from "../utils/utils";
 
 interface Props {
   lists: List[];
   setLists: (lists: List[]) => void;
+  toggleActiveLists: (listId: string) => void;
+  activeList: List | null;
 }
 
-export const SideNav: React.FC<Props> = ({ lists, setLists }) => {
+export const SideNav: React.FC<Props> = ({
+  lists,
+  setLists,
+  toggleActiveLists,
+  activeList,
+}) => {
   const { setNavBarOpen } = useUiContext();
   const { user } = useUserContext();
   const {
@@ -47,18 +53,13 @@ export const SideNav: React.FC<Props> = ({ lists, setLists }) => {
     );
 
     setLists(items);
-
     // persist the current order in local storage, so when page loads the order remains
-    const listsOrder: listOrderType = {};
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      listsOrder[item._id] = i;
-    }
+    storeListOrderInLocalStorage(items);
+  }
 
-    localStorage.setItem(
-      config.localStorage.listsOrder,
-      JSON.stringify(listsOrder)
-    );
+  function isListActive(list: List): boolean {
+    if (activeList === null) return false;
+    return activeList._id === list._id;
   }
 
   return (
@@ -97,6 +98,8 @@ export const SideNav: React.FC<Props> = ({ lists, setLists }) => {
                     list={list}
                     user={user as User}
                     index={index}
+                    toggleActiveLists={toggleActiveLists}
+                    active={isListActive(list)}
                   />
                 ))}
                 {provided.placeholder}

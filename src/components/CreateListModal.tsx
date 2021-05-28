@@ -21,7 +21,6 @@ import { Field, Form, Formik } from "formik";
 import { createListRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
 import ReactGA from "react-ga";
-import { useUiContext } from "../context/UiContext";
 import { List } from "../type";
 
 export interface CreateListValues {
@@ -45,24 +44,23 @@ interface Props {
   lists: List[];
 }
 
-export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose, lists}) => {
+export const CreateListModal: React.FC<Props> = ({
+  modalOpen,
+  modalClose,
+  lists,
+}) => {
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
-  const { setLoading } = useUiContext();
 
   async function createList(values: CreateListValues) {
-    setLoading(true)
     try {
       const res = await createListRequest(values);
-      console.log(res, res.data)
       ReactGA.event({
         category: config.googleAnalytics.lists,
         action: "list created",
       });
-      toast(
-        toastConfig("Whoop 🙌", "info", "Your new list is ready to go.")
-      );
-      lists.push(res.data as List)
+      toast(toastConfig("Whoop 🙌", "info", "Your new list is ready to go."));
+      lists.push(res.data as List);
       modalClose();
     } catch (_err) {
       toast(
@@ -72,13 +70,11 @@ export const CreateListModal: React.FC<Props> = ({modalOpen, modalClose, lists})
           "There has been an error creating your list, please try again later."
         )
       );
-    } finally {
-      setLoading(false)
     }
   }
 
   return (
-    <Modal isOpen={modalOpen} onClose={modalClose} size="sm" >
+    <Modal isOpen={modalOpen} onClose={modalClose} size="sm">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>New List</ModalHeader>
