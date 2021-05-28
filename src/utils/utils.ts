@@ -71,3 +71,16 @@ export function storeListOrderInLocalStorage(items: List[]): void {
 export function storeActiveListInLocalStorage(listId): void {
   localStorage.setItem(config.localStorage.activeList, listId);
 }
+
+export function setActiveListFromLocalStorage(
+  setActiveList: (list: List) => void,
+  lists: List[]
+): void {
+  const activeListRecorded = localStorage.getItem(
+    config.localStorage.activeList
+  );
+  if (activeListRecorded !== null) {
+    const index = lists.findIndex((list) => list._id === activeListRecorded);
+    setActiveList(lists[index]);
+  }
+}

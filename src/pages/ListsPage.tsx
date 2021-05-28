@@ -1,9 +1,10 @@
-import { Flex, Box, Grid, useToast } from "@chakra-ui/react";
+import { Box, Grid, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useUserContext } from "../context/UserContext";
 import { useUiContext } from "../context/UiContext";
 import { getUserRequest } from "../api/requests";
 import {
+  setActiveListFromLocalStorage,
   sortListsBasedOnPreviousOrder,
   storeActiveListInLocalStorage,
   toastConfig,
@@ -11,7 +12,8 @@ import {
 import { List } from "../type";
 import { LoadingComponent } from "../components/Loading";
 import { SideNav } from "../components/SideNav";
-
+import { ListsDisplay } from "../components/ListsDisplay";
+import { config } from "../config";
 
 export const ListsPage = () => {
   const { navBarOpen } = useUiContext();
@@ -25,13 +27,12 @@ export const ListsPage = () => {
     setLoadingScreen(true);
     try {
       const req = await getUserRequest();
-      console.log(req.data)
       const user = req.data;
       const lists = req.data.lists;
       const sortedLists = sortListsBasedOnPreviousOrder(lists);
       setUser(user);
       setLists(sortedLists);
-      // todo: need to set active lists based on local storage
+      setActiveListFromLocalStorage(setActiveList, lists)
       setLoadingScreen(false);
     } catch (e) {
       // const errorMessage = e.response.data.message;
@@ -45,9 +46,9 @@ export const ListsPage = () => {
   }, []);
 
   function toggleActiveLists(listId: string) {
-    const index = lists.findIndex(list => list._id === listId)
+    const index = lists.findIndex((list) => list._id === listId);
     setActiveList(lists[index]);
-    storeActiveListInLocalStorage(listId)
+    storeActiveListInLocalStorage(listId);
   }
 
   return (
@@ -69,8 +70,7 @@ export const ListsPage = () => {
               activeList={activeList}
             />
           ) : null}
-          {/* navbar */}
-          <Flex>body</Flex>
+          <ListsDisplay />
         </Grid>
       )}
     </Box>
