@@ -8,14 +8,14 @@ import {
 import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
 import { Collapse, IconButton, Link, Text } from "@chakra-ui/react";
 import React from "react";
-import { ListItem } from "../type";
+import { ListItem, TentativeListItem } from "../type";
 import { longDateFormat } from "../utils/utils";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
 import { IoMdUndo } from 'react-icons/io'
 
 interface Props {
-  item: ListItem;
+  item: ListItem | TentativeListItem;
   deleteItem: (id: string) => void;
   updateListItemDoneState: (
     event: React.MouseEvent,
@@ -114,7 +114,7 @@ export const ListItemRow: React.FC<Props> = ({
           )}
         </HStack>
       </Flex>
-      <Collapse in={open} animateOpacity onClick={() => setOpen(false)}>
+      {/* <Collapse in={open} animateOpacity onClick={() => setOpen(false)}>
         <Stack px={2} pb={4} spacing={2}>
           <Box>
             <Text fontSize="sm">
@@ -146,7 +146,7 @@ export const ListItemRow: React.FC<Props> = ({
             </Link>
           ) : null}
         </Stack>
-      </Collapse>
+      </Collapse> */}
       <Divider />
     </Box>
   );

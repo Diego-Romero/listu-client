@@ -11,6 +11,7 @@ import React from "react";
 import * as Yup from "yup";
 import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
+import { List } from "../type";
 
 export interface CreateListItemValues {
   name: string;
@@ -25,19 +26,21 @@ const validationSchema = Yup.object().shape({
 });
 
 interface Props {
-  createNewItem: (body: CreateListItemValues) => void;
+  createNewItem: (listId: string, itemValues: CreateListItemValues) => void;
+  list: List;
 }
 
-export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
+export const CreateListItemForm: React.FC<Props> = ({ createNewItem, list }) => {
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   return (
     <Formik
       initialValues={initialValues}
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={(values, actions) => {
+      onSubmit={(values: CreateListItemValues, actions) => {
         actions.setSubmitting(false);
-        createNewItem(values);
+        createNewItem(list._id, values);
+        actions.resetForm()
       }}
       validationSchema={validationSchema}
     >

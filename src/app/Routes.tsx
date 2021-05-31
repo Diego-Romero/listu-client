@@ -9,7 +9,7 @@ import { ListsPage } from "../pages/ListsPage";
 import { Login } from "../pages/LoginPage";
 import { NewFriendPage } from "../pages/NewFriendPage";
 import { ResetPasswordPage } from "../pages/ResetPasswordPage";
-import { ViewListPage } from "../pages/ViewListPage";
+import { ListDisplay } from "../components/ListDisplay";
 import ReactGA from "react-ga";
 
 ReactGA.initialize(config.env.gaId as string);
@@ -56,7 +56,7 @@ export const Routes = () => {
       </Route>
       {/* Private Routes */}
       <PrivateRoute path={config.routes.lists} exact component={ListsPage} />
-      <PrivateRoute path={config.routes.list} exact component={ViewListPage} />
+      <PrivateRoute path={config.routes.list} exact component={ListDisplay} />
       <PrivateRoute
         path={config.routes.listItem}
         exact

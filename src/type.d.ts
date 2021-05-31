@@ -5,6 +5,7 @@ export interface List {
   description?: string;
   createdAt: Date;
   createdBy: User;
+  items: (ListItem | TentativeListItem)[]
 }
 export interface ListItem {
   _id: string;
@@ -25,3 +26,9 @@ export interface User {
 }
 
 export type listOrderType = { [key: string]: number };
+
+export interface TentativeListItem {
+  _id: string;
+  name: string;
+  done: boolean;
+}

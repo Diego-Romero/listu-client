@@ -85,7 +85,7 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
             <Button
               mt={SPACING_BUTTONS - 4}
               colorScheme="teal"
-              variant="outline"
+              variant="solid"
               isFullWidth
               type="submit"
               isLoading={props.isSubmitting || loading}

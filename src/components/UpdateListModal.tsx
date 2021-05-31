@@ -261,10 +261,11 @@ export const UpdateListModal: React.FC<Props> = ({
               <PopoverTrigger>
                 <Button
                   rightIcon={<AiOutlineUserAdd />}
-                  colorScheme="green"
+                  colorScheme="teal"
                   mt={4}
                   isFullWidth
                   variant="outline"
+                  isLoading={loading}
                 >
                   Add Friend
                 </Button>
@@ -311,8 +312,8 @@ export const UpdateListModal: React.FC<Props> = ({
                         <Button
                           mt={4}
                           mb={6}
-                          colorScheme="green"
-                          variant="outline"
+                          colorScheme="teal"
+                          variant="solid"
                           isFullWidth
                           type="submit"
                           isLoading={props.isSubmitting || loading}
