@@ -42,12 +42,14 @@ interface Props {
   modalOpen: boolean;
   modalClose: () => void;
   lists: List[];
+  setActiveList: (list: List) => void;
 }
 
 export const CreateListModal: React.FC<Props> = ({
   modalOpen,
   modalClose,
   lists,
+  setActiveList,
 }) => {
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
@@ -61,6 +63,7 @@ export const CreateListModal: React.FC<Props> = ({
       });
       toast(toastConfig("Whoop 🙌", "info", "Your new list is ready to go."));
       lists.push(res.data as List);
+      setActiveList(res.data);
       modalClose();
     } catch (_err) {
       toast(

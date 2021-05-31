@@ -1,4 +1,12 @@
-import { Box, Grid, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  Image,
+  Heading,
+  Stack,
+  useToast,
+} from "@chakra-ui/react";
 import React from "react";
 import { useUserContext } from "../context/UserContext";
 import { useUiContext } from "../context/UiContext";
@@ -17,11 +25,12 @@ import {
 import { List, TentativeListItem } from "../type";
 import { LoadingComponent } from "../components/Loading";
 import { SideNav } from "../components/SideNav";
-import { ListsDisplay } from "../components/ListsDisplay";
 import { CreateListItemValues } from "../components/CreateItemForm";
 import { v4 as uuidv4 } from "uuid";
+import logo from "../images/icons/team_up.svg";
 import produce from "immer";
 import { remove } from "ramda";
+import { ListDisplay } from "../components/ListDisplay";
 
 export const ListsPage = () => {
   const { navBarOpen } = useUiContext();
@@ -63,7 +72,7 @@ export const ListsPage = () => {
     storeActiveListInLocalStorage(listId);
   }
 
-  function findListIndexById(listId): number {
+  function findListIndexById(listId: string): number {
     return lists.findIndex((list) => list._id === listId);
   }
 
@@ -152,7 +161,6 @@ export const ListsPage = () => {
     const list = lists[listIndex];
     const itemIndex = list.items.findIndex((item) => item._id === itemId);
     const updatedItems = remove(itemIndex, 1, list.items);
-    console.log(updatedItems);
     const updatedList = { ...list, items: updatedItems };
     setActiveList(updatedList);
     updateLists(listIndex, updatedList);
@@ -172,10 +180,9 @@ export const ListsPage = () => {
   // todo: create update list item
   // todo: fix update list is not loading
 
-  // todo: create a mechanism for keeping the order of the list elements
-  // todo: allow to have multiple lists at the same time
   // todo: keyboard functions to toggle lists, i.e. cmd 1, 2, 3, etc.
   // todo: create an auto pull mechanism to fetch the items of every list and check if have been updated
+  // todo: make list an immediate request, same as with list item
 
   return (
     <Box height="100%">
@@ -191,17 +198,35 @@ export const ListsPage = () => {
           {navBarOpen ? (
             <SideNav
               lists={lists}
+              // todo: refactor this to have the logic to create a list here
               setLists={setLists}
               toggleActiveLists={toggleActiveLists}
               activeList={activeList}
+              setActiveList={setActiveList}
             />
           ) : null}
-          <ListsDisplay
-            list={activeList}
-            onCreateItem={createListItem}
-            toggleItemDone={toggleItemDone}
-            deleteListItem={deleteListItem}
-          />
+          <Flex
+            height="100%"
+            width="100%"
+            alignItems="flex-start"
+            justifyContent="center"
+          >
+            {activeList ? (
+              <ListDisplay
+                list={activeList}
+                onCreateItem={createListItem}
+                toggleItemDone={toggleItemDone}
+                deleteListItem={deleteListItem}
+              />
+            ) : (
+              <Stack textAlign="center">
+                <Image mt={4} boxSize="400px" src={logo} alt="Login" />
+                <Heading size="md">
+                  Select a list from the side nav to get going
+                </Heading>
+              </Stack>
+            )}
+          </Flex>
         </Grid>
       )}
     </Box>

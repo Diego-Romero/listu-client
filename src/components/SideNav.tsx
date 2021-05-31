@@ -23,6 +23,7 @@ interface Props {
   lists: List[];
   setLists: (lists: List[]) => void;
   toggleActiveLists: (listId: string) => void;
+  setActiveList: (list: List) => void;
   activeList: List | null;
 }
 
@@ -31,6 +32,7 @@ export const SideNav: React.FC<Props> = ({
   setLists,
   toggleActiveLists,
   activeList,
+  setActiveList,
 }) => {
   const { setNavBarOpen } = useUiContext();
   const { user } = useUserContext();
@@ -58,7 +60,7 @@ export const SideNav: React.FC<Props> = ({
   }
 
   function isListActive(list: List): boolean {
-    if (activeList === null) return false;
+    if (!activeList || activeList === null) return false;
     return activeList._id === list._id;
   }
 
@@ -121,6 +123,7 @@ export const SideNav: React.FC<Props> = ({
           modalOpen={isCreateListModalOpen}
           modalClose={onCreateListModalClose}
           lists={lists}
+          setActiveList={setActiveList}
         />
       </Box>
     </Grid>

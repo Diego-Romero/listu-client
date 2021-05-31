@@ -1,6 +1,12 @@
 import { DragHandleIcon, EditIcon, StarIcon } from "@chakra-ui/icons";
 import { Divider, Box, Text, HStack } from "@chakra-ui/layout";
-import { Grid, IconButton, Tooltip, useColorMode, useDisclosure } from "@chakra-ui/react";
+import {
+  Grid,
+  IconButton,
+  Tooltip,
+  useColorMode,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React from "react";
 import { List, User } from "../type";
 import { UpdateListModal } from "./UpdateListModal";
@@ -38,7 +44,7 @@ export const ListRow: React.FC<Props> = ({
           _hover={{
             fontWeight: "semibold",
             textDecoration: "underline",
-            bgColor: colorMode === 'light' ? 'gray.100' : "gray.900"
+            bgColor: colorMode === "light" ? "gray.100" : "gray.900",
           }}
         >
           <Grid
@@ -59,10 +65,7 @@ export const ListRow: React.FC<Props> = ({
               {list.name}{" "}
             </Text>
             <HStack>
-              {/* <Text fontSize="sm">
-                <Kbd>CMD</Kbd> + <Kbd>{index}</Kbd>
-              </Text> */}
-              <Tooltip label="Update list info">
+              <Tooltip label="Invite friends!">
                 <IconButton
                   aria-label="Update list"
                   icon={<EditIcon />}
@@ -77,7 +80,9 @@ export const ListRow: React.FC<Props> = ({
                   icon={<StarIcon />}
                   size="sm"
                   variant={active ? "solid" : "outline"}
-                  colorScheme={active ? colorMode === 'dark' ? 'teal' : 'teal' : "gray"}
+                  colorScheme={
+                    active ? (colorMode === "dark" ? "teal" : "teal") : "gray"
+                  }
                   isRound
                   onClick={() => toggleActiveLists(list._id)}
                 />

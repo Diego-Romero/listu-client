@@ -1,5 +1,6 @@
-import { Flex, Heading, Text } from "@chakra-ui/layout";
-import { Box, Link, Stack, useDisclosure } from "@chakra-ui/react";
+import { ChatIcon } from "@chakra-ui/icons";
+import { Flex, Heading } from "@chakra-ui/layout";
+import { Box, IconButton, Link, Stack, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { ContactFormModal } from "./ContactFormModal";
 
@@ -17,22 +18,26 @@ export const Footer: React.FC = () => {
         bgGradient="linear(to-r, teal.400,green.300)"
         color="white"
       >
-        <Stack direction={["column", "column", "row"]} alignItems="center">
+        <Stack direction={["column", "column", "row"]} alignItems="center" spacing={4} >
           <Heading size="sm">
             Made with ☕️ {"_"} by{" "}
             <Link
               href="https://www.linkedin.com/in/dev-diego-romero/"
               isExternal
+              textDecor="underline"
             >
               Diego Romero
             </Link>
-            {/* <Badge ml={4} colorScheme="teal">BETA</Badge> */}
           </Heading>
-          <Text>
-            <Link textDecoration="underline" onClick={onOpen}>
-              get in touch
-            </Link>
-          </Text>
+          <IconButton
+            variant="outline"
+            isRound
+            colorScheme="white"
+            size="sm"
+            aria-label="get in touch"
+            onClick={onOpen}
+            icon={<ChatIcon />}
+          />
         </Stack>
       </Flex>
       <ContactFormModal modalOpen={isOpen} modalClose={onClose} />

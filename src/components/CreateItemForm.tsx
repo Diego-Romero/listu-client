@@ -1,7 +1,7 @@
 import {
-  Button,
   FormControl,
   FormErrorMessage,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { List } from "../type";
+import { AddIcon } from "@chakra-ui/icons";
 
 export interface CreateListItemValues {
   name: string;
@@ -30,7 +31,10 @@ interface Props {
   list: List;
 }
 
-export const CreateListItemForm: React.FC<Props> = ({ createNewItem, list }) => {
+export const CreateListItemForm: React.FC<Props> = ({
+  createNewItem,
+  list,
+}) => {
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   return (
     <Formik
@@ -40,11 +44,11 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem, list }) => 
       onSubmit={(values: CreateListItemValues, actions) => {
         actions.setSubmitting(false);
         createNewItem(list._id, values);
-        actions.resetForm()
+        actions.resetForm();
       }}
       validationSchema={validationSchema}
     >
-      {(props) => (
+      {() => (
         <Form>
           <Field name="name">
             {({ field, form }) => (
@@ -56,15 +60,24 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem, list }) => 
               >
                 <InputGroup size="md">
                   <Input
-                    pr="4.5rem"
                     autoFocus={isLargerThan480} // only autofocus on non mobile views
                     type="text"
                     placeholder="Add a new list item"
                     variant="flushed"
                     {...field}
                   />
-                  <InputRightElement width="4.5rem">
-                    <Button
+                  <InputRightElement width="3.2rem">
+                    <IconButton
+                      variant="solid"
+                      colorScheme="teal"
+                      size="sm"
+                      isRound
+                      mb={2}
+                      type="submit"
+                      aria-label="Delete item"
+                      icon={<AddIcon />}
+                    />
+                    {/* <Button
                       h="1.5rem"
                       size="sm"
                       type="submit"
@@ -73,7 +86,7 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem, list }) => 
                       isLoading={props.isSubmitting}
                     >
                       Add
-                    </Button>
+                    </Button> */}
                   </InputRightElement>
                 </InputGroup>
                 <FormErrorMessage>{form.errors.name}</FormErrorMessage>
