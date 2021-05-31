@@ -1,35 +1,25 @@
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  DeleteIcon,
-  ExternalLinkIcon,
-} from "@chakra-ui/icons";
-import { Divider, Flex, HStack, Box, Stack } from "@chakra-ui/layout";
-import { Collapse, IconButton, Link, Text } from "@chakra-ui/react";
+import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
+import { Divider, Flex, HStack, Box } from "@chakra-ui/layout";
+import { IconButton, Text } from "@chakra-ui/react";
 import React from "react";
 import { ListItem, TentativeListItem } from "../type";
-import { longDateFormat } from "../utils/utils";
-import { useHistory } from "react-router-dom";
-import { config } from "../config";
 import { IoMdUndo } from "react-icons/io";
 
 interface Props {
   item: ListItem | TentativeListItem;
   toggleItemDone: (listId: string, itemId: string) => void;
-  deleteItem: (id: string) => void;
+  deleteListItem: (listId: string, itemId: string) => void;
   undone: boolean;
   listId: string;
 }
 
 export const ListItemRow: React.FC<Props> = ({
   item,
-  deleteItem,
   undone: showUndone,
   listId,
+  deleteListItem,
   toggleItemDone,
 }) => {
-  const history = useHistory();
   return (
     <Box width="100%" cursor="pointer">
       <Flex
@@ -38,9 +28,9 @@ export const ListItemRow: React.FC<Props> = ({
         justifyContent="space-between"
         py={4}
         px={2}
-        onClick={() =>
-          history.push(config.routes.singleListItemUrl(listId, item._id))
-        }
+        // onClick={() =>
+        //   history.push(config.routes.singleListItemUrl(listId, item._id))
+        // }
         color={!showUndone ? "gray.500" : "inherit"}
         textDecoration={!showUndone ? "line-through" : "inherit"}
         _hover={{
@@ -95,7 +85,7 @@ export const ListItemRow: React.FC<Props> = ({
                 aria-label="Delete item"
                 onClick={(event) => {
                   event.stopPropagation();
-                  deleteItem(item._id);
+                  deleteListItem(listId, item._id);
                 }}
                 icon={<DeleteIcon />}
               />
@@ -103,39 +93,6 @@ export const ListItemRow: React.FC<Props> = ({
           )}
         </HStack>
       </Flex>
-      {/* <Collapse in={open} animateOpacity onClick={() => setOpen(false)}>
-        <Stack px={2} pb={4} spacing={2}>
-          <Box>
-            <Text fontSize="sm">
-              <b>Name:</b> {item.name}
-            </Text>
-            <Text fontSize="sm">
-              <b>Created by:</b> {item.createdBy.name}
-            </Text>
-            <Text color="gray.500" fontSize="sm">
-              {longDateFormat(item.createdAt)}
-            </Text>
-          </Box>
-          {item.description ? (
-            <Text fontSize="sm" whiteSpace="pre-wrap">
-              <strong>Description:</strong>
-              <br />
-              {item.description}
-            </Text>
-          ) : null}
-          {item.attachmentUrl ? (
-            <Link
-              color="gray"
-              fontSize="sm"
-              href={item.attachmentUrl}
-              isExternal
-              onClick={(event) => event.stopPropagation()}
-            >
-              Download Image <ExternalLinkIcon mx="2px" />
-            </Link>
-          ) : null}
-        </Stack>
-      </Collapse> */}
       <Divider />
     </Box>
   );

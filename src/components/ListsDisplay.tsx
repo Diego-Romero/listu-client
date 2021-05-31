@@ -9,12 +9,14 @@ interface Props {
   list: List | null;
   onCreateItem: (listId: string, itemValues: CreateListItemValues) => void;
   toggleItemDone: (listId: string, itemId: string) => void;
+  deleteListItem: (listId: string, itemId: string) => void;
 }
 
 export const ListsDisplay: React.FC<Props> = ({
   list,
   onCreateItem,
   toggleItemDone,
+  deleteListItem,
 }) => {
   return (
     <Flex
@@ -35,6 +37,7 @@ export const ListsDisplay: React.FC<Props> = ({
           list={list}
           onCreateItem={onCreateItem}
           toggleItemDone={toggleItemDone}
+          deleteListItem={deleteListItem}
         />
       )}
     </Flex>

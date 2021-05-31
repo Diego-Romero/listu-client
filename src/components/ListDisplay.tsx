@@ -9,6 +9,7 @@ interface Props {
   onCreateItem: (listId: string, itemValues: CreateListItemValues) => void;
   toggleItemDone: (listId: string, itemId: string) => void;
   list: List;
+  deleteListItem: (listId: string, itemId: string) => void;
 }
 
 type ListItemType = ListSingleItem | TentativeListItem;
@@ -17,6 +18,7 @@ export const ListDisplay: React.FC<Props> = ({
   list,
   onCreateItem,
   toggleItemDone,
+  deleteListItem,
 }) => {
   const [undoneItems, setUndoneItems] = React.useState<ListItemType[]>([]);
   const [doneItems, setDoneItems] = React.useState<ListItemType[]>([]);
@@ -31,26 +33,6 @@ export const ListDisplay: React.FC<Props> = ({
     setDoneItems(done);
     setUndoneItems(undone);
   }, [list]);
-
-  async function deleteItem(itemId: string) {
-    // setLoading(true);
-    // try {
-    //   await deleteListItemRequest(id, itemId);
-    //   toast(toastConfig("List item deleted", "success"));
-    //   await getListData();
-    // } catch (e) {
-    //   const errorMessage = e.response.data.message;
-    //   toast(
-    //     toastConfig(
-    //       "whoops, there has been an error deleting the item",
-    //       "error",
-    //       errorMessage
-    //     )
-    //   );
-    // } finally {
-    //   setLoading(false);
-    // }
-  }
 
   return (
     <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
@@ -79,8 +61,8 @@ export const ListDisplay: React.FC<Props> = ({
               item={item}
               key={item._id}
               listId={list?._id as string}
-              deleteItem={deleteItem}
               undone
+              deleteListItem={deleteListItem}
               toggleItemDone={toggleItemDone}
             />
           ))}
@@ -90,7 +72,7 @@ export const ListDisplay: React.FC<Props> = ({
             item={item}
             key={item._id}
             listId={list?._id as string}
-            deleteItem={deleteItem}
+            deleteListItem={deleteListItem}
             undone={false}
             toggleItemDone={toggleItemDone}
           />

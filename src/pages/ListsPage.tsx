@@ -4,6 +4,7 @@ import { useUserContext } from "../context/UserContext";
 import { useUiContext } from "../context/UiContext";
 import {
   createListItemRequest,
+  deleteListItemRequest,
   getUserRequest,
   updateListItemRequest,
 } from "../api/requests";
@@ -13,13 +14,14 @@ import {
   storeActiveListInLocalStorage,
   toastConfig,
 } from "../utils/utils";
-import { List, ListItem, TentativeListItem } from "../type";
+import { List, TentativeListItem } from "../type";
 import { LoadingComponent } from "../components/Loading";
 import { SideNav } from "../components/SideNav";
 import { ListsDisplay } from "../components/ListsDisplay";
 import { CreateListItemValues } from "../components/CreateItemForm";
 import { v4 as uuidv4 } from "uuid";
 import produce from "immer";
+import { remove } from "ramda";
 
 export const ListsPage = () => {
   const { navBarOpen } = useUiContext();
@@ -144,7 +146,29 @@ export const ListsPage = () => {
     }
   }
 
-  // todo: create delete list item
+  async function deleteListItem(listId: string, itemId: string) {
+    const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
+    const listIndex = findListIndexById(listId);
+    const list = lists[listIndex];
+    const itemIndex = list.items.findIndex((item) => item._id === itemId);
+    const updatedItems = remove(itemIndex, 1, list.items);
+    console.log(updatedItems);
+    const updatedList = { ...list, items: updatedItems };
+    setActiveList(updatedList);
+    updateLists(listIndex, updatedList);
+    try {
+      await deleteListItemRequest(listId, itemId);
+    } catch (e) {
+      setLists(snapshot);
+      toast(
+        toastConfig(
+          "Whoops, there has been an error deleting your todo, please try again",
+          "error"
+        )
+      );
+    }
+  }
+
   // todo: create update list item
   // todo: fix update list is not loading
 
@@ -176,6 +200,7 @@ export const ListsPage = () => {
             list={activeList}
             onCreateItem={createListItem}
             toggleItemDone={toggleItemDone}
+            deleteListItem={deleteListItem}
           />
         </Grid>
       )}
