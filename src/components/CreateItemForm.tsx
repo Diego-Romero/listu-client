@@ -68,7 +68,7 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem, list }) => 
                       h="1.5rem"
                       size="sm"
                       type="submit"
-                      variant="solid"
+                      variant="outline"
                       colorScheme="teal"
                       isLoading={props.isSubmitting}
                     >

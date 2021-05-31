@@ -12,33 +12,24 @@ import { ListItem, TentativeListItem } from "../type";
 import { longDateFormat } from "../utils/utils";
 import { useHistory } from "react-router-dom";
 import { config } from "../config";
-import { IoMdUndo } from 'react-icons/io'
+import { IoMdUndo } from "react-icons/io";
 
 interface Props {
   item: ListItem | TentativeListItem;
+  toggleItemDone: (listId: string, itemId: string) => void;
   deleteItem: (id: string) => void;
-  updateListItemDoneState: (
-    event: React.MouseEvent,
-    listItem: ListItem,
-    done: boolean
-  ) => void;
-  showUndone: boolean;
+  undone: boolean;
   listId: string;
 }
 
 export const ListItemRow: React.FC<Props> = ({
   item,
   deleteItem,
-  updateListItemDoneState,
-  showUndone,
+  undone: showUndone,
   listId,
+  toggleItemDone,
 }) => {
-  const [open, setOpen] = React.useState(false);
   const history = useHistory();
-  function toggleOpenState(event: React.MouseEvent) {
-    event.stopPropagation();
-    setOpen(!open);
-  }
   return (
     <Box width="100%" cursor="pointer">
       <Flex
@@ -71,20 +62,15 @@ export const ListItemRow: React.FC<Props> = ({
           {showUndone ? (
             <>
               <IconButton
-                variant="outline"
-                size="sm"
-                zIndex={10}
-                aria-label="Navigate to item"
-                onClick={(event) => toggleOpenState(event)}
-                icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              />
-              <IconButton
-                variant="ghost"
+                variant="solid"
                 colorScheme="teal"
                 size="sm"
                 ml={2}
                 aria-label="Mark item as done"
-                onClick={(event) => updateListItemDoneState(event, item, true)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  toggleItemDone(listId, item._id);
+                }}
                 icon={<CheckIcon />}
               />
             </>
@@ -96,7 +82,10 @@ export const ListItemRow: React.FC<Props> = ({
                 size="sm"
                 color="gray"
                 aria-label="Move item to to-do"
-                onClick={(event) => updateListItemDoneState(event, item, false)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  toggleItemDone(listId, item._id);
+                }}
                 icon={<IoMdUndo />}
               />
               <IconButton

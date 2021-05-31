@@ -7,7 +7,7 @@ import { RegisterFriendFormTypes } from "../components/NewFriendForm";
 import { config } from "../config";
 import { CreateListValues } from "../components/CreateListModal";
 import { ResetPasswordFormTypes } from "../pages/ResetPasswordPage";
-import { ListItem } from "../type";
+import { ListItem, TentativeListItem } from "../type";
 
 const axiosInstance = axios.create({
   baseURL: config.env.serverUrl,
@@ -76,7 +76,7 @@ export const createListItemRequest = async (
 export const updateListItemRequest = async (
   listId: string,
   itemId: string,
-  listItem: ListItem
+  listItem: ListItem | TentativeListItem
 ) => {
   const url = `/lists/${listId}/done/${itemId}`;
   return axiosInstance.post(url, listItem, {

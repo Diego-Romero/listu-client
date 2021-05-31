@@ -2,14 +2,18 @@ import { Box, Grid, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useUserContext } from "../context/UserContext";
 import { useUiContext } from "../context/UiContext";
-import { createListItemRequest, getUserRequest } from "../api/requests";
+import {
+  createListItemRequest,
+  getUserRequest,
+  updateListItemRequest,
+} from "../api/requests";
 import {
   setActiveListFromLocalStorage,
   sortListsBasedOnPreviousOrder,
   storeActiveListInLocalStorage,
   toastConfig,
 } from "../utils/utils";
-import { List, TentativeListItem } from "../type";
+import { List, ListItem, TentativeListItem } from "../type";
 import { LoadingComponent } from "../components/Loading";
 import { SideNav } from "../components/SideNav";
 import { ListsDisplay } from "../components/ListsDisplay";
@@ -61,6 +65,11 @@ export const ListsPage = () => {
     return lists.findIndex((list) => list._id === listId);
   }
 
+  /**
+   * In order for the application to be snappy, I'm creating first a local record of the created item, with a unique id.
+   * Then the item is being saved to be BE in parallel, when the item is saved it will be updated in React, but will be not be perceived by the user
+   * If the request fails, I roll back to a snapshot before the item was created.
+   */
   async function createListItem(
     listId: string,
     newItemValues: CreateListItemValues
@@ -92,14 +101,13 @@ export const ListsPage = () => {
       setActiveList(updatedList);
       updateLists(listIndex, updatedList);
     } catch (e) {
-      setLists(snapshot)
+      setLists(snapshot);
       toast(
         toastConfig(
           "Whoops, there has been an error saving your todo, please try again",
-          "error",
+          "error"
         )
       );
-      console.log(e);
     }
   }
 
@@ -108,6 +116,32 @@ export const ListsPage = () => {
       draft[index] = updatedList;
     });
     setLists(nextState);
+  }
+
+  async function toggleItemDone(listId: string, itemId: string) {
+    const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
+    const listIndex = findListIndexById(listId);
+    const list = lists[listIndex];
+    const itemIndex = list.items.findIndex((item) => item._id === itemId);
+    const item = list.items[itemIndex];
+    const updatedListItem = { ...item, done: !item.done };
+    const updatedItems = produce(list.items, (draft) => {
+      draft[itemIndex] = updatedListItem;
+    });
+    const updatedList = { ...list, items: updatedItems };
+    setActiveList(updatedList);
+    updateLists(listIndex, updatedList);
+    try {
+      await updateListItemRequest(listId, itemId, updatedListItem);
+    } catch (e) {
+      setLists(snapshot);
+      toast(
+        toastConfig(
+          "Whoops, there has been an error updating your todo, please try again",
+          "error"
+        )
+      );
+    }
   }
 
   // todo: create delete list item
@@ -138,7 +172,11 @@ export const ListsPage = () => {
               activeList={activeList}
             />
           ) : null}
-          <ListsDisplay list={activeList} onCreateItem={createListItem} />
+          <ListsDisplay
+            list={activeList}
+            onCreateItem={createListItem}
+            toggleItemDone={toggleItemDone}
+          />
         </Grid>
       )}
     </Box>
