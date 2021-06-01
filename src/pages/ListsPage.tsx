@@ -31,6 +31,7 @@ import logo from "../images/icons/team_up.svg";
 import produce from "immer";
 import { remove } from "ramda";
 import { ListDisplay } from "../components/ListDisplay";
+import { UpdateListItemValues } from "./ListItemPage";
 
 export const ListsPage = () => {
   const { navBarOpen } = useUiContext();
@@ -155,6 +156,37 @@ export const ListsPage = () => {
     }
   }
 
+  async function updateListItem(
+    listId: string,
+    itemId: string,
+    values: UpdateListItemValues
+  ) {
+    const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
+    const listIndex = findListIndexById(listId);
+    const list = lists[listIndex];
+    const itemIndex = list.items.findIndex((item) => item._id === itemId);
+    const item = list.items[itemIndex];
+    const { name, description } = values;
+    const updatedListItem = { ...item, name, description };
+    const updatedItems = produce(list.items, (draft) => {
+      draft[itemIndex] = updatedListItem;
+    });
+    const updatedList = { ...list, items: updatedItems };
+    setActiveList(updatedList);
+    updateLists(listIndex, updatedList);
+    try {
+      await updateListItemRequest(listId, itemId, updatedListItem);
+    } catch (e) {
+      setLists(snapshot);
+      toast(
+        toastConfig(
+          "Whoops, there has been an error updating your todo, please try again",
+          "error"
+        )
+      );
+    }
+  }
+
   async function deleteListItem(listId: string, itemId: string) {
     const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
     const listIndex = findListIndexById(listId);
@@ -192,10 +224,7 @@ export const ListsPage = () => {
     });
     const updatedList = { ...list, items: updatedItems };
     setActiveList(updatedList);
-    const updatedLists = produce(lists, (draft) => {
-      draft[listIndex] = updatedList;
-    });
-    setLists(updatedLists);
+    updateLists(listIndex, updatedList);
   }
 
   // todo: create update list item
@@ -240,6 +269,7 @@ export const ListsPage = () => {
                 toggleItemDone={toggleItemDone}
                 deleteListItem={deleteListItem}
                 updateListItemAttachmentUrl={updateListItemAttachmentUrl}
+                updateListItem={updateListItem}
               />
             ) : (
               <Stack textAlign="center">

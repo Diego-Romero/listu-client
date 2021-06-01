@@ -12,13 +12,19 @@ import {
   splitListItems,
   storeListItemInLocalStorage,
 } from "../utils/utils";
+import { UpdateListItemValues } from "./UpdateListItemModal";
 
 interface Props {
   onCreateItem: (listId: string, itemValues: CreateListItemValues) => void;
   toggleItemDone: (listId: string, itemId: string) => void;
   list: List;
   deleteListItem: (listId: string, itemId: string) => void;
-  updateListItemAttachmentUrl: (url: string, listId: string, itemId: string) => void;
+  updateListItemAttachmentUrl: (
+    url: string,
+    listId: string,
+    itemId: string
+  ) => void;
+  updateListItem: (listId: string, itemId: string, values: UpdateListItemValues) => void;
 }
 
 export const ListDisplay: React.FC<Props> = ({
@@ -27,6 +33,7 @@ export const ListDisplay: React.FC<Props> = ({
   toggleItemDone,
   deleteListItem,
   updateListItemAttachmentUrl,
+  updateListItem
 }) => {
   const [undoneItems, setUndoneItems] = React.useState<ListItemType[]>([]);
   const [doneItems, setDoneItems] = React.useState<ListItemType[]>([]);
@@ -56,7 +63,13 @@ export const ListDisplay: React.FC<Props> = ({
   }
 
   return (
-    <Flex direction="column" justify="center" align="center" mx={8} mt={[8, 8, 16]}>
+    <Flex
+      direction="column"
+      justify="center"
+      align="center"
+      mx={8}
+      mt={[8, 8, 16]}
+    >
       <Card loading={loading} maxHeight="75vh">
         <Flex
           direction={["column", "column", "row"]}
@@ -94,6 +107,7 @@ export const ListDisplay: React.FC<Props> = ({
                       toggleItemDone={toggleItemDone}
                       index={index}
                       updateListItemAttachmentUrl={updateListItemAttachmentUrl}
+                      updateListItem={updateListItem}
                     />
                   ))}
                   {provided.placeholder}

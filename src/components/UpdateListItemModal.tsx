@@ -25,9 +25,11 @@ import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { longDateFormat, toastConfig } from "../utils/utils";
 import { ListItemType } from "../type";
-import { useHistory } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
-import { getSignedUrlRequest, putFileToS3 } from "../api/requests";
+import {
+  getSignedUrlRequest,
+  putFileToS3,
+} from "../api/requests";
 import { AttachmentIcon, ExternalLinkIcon, InfoIcon } from "@chakra-ui/icons";
 
 export interface UpdateListItemValues {
@@ -35,12 +37,6 @@ export interface UpdateListItemValues {
   description?: string;
   done: boolean;
 }
-
-const initialValues: UpdateListItemValues = {
-  name: "",
-  description: "",
-  done: false,
-};
 
 const validationSchema = Yup.object().shape({
   name: config.validation.name,
@@ -52,7 +48,16 @@ interface Props {
   modalClose: () => void;
   listItem: ListItemType;
   listId: string;
-  updateListItemAttachmentUrl: (url: string, listId: string, itemId: string) => void;
+  updateListItemAttachmentUrl: (
+    url: string,
+    listId: string,
+    itemId: string
+  ) => void;
+  updateListItem: (
+    listId: string,
+    itemId: string,
+    values: UpdateListItemValues
+  ) => void;
 }
 
 export const UpdateListItemModal: React.FC<Props> = ({
@@ -60,12 +65,11 @@ export const UpdateListItemModal: React.FC<Props> = ({
   modalClose,
   listItem,
   listId,
-  updateListItemAttachmentUrl
+  updateListItemAttachmentUrl,
+  updateListItem,
 }) => {
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
-  const history = useHistory();
-  const [loading, setLoading] = React.useState(false);
   const [loadingFileUpload, setLoadingFileUpload] = React.useState(false);
   const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
     noClick: true,
@@ -89,7 +93,6 @@ export const UpdateListItemModal: React.FC<Props> = ({
 
   async function uploadFile() {
     setLoadingFileUpload(true);
-    console.log(listId)
     try {
       const listItemId = listItem._id;
       const file = acceptedFiles[0];
@@ -103,7 +106,7 @@ export const UpdateListItemModal: React.FC<Props> = ({
       const url = getSignedUrl.data.url as string;
       await putFileToS3(file, url);
       const uploadedImageUrl = `https://listu-${config.environment}.s3.amazonaws.com/${fileName}`;
-      updateListItemAttachmentUrl(uploadedImageUrl, listId, listItem._id)
+      updateListItemAttachmentUrl(uploadedImageUrl, listId, listItem._id);
     } catch (e) {
       if (e.response) {
         const errorMessage = e.response.data.message;
@@ -123,28 +126,13 @@ export const UpdateListItemModal: React.FC<Props> = ({
     }
   }
 
-  async function updateListItem(values: UpdateListItemValues) {
-    // setLoading(true);
-    // const updated = { ...listItem } as ListItem;
-    // updated.name = values.name;
-    // updated.description = values.description;
-    // updated.done = values.done;
-    // try {
-    //   await updateListItemRequest(listId, listItemId, updated);
-    //   history.push(config.routes.singleListUrl(listId));
-    //   toast(toastConfig("Item updated", "success"));
-    // } catch (e) {
-    //   const errorMessage = e.response.data.message;
-    //   toast(
-    //     toastConfig(
-    //       "whoops, there has been an error deleting the item",
-    //       "error",
-    //       errorMessage
-    //     )
-    //   );
-    // } finally {
-    //   setLoading(false);
-    // }
+  async function updateListItemSubmit(values: UpdateListItemValues) {
+    const updated = { ...listItem } as ListItemType;
+    updated.name = values.name;
+    updated.description = values.description;
+    updated.done = values.done;
+    updateListItem(listId, listItem._id, updated);
+    modalClose()
   }
 
   return (
@@ -158,11 +146,11 @@ export const UpdateListItemModal: React.FC<Props> = ({
             initialValues={initialValues}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              updateListItem(values);
+              updateListItemSubmit(values);
             }}
             validationSchema={validationSchema}
           >
-            {(props) => (
+            {() => (
               <Form>
                 <Field name="name">
                   {({ field, form }) => (
@@ -255,8 +243,8 @@ export const UpdateListItemModal: React.FC<Props> = ({
                 </Box>
                 <Stack mt={4}>
                   <Text fontSize="sm" color="gray">
-                    Created by <b>{listItem!.createdBy.name}</b> on the{" "}
-                    {longDateFormat(listItem!.createdAt)}
+                    Created by <b>{listItem.createdBy.name}</b> on the{" "}
+                    {longDateFormat(listItem.createdAt)}
                   </Text>
                 </Stack>
                 <Button
@@ -265,7 +253,6 @@ export const UpdateListItemModal: React.FC<Props> = ({
                   variant="solid"
                   isFullWidth
                   type="submit"
-                  isLoading={props.isSubmitting}
                 >
                   Update
                 </Button>

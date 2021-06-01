@@ -4,12 +4,10 @@ import { config } from "../config";
 import { FourOFourPage } from "../pages/404Page";
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { Landing } from "../pages/LandingPage";
-import { ListItemPage } from "../pages/ListItemPage";
 import { ListsPage } from "../pages/ListsPage";
 import { Login } from "../pages/LoginPage";
 import { NewFriendPage } from "../pages/NewFriendPage";
 import { ResetPasswordPage } from "../pages/ResetPasswordPage";
-import { ListDisplay } from "../components/ListDisplay";
 import ReactGA from "react-ga";
 
 ReactGA.initialize(config.env.gaId as string);
@@ -56,12 +54,6 @@ export const Routes = () => {
       </Route>
       {/* Private Routes */}
       <PrivateRoute path={config.routes.lists} exact component={ListsPage} />
-      <PrivateRoute path={config.routes.list} exact component={ListDisplay} />
-      <PrivateRoute
-        path={config.routes.listItem}
-        exact
-        component={ListItemPage}
-      />
       {/* 404 when route is unidentified */}
       <Route>
         <FourOFourPage />

@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { ListItem, TentativeListItem } from "../type";
 import { Draggable } from "react-beautiful-dnd";
-import { UpdateListItemModal } from "./UpdateListItemModal";
+import { UpdateListItemModal, UpdateListItemValues } from "./UpdateListItemModal";
 
 interface Props {
   item: ListItem | TentativeListItem;
@@ -22,6 +22,7 @@ interface Props {
     listId: string,
     itemId: string
   ) => void;
+  updateListItem: (listId: string, itemId: string, values: UpdateListItemValues) => void;
 }
 
 export const UndoneListItemRow: React.FC<Props> = ({
@@ -30,6 +31,7 @@ export const UndoneListItemRow: React.FC<Props> = ({
   index,
   toggleItemDone,
   updateListItemAttachmentUrl,
+  updateListItem
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode } = useColorMode();
@@ -108,6 +110,7 @@ export const UndoneListItemRow: React.FC<Props> = ({
         listItem={item}
         updateListItemAttachmentUrl={updateListItemAttachmentUrl}
         listId={listId}
+        updateListItem={updateListItem}
       />
     </Box>
   );
