@@ -275,8 +275,9 @@ export const ListsPage = () => {
   }
 
   // todo: keyboard functions to toggle lists, i.e. cmd 1, 2, 3, etc.
-  // todo: create an auto pull mechanism to fetch the items of every list and check if have been updated
-  // todo: make list an immediate request, same as with list item
+  // todo: refactor login/signup
+  // todo: test reset password journey
+  // todo: test mobile
 
   return (
     <Box height="100%">
