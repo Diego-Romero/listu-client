@@ -17,6 +17,7 @@ import { CreateListModal } from "./CreateListModal";
 import { ListRow } from "./ListRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { reorder, storeListOrderInLocalStorage } from "../utils/utils";
+import { CreateListValues } from "./UpdateListModal";
 
 interface Props {
   lists: List[];
@@ -24,6 +25,8 @@ interface Props {
   toggleActiveLists: (listId: string) => void;
   setActiveList: (list: List) => void;
   activeList: List | null;
+  updateList: (listId: string, values: CreateListValues) => void;
+  deleteList: (listId: string) => void;
 }
 
 export const SideNav: React.FC<Props> = ({
@@ -32,6 +35,8 @@ export const SideNav: React.FC<Props> = ({
   toggleActiveLists,
   activeList,
   setActiveList,
+  updateList,
+  deleteList,
 }) => {
   const { setNavBarOpen } = useUiContext();
   const { user } = useUserContext();
@@ -101,6 +106,8 @@ export const SideNav: React.FC<Props> = ({
                     index={index}
                     toggleActiveLists={toggleActiveLists}
                     active={isListActive(list)}
+                    updateList={updateList}
+                    deleteList={deleteList}
                   />
                 ))}
                 {provided.placeholder}

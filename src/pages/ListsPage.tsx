@@ -13,8 +13,10 @@ import { useUiContext } from "../context/UiContext";
 import {
   createListItemRequest,
   deleteListItemRequest,
+  deleteListRequest,
   getUserRequest,
   updateListItemRequest,
+  updateListRequest,
 } from "../api/requests";
 import {
   setActiveListFromLocalStorage,
@@ -32,6 +34,7 @@ import produce from "immer";
 import { remove } from "ramda";
 import { ListDisplay } from "../components/ListDisplay";
 import { UpdateListItemValues } from "./ListItemPage";
+import { CreateListValues } from "../components/UpdateListModal";
 
 export const ListsPage = () => {
   const { navBarOpen } = useUiContext();
@@ -75,6 +78,50 @@ export const ListsPage = () => {
 
   function findListIndexById(listId: string): number {
     return lists.findIndex((list) => list._id === listId);
+  }
+
+  async function updateList(listId: string, values: CreateListValues) {
+    const snapshot = [...lists];
+    const listIndex = findListIndexById(listId);
+    const list = lists[listIndex];
+    const updated = { ...list, ...values };
+    setActiveList(updated);
+    updateLists(listIndex, updated);
+    try {
+      await updateListRequest(values, list._id);
+      toast(toastConfig("Whoop 🙌", "info", "List updated"));
+    } catch (_err) {
+      setLists(snapshot);
+      toast(
+        toastConfig(
+          "Yikes..",
+          "warning",
+          "There has been an error updating your list, please try again later."
+        )
+      );
+    }
+  }
+
+  async function deleteList(listId: string) {
+    const snapshot = [...lists];
+    console.log(listId);
+    const listIndex = findListIndexById(listId);
+    const updatedLists = remove(listIndex, 1, lists);
+    setLists(updatedLists);
+    if (activeList?._id === listId) setActiveList(null);
+    try {
+      await deleteListRequest(listId);
+      toast(toastConfig("List deleted", "info"));
+    } catch (_err) {
+      setLists(snapshot);
+      toast(
+        toastConfig(
+          "Yikes..",
+          "warning",
+          "There has been an error deleting your list, please try again later."
+        )
+      );
+    }
   }
 
   /**
@@ -227,9 +274,6 @@ export const ListsPage = () => {
     updateLists(listIndex, updatedList);
   }
 
-  // todo: create update list item
-  // todo: fix update list is not loading
-
   // todo: keyboard functions to toggle lists, i.e. cmd 1, 2, 3, etc.
   // todo: create an auto pull mechanism to fetch the items of every list and check if have been updated
   // todo: make list an immediate request, same as with list item
@@ -249,11 +293,12 @@ export const ListsPage = () => {
           {navBarOpen ? (
             <SideNav
               lists={lists}
-              // todo: refactor this to have the logic to create a list here
+              updateList={updateList}
               setLists={setLists}
               toggleActiveLists={toggleActiveLists}
               activeList={activeList}
               setActiveList={setActiveList}
+              deleteList={deleteList}
             />
           ) : null}
           <Flex

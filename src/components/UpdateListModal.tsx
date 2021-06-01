@@ -38,14 +38,9 @@ import React from "react";
 import * as Yup from "yup";
 import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
-import {
-  addFriendRequest,
-  deleteListRequest,
-  updateListRequest,
-} from "../api/requests";
+import { addFriendRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
 import { List, User } from "../type";
-import { useHistory } from "react-router-dom";
 import { AiOutlineUserAdd } from "react-icons/ai";
 
 export interface AddFriendFormValues {
@@ -74,6 +69,8 @@ interface Props {
   modalClose: () => void;
   list: List;
   user: User;
+  updateList: (listId: string, values: CreateListValues) => void;
+  deleteList: (listId: string) => void;
 }
 
 export const UpdateListModal: React.FC<Props> = ({
@@ -81,6 +78,8 @@ export const UpdateListModal: React.FC<Props> = ({
   modalClose,
   list,
   user,
+  updateList,
+  deleteList,
 }) => {
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
@@ -90,32 +89,12 @@ export const UpdateListModal: React.FC<Props> = ({
     onOpen: onDeleteAlertOpen,
     onClose: onDeleteAlertClose,
   } = useDisclosure();
-  const history = useHistory();
   const [loading, setLoading] = React.useState(false);
 
   const initialValues: CreateListValues = {
     name: list.name,
     description: list.description as string,
   };
-
-  async function updateList(values: CreateListValues) {
-    setLoading(true);
-    try {
-      await updateListRequest(values, list._id);
-      toast(toastConfig("Whoop 🙌", "info", "List updated"));
-      history.push(config.routes.lists);
-    } catch (_err) {
-      toast(
-        toastConfig(
-          "Yikes..",
-          "warning",
-          "There has been an error updating your list, please try again later."
-        )
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const addFriend = async (values: AddFriendFormValues, resetForm: any) => {
     setLoading(true);
@@ -128,25 +107,6 @@ export const UpdateListModal: React.FC<Props> = ({
       const errorMessage = e.response.data.message;
       toast(
         toastConfig("Yikes... There has been an error", "error", errorMessage)
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleListDelete = async () => {
-    setLoading(true);
-    const declaredList = list as List;
-    try {
-      await deleteListRequest(declaredList._id);
-      toast(toastConfig("List has been deleted successfully", "info"));
-      history.push(config.routes.lists);
-    } catch (_error) {
-      toast(
-        toastConfig(
-          "Whoops, there has been an error deleting the list.",
-          "warning"
-        )
       );
     } finally {
       setLoading(false);
@@ -166,7 +126,8 @@ export const UpdateListModal: React.FC<Props> = ({
             validateOnBlur={false}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              updateList(values);
+              updateList(list._id, values);
+              modalClose();
             }}
             validationSchema={validationSchema}
           >
@@ -372,7 +333,11 @@ export const UpdateListModal: React.FC<Props> = ({
               </Button>
               <Button
                 colorScheme="red"
-                onClick={() => handleListDelete()}
+                onClick={() => {
+                  deleteList(list._id);
+                  onDeleteAlertClose();
+                  modalClose();
+                }}
                 ml={3}
               >
                 Delete

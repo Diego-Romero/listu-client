@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { List, User } from "../type";
-import { UpdateListModal } from "./UpdateListModal";
+import { CreateListValues, UpdateListModal } from "./UpdateListModal";
 import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
@@ -18,6 +18,8 @@ interface Props {
   index: number;
   toggleActiveLists: (listId: string) => void;
   active: boolean;
+  updateList: (listId: string, values: CreateListValues) => void;
+  deleteList: (listId: string) => void;
 }
 
 export const ListRow: React.FC<Props> = ({
@@ -26,6 +28,8 @@ export const ListRow: React.FC<Props> = ({
   index,
   toggleActiveLists,
   active,
+  updateList,
+  deleteList
 }) => {
   const {
     isOpen: isUpdateListModalOpen,
@@ -95,6 +99,8 @@ export const ListRow: React.FC<Props> = ({
             modalClose={onUpdateListModalClose}
             list={list}
             user={user}
+            updateList={updateList}
+            deleteList={deleteList}
           />
         </Box>
       )}
