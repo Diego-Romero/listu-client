@@ -32,3 +32,5 @@ export interface TentativeListItem {
   name: string;
   done: boolean;
 }
+
+export type ListItemType = ListSingleItem | TentativeListItem;

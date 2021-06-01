@@ -1,7 +1,13 @@
 import { UseToastOptions } from "@chakra-ui/react";
 import moment from "moment";
 import { config } from "../config";
-import { List, listOrderType } from "../type";
+import {
+  List,
+  ListItem,
+  ListItemType,
+  listOrderType,
+  TentativeListItem,
+} from "../type";
 
 export function shortDateFormat(date: Date) {
   return moment(date).format("Do-MMM");
@@ -55,6 +61,25 @@ export function sortListsBasedOnPreviousOrder(lists: List[]): List[] {
   return [...listsWithOrder, ...otherLists];
 }
 
+export function sortUndoneListItemsBasedOnPreviousOrder(
+  undoneItems: ListItemType[],
+  listId: string
+): ListItemType[] {
+  const orderString = localStorage.getItem(listId);
+  if (!orderString || orderString === null) return undoneItems;
+
+  const orderObject: listOrderType = JSON.parse(orderString);
+  let itemsWithOrder = new Array(undoneItems.length).fill(null);
+  const other: ListItemType[] = [];
+  for (const item of undoneItems) {
+    const index = orderObject[item._id];
+    if (index !== undefined) itemsWithOrder[index] = item;
+    else other.push(item);
+  }
+  itemsWithOrder = itemsWithOrder.filter((i) => i !== null);
+  return [...itemsWithOrder, ...other];
+}
+
 export function storeListOrderInLocalStorage(items: List[]): void {
   const listsOrder: listOrderType = {};
   for (let i = 0; i < items.length; i++) {
@@ -66,6 +91,19 @@ export function storeListOrderInLocalStorage(items: List[]): void {
     config.localStorage.listsOrder,
     JSON.stringify(listsOrder)
   );
+}
+
+export function storeListItemInLocalStorage(
+  items: (ListItem | TentativeListItem)[],
+  listId: string
+): void {
+  const listsOrder: listOrderType = {};
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    listsOrder[item._id] = i;
+  }
+
+  localStorage.setItem(listId, JSON.stringify(listsOrder));
 }
 
 export function storeActiveListInLocalStorage(listId): void {
@@ -83,4 +121,13 @@ export function setActiveListFromLocalStorage(
     const index = lists.findIndex((list) => list._id === activeListRecorded);
     setActiveList(lists[index]);
   }
+}
+export function splitListItems(
+  items: ListItemType[]
+): { done: ListItemType[]; undone: ListItemType[] } {
+  const done: ListItemType[] = [],
+    undone: ListItemType[] = [];
+  for (const item of items) item.done ? done.push(item) : undone.push(item);
+
+  return { done, undone };
 }

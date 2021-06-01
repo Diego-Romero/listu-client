@@ -5,13 +5,17 @@ import { CreateListItemForm, CreateListItemValues } from "./CreateItemForm";
 import {
   List,
   ListItem,
-  ListItem as ListSingleItem,
-  TentativeListItem,
+  ListItemType,
 } from "../type";
 import { UndoneListItemRow } from "./UndoneListItemRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { DoneListItemRow } from "./DoneListItemRow";
-import { reorder } from "../utils/utils";
+import {
+  reorder,
+  sortUndoneListItemsBasedOnPreviousOrder,
+  splitListItems,
+  storeListItemInLocalStorage,
+} from "../utils/utils";
 
 interface Props {
   onCreateItem: (listId: string, itemValues: CreateListItemValues) => void;
@@ -19,8 +23,6 @@ interface Props {
   list: List;
   deleteListItem: (listId: string, itemId: string) => void;
 }
-
-type ListItemType = ListSingleItem | TentativeListItem;
 
 export const ListDisplay: React.FC<Props> = ({
   list,
@@ -33,21 +35,19 @@ export const ListDisplay: React.FC<Props> = ({
   const [loading] = React.useState(false);
 
   React.useEffect(() => {
-    if (list !== null) {
-      const done: ListItemType[] = [],
-        undone: ListItemType[] = [];
-      for (const item of list.items)
-        item.done ? done.push(item) : undone.push(item);
-
-      setDoneItems(done);
-      setUndoneItems(undone);
-    }
+    console.log("re rendering");
+    const { done, undone } = splitListItems(list.items);
+    const undoneSorted = sortUndoneListItemsBasedOnPreviousOrder(
+      undone,
+      list._id
+    );
+    setDoneItems(done);
+    setUndoneItems(undoneSorted);
+    storeListItemInLocalStorage(undoneSorted, list._id);
   }, [list]);
 
   function onDragEnd(result) {
-    if (!result.destination) {
-      return;
-    }
+    if (!result.destination) return;
 
     const items: ListItem[] = reorder(
       undoneItems,
@@ -55,7 +55,7 @@ export const ListDisplay: React.FC<Props> = ({
       result.destination.index
     );
     setUndoneItems(items);
-    // todo: save undone items order in local storage
+    storeListItemInLocalStorage(items, list._id);
   }
 
   return (

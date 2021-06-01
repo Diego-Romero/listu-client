@@ -1,4 +1,4 @@
-import { ChatIcon } from "@chakra-ui/icons";
+import { EmailIcon } from "@chakra-ui/icons";
 import { Flex, Heading } from "@chakra-ui/layout";
 import { Box, IconButton, Link, Stack, useDisclosure } from "@chakra-ui/react";
 import React from "react";
@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
             size="sm"
             aria-label="get in touch"
             onClick={onOpen}
-            icon={<ChatIcon />}
+            icon={<EmailIcon />}
           />
         </Stack>
       </Flex>
