@@ -15,7 +15,7 @@ export interface ListItem {
   description?: string;
   done: boolean;
   dateCompleted?: string;
-  attachmentUrl: string;
+  attachmentUrl?: string;
 }
 export interface User {
   _id: string;
@@ -31,6 +31,7 @@ export interface TentativeListItem {
   _id: string;
   name: string;
   done: boolean;
+  attachmentUrl?: string;
 }
 
 export type ListItemType = ListSingleItem | TentativeListItem;

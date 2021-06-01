@@ -20,6 +20,7 @@ export const config = {
     serverUrl: process.env.REACT_APP_SERVER_URL,
     gaId: process.env.REACT_APP_GA_ID,
   },
+  environment: process.env.REACT_APP_ENVIRONMENT,
   routes: {
     login: "/login",
     newFriend: "/new-friend/:id",

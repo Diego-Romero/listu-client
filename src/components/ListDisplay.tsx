@@ -2,11 +2,7 @@ import { Box, Flex, Heading, HStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "./Card";
 import { CreateListItemForm, CreateListItemValues } from "./CreateItemForm";
-import {
-  List,
-  ListItem,
-  ListItemType,
-} from "../type";
+import { List, ListItem, ListItemType } from "../type";
 import { UndoneListItemRow } from "./UndoneListItemRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { DoneListItemRow } from "./DoneListItemRow";
@@ -22,6 +18,7 @@ interface Props {
   toggleItemDone: (listId: string, itemId: string) => void;
   list: List;
   deleteListItem: (listId: string, itemId: string) => void;
+  updateListItemAttachmentUrl: (url: string, listId: string, itemId: string) => void;
 }
 
 export const ListDisplay: React.FC<Props> = ({
@@ -29,13 +26,13 @@ export const ListDisplay: React.FC<Props> = ({
   onCreateItem,
   toggleItemDone,
   deleteListItem,
+  updateListItemAttachmentUrl,
 }) => {
   const [undoneItems, setUndoneItems] = React.useState<ListItemType[]>([]);
   const [doneItems, setDoneItems] = React.useState<ListItemType[]>([]);
   const [loading] = React.useState(false);
 
   React.useEffect(() => {
-    console.log("re rendering");
     const { done, undone } = splitListItems(list.items);
     const undoneSorted = sortUndoneListItemsBasedOnPreviousOrder(
       undone,
@@ -59,8 +56,8 @@ export const ListDisplay: React.FC<Props> = ({
   }
 
   return (
-    <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card loading={loading} maxHeight="70vh">
+    <Flex direction="column" justify="center" align="center" mx={8} mt={[8, 8, 16]}>
+      <Card loading={loading} maxHeight="75vh">
         <Flex
           direction={["column", "column", "row"]}
           align={["start", "start", "center"]}
@@ -93,9 +90,10 @@ export const ListDisplay: React.FC<Props> = ({
                     <UndoneListItemRow
                       item={item}
                       key={item._id}
-                      listId={list?._id as string}
+                      listId={list._id}
                       toggleItemDone={toggleItemDone}
                       index={index}
+                      updateListItemAttachmentUrl={updateListItemAttachmentUrl}
                     />
                   ))}
                   {provided.placeholder}
@@ -108,7 +106,7 @@ export const ListDisplay: React.FC<Props> = ({
           <DoneListItemRow
             item={item}
             key={item._id}
-            listId={list?._id as string}
+            listId={list._id}
             deleteListItem={deleteListItem}
             toggleItemDone={toggleItemDone}
           />

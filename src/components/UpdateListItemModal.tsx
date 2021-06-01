@@ -1,38 +1,34 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
+  Text,
+  Box,
   Button,
   Checkbox,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Text,
-  Image,
+  HStack,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Textarea,
-  useToast,
   useMediaQuery,
-  Box,
-  HStack,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
-import { useHistory, useParams } from "react-router-dom";
-import {
-  getListItemRequest,
-  getSignedUrlRequest,
-  putFileToS3,
-  updateListItemRequest,
-} from "../api/requests";
-import { Card } from "../components/Card";
-import logo from "../images/icons/landing2.svg";
-import { ListItem } from "../type";
-import { toastConfig, longDateFormat } from "../utils/utils";
 import * as Yup from "yup";
 import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
-import { AttachmentIcon, ExternalLinkIcon, InfoIcon } from "@chakra-ui/icons";
+import { longDateFormat, toastConfig } from "../utils/utils";
+import { ListItemType } from "../type";
+import { useHistory } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
+import { getSignedUrlRequest, putFileToS3 } from "../api/requests";
+import { AttachmentIcon, ExternalLinkIcon, InfoIcon } from "@chakra-ui/icons";
 
 export interface UpdateListItemValues {
   name: string;
@@ -51,19 +47,26 @@ const validationSchema = Yup.object().shape({
   description: config.validation.description,
 });
 
-interface ParamTypes {
+interface Props {
+  modalOpen: boolean;
+  modalClose: () => void;
+  listItem: ListItemType;
   listId: string;
-  listItemId: string;
+  updateListItemAttachmentUrl: (url: string, listId: string, itemId: string) => void;
 }
 
-export const ListItemPage = () => {
-  const [loading, setLoading] = React.useState(false);
-  const history = useHistory();
-  const { listItemId, listId } = useParams<ParamTypes>();
-  const [listItem, setListItem] = React.useState<ListItem | null>(null);
+export const UpdateListItemModal: React.FC<Props> = ({
+  modalOpen,
+  modalClose,
+  listItem,
+  listId,
+  updateListItemAttachmentUrl
+}) => {
   const toast = useToast();
-  const [loadingFileUpload, setLoadingFileUpload] = React.useState(false);
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
+  const history = useHistory();
+  const [loading, setLoading] = React.useState(false);
+  const [loadingFileUpload, setLoadingFileUpload] = React.useState(false);
   const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
     noClick: true,
     noKeyboard: true,
@@ -72,13 +75,23 @@ export const ListItemPage = () => {
     maxSize: 5242880, // 5mb
   });
 
+  const initialValues: UpdateListItemValues = {
+    name: listItem.name,
+    description: listItem.description as string,
+    done: listItem.done,
+  };
+
   React.useEffect(() => {
-    getListItem();
-  }, []);
+    if (acceptedFiles.length === 1) {
+      uploadFile();
+    }
+  }, [acceptedFiles]);
 
   async function uploadFile() {
     setLoadingFileUpload(true);
+    console.log(listId)
     try {
+      const listItemId = listItem._id;
       const file = acceptedFiles[0];
       const fileExtension = file.type.split("/")[1];
       const fileName = `${listItemId}.${fileExtension}`;
@@ -89,7 +102,8 @@ export const ListItemPage = () => {
       );
       const url = getSignedUrl.data.url as string;
       await putFileToS3(file, url);
-      getListItem();
+      const uploadedImageUrl = `https://listu-${config.environment}.s3.amazonaws.com/${fileName}`;
+      updateListItemAttachmentUrl(uploadedImageUrl, listId, listItem._id)
     } catch (e) {
       if (e.response) {
         const errorMessage = e.response.data.message;
@@ -109,62 +123,37 @@ export const ListItemPage = () => {
     }
   }
 
-  React.useEffect(() => {
-    if (acceptedFiles.length === 1) {
-      uploadFile();
-    }
-  }, [acceptedFiles]);
-
-  async function getListItem() {
-    setLoading(true);
-    try {
-      const res = await getListItemRequest(listItemId);
-      setListItem(res.data);
-      initialValues.name = res.data.name;
-      initialValues.description = res.data.description;
-      initialValues.done = res.data.done;
-    } catch (e) {
-      const errorMessage = e.response.data.message;
-      toast(
-        toastConfig(
-          "Whoops, there has been an error retrieving this list item",
-          "error",
-          errorMessage
-        )
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
   async function updateListItem(values: UpdateListItemValues) {
-    setLoading(true);
-    const updated = { ...listItem } as ListItem;
-    updated.name = values.name;
-    updated.description = values.description;
-    updated.done = values.done;
-    try {
-      await updateListItemRequest(listId, listItemId, updated);
-      history.push(config.routes.singleListUrl(listId));
-      toast(toastConfig("Item updated", "success"));
-    } catch (e) {
-      const errorMessage = e.response.data.message;
-      toast(
-        toastConfig(
-          "whoops, there has been an error deleting the item",
-          "error",
-          errorMessage
-        )
-      );
-    } finally {
-      setLoading(false);
-    }
+    // setLoading(true);
+    // const updated = { ...listItem } as ListItem;
+    // updated.name = values.name;
+    // updated.description = values.description;
+    // updated.done = values.done;
+    // try {
+    //   await updateListItemRequest(listId, listItemId, updated);
+    //   history.push(config.routes.singleListUrl(listId));
+    //   toast(toastConfig("Item updated", "success"));
+    // } catch (e) {
+    //   const errorMessage = e.response.data.message;
+    //   toast(
+    //     toastConfig(
+    //       "whoops, there has been an error deleting the item",
+    //       "error",
+    //       errorMessage
+    //     )
+    //   );
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   return (
-    <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
-      <Card loading={loading}>
-        {listItem === null ? null : (
+    <Modal isOpen={modalOpen} onClose={modalClose} size={"md"}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Update Item</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
           <Formik
             initialValues={initialValues}
             onSubmit={(values, actions) => {
@@ -203,7 +192,7 @@ export const ListItemPage = () => {
                       }
                     >
                       <FormLabel htmlFor="description">Description</FormLabel>
-                      <Textarea size="sm" {...field} />
+                      <Textarea size="sm" {...field} rows={6} />
                       <FormErrorMessage>
                         {form.errors.description}
                       </FormErrorMessage>
@@ -240,12 +229,12 @@ export const ListItemPage = () => {
                   </Box>
                 ) : null}
                 <Box>
-                <HStack mt={4}>
-                  <InfoIcon h={4} w={4} color="gray" />
-                  <Text fontSize="sm" color="gray">
-                    You are only able to upload images smaller than 5mb
-                  </Text>
-                </HStack>
+                  <HStack mt={4}>
+                    <InfoIcon h={4} w={4} color="gray" />
+                    <Text fontSize="sm" color="gray">
+                      You are only able to upload images smaller than 5mb
+                    </Text>
+                  </HStack>
                   <Button
                     rightIcon={<AttachmentIcon />}
                     colorScheme="gray"
@@ -266,13 +255,14 @@ export const ListItemPage = () => {
                 </Box>
                 <Stack mt={4}>
                   <Text fontSize="sm" color="gray">
-                    Created by <b>{listItem!.createdBy.name}</b> on the {longDateFormat(listItem!.createdAt)}
+                    Created by <b>{listItem!.createdBy.name}</b> on the{" "}
+                    {longDateFormat(listItem!.createdAt)}
                   </Text>
                 </Stack>
                 <Button
                   mt={SPACING_BUTTONS}
                   colorScheme="teal"
-                  variant="outline"
+                  variant="solid"
                   isFullWidth
                   type="submit"
                   isLoading={props.isSubmitting}
@@ -281,21 +271,19 @@ export const ListItemPage = () => {
                 </Button>
                 <Button
                   mt={4}
+                  mb={4}
                   isFullWidth
-                  colorScheme="teal"
-                  variant="solid"
-                  onClick={() =>
-                    history.push(config.routes.singleListUrl(listId))
-                  }
+                  colorScheme="gray"
+                  variant="outline"
+                  onClick={modalClose}
                 >
                   Back
                 </Button>
               </Form>
             )}
           </Formik>
-        )}
-      </Card>
-      <Image mt={4} boxSize="400px" src={logo} alt="Login" />
-    </Flex>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };

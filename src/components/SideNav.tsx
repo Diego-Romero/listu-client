@@ -6,7 +6,6 @@ import {
   Flex,
   Grid,
   Heading,
-  Stack,
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -67,7 +66,7 @@ export const SideNav: React.FC<Props> = ({
   return (
     <Grid
       height="100%"
-      width={["100vw", "100vw", "40vw", "35vw", "25vw"]}
+      width={["100vw", "100vw", "100vw", "35vw", "25vw"]}
       templateRows="auto 1fr auto"
       boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
       borderRightColor="gray.200"
@@ -88,7 +87,7 @@ export const SideNav: React.FC<Props> = ({
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="lists">
             {(provided) => (
-              <Stack
+              <Box
                 overflowY="auto"
                 maxH="70vh"
                 {...provided.droppableProps}
@@ -105,7 +104,7 @@ export const SideNav: React.FC<Props> = ({
                   />
                 ))}
                 {provided.placeholder}
-              </Stack>
+              </Box>
             )}
           </Droppable>
         </DragDropContext>

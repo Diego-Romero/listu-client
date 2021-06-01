@@ -22,7 +22,7 @@ import {
   storeActiveListInLocalStorage,
   toastConfig,
 } from "../utils/utils";
-import { List, TentativeListItem } from "../type";
+import { List, ListItemType, TentativeListItem } from "../type";
 import { LoadingComponent } from "../components/Loading";
 import { SideNav } from "../components/SideNav";
 import { CreateListItemValues } from "../components/CreateItemForm";
@@ -177,6 +177,27 @@ export const ListsPage = () => {
     }
   }
 
+  function updateListItemAttachmentUrl(
+    url: string,
+    listId: string,
+    itemId: string
+  ): void {
+    const listIndex = findListIndexById(listId);
+    const list = lists[listIndex];
+    const listItemIndex = list.items.findIndex((l) => l._id === itemId);
+    const item = list.items[listItemIndex];
+    const updatedItem: ListItemType = { ...item, attachmentUrl: url };
+    const updatedItems = produce(list.items, (draft) => {
+      draft[listItemIndex] = updatedItem;
+    });
+    const updatedList = { ...list, items: updatedItems };
+    setActiveList(updatedList);
+    const updatedLists = produce(lists, (draft) => {
+      draft[listIndex] = updatedList;
+    });
+    setLists(updatedLists);
+  }
+
   // todo: create update list item
   // todo: fix update list is not loading
 
@@ -193,6 +214,7 @@ export const ListsPage = () => {
           height="100%"
           templateColumns={navBarOpen ? "auto 1fr" : "1fr"}
           width="100vw"
+          overflow="auto"
           position="relative"
         >
           {navBarOpen ? (
@@ -217,6 +239,7 @@ export const ListsPage = () => {
                 onCreateItem={createListItem}
                 toggleItemDone={toggleItemDone}
                 deleteListItem={deleteListItem}
+                updateListItemAttachmentUrl={updateListItemAttachmentUrl}
               />
             ) : (
               <Stack textAlign="center">
