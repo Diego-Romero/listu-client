@@ -7,7 +7,7 @@ import logo from "../images/icons/sleeping.svg";
 export const FourOFourPage: React.FC = () => {
   const history = useHistory();
   return (
-    <VStack spacing={12} textAlign="center">
+    <VStack spacing={12} textAlign="center" mt={12}>
       <Box>
         <Heading as="h1" size="lg">
           Yikes!

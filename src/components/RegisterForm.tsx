@@ -18,22 +18,18 @@ import {
   config,
   NAME_MIN_LENGTH,
   PASSWORD_MIN_LENGTH,
-  SPACING_BUTTONS,
   SPACING_INPUTS,
 } from "../config";
 import { useHistory } from "react-router";
 import { registerRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
 import ReactGA from "react-ga";
+import { useUserContext } from "../context/UserContext";
 
 export interface RegisterFormTypes {
   email: string;
   password: string;
   name: string;
-}
-
-interface Props {
-  setLoading: (boolean) => void;
 }
 
 const initialValues: RegisterFormTypes = {
@@ -48,30 +44,30 @@ const validationSchema = Yup.object().shape({
   name: config.validation.name,
 });
 
-export const RegisterForm: React.FC<Props> = ({ setLoading }) => {
-  const history = useHistory();
+export const RegisterForm: React.FC = () => {
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   const toast = useToast();
   const [show, setShow] = React.useState(false);
+  const { setUser } = useUserContext();
+  const history = useHistory();
 
   async function register(values: RegisterFormTypes, actions) {
-    actions.setSubmitting(false);
-    setLoading(true);
     try {
-      await registerRequest(values);
+      const res = await registerRequest(values);
       ReactGA.event({
         category: config.googleAnalytics.users,
         action: "user created",
       });
-      toast(toastConfig("Whoop 🙌, you can now login!", "success"));
-      history.push(config.routes.home);
+      localStorage.setItem("token", res.data.token);
+      setUser(res.data.user);
+      history.push(config.routes.lists);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
         toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
-      setLoading(false);
+      actions.setSubmitting(false);
     }
   }
   return (
@@ -152,24 +148,15 @@ export const RegisterForm: React.FC<Props> = ({ setLoading }) => {
               )}
             </Field>
             <Button
-              mt={SPACING_BUTTONS}
+              mt={6}
+              mb={6}
               colorScheme="teal"
-              variant="outline"
+              variant="solid"
               isFullWidth
               type="submit"
               isLoading={props.isSubmitting}
             >
               Register
-            </Button>
-            <Button
-              mt={SPACING_BUTTONS - 4}
-              colorScheme="teal"
-              // variant="ghost"
-              isFullWidth
-              isLoading={props.isSubmitting}
-              onClick={() => history.push(config.routes.home)}
-            >
-              Back
             </Button>
           </Form>
         )}

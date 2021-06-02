@@ -301,10 +301,10 @@ export const ListsPage = () => {
     updateLists(listIndex, updatedList);
   }
 
-  // todo: keyboard functions to toggle lists, i.e. cmd 1, 2, 3, etc.
   // todo: refactor login/signup
   // todo: test reset password journey
   // todo: test mobile
+  // todo: new user should have a couple of example lists
 
   return (
     <Box height="100%">

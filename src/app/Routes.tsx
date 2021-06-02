@@ -2,7 +2,6 @@ import React from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { config } from "../config";
 import { FourOFourPage } from "../pages/404Page";
-import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { Landing } from "../pages/LandingPage";
 import { ListsPage } from "../pages/ListsPage";
 import { Login } from "../pages/LoginPage";
@@ -39,12 +38,6 @@ export const Routes = () => {
       {/* public routes */}
       <Route path={config.routes.home} exact>
         <Landing />
-      </Route>
-      <Route path={config.routes.login} exact>
-        <Login />
-      </Route>
-      <Route path={config.routes.forgotPassword} exact>
-        <ForgotPasswordPage />
       </Route>
       <Route path={config.routes.resetPassword} exact>
         <ResetPasswordPage />

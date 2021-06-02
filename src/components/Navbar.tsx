@@ -4,6 +4,7 @@ import {
   HStack,
   IconButton,
   Tooltip,
+  useColorMode,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -13,7 +14,7 @@ import { useHistory } from "react-router-dom";
 import { config } from "../config";
 import { useUserContext } from "../context/UserContext";
 import { toastConfig } from "../utils/utils";
-import { IoMdLogOut, IoMdHome, IoMdLogIn } from "react-icons/io";
+import { IoMdLogOut } from "react-icons/io";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 import { useUiContext } from "../context/UiContext";
@@ -28,9 +29,12 @@ export const NavBar: React.FC = () => {
   const { user, removeUser } = useUserContext();
   const { navBarOpen, setNavBarOpen } = useUiContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { setColorMode } = useColorMode();
 
   React.useEffect(() => {
     MouseTrap.bind("ctrl+k", () => onOpen());
+    MouseTrap.bind("ctrl+l", () => setColorMode("light"));
+    MouseTrap.bind("ctrl+d", () => setColorMode("dark"));
   }, []);
 
   const location = useLocation();
@@ -93,35 +97,27 @@ export const NavBar: React.FC = () => {
               </Tooltip>
             )}
           </>
-        ) : (
-          <IconButton
-            size="md"
-            variant="ghost"
-            color="current"
-            fontSize="2xl"
-            onClick={() => history.push(config.routes.home)}
-            icon={<IoMdHome />}
-            aria-label={`Go to home`}
-          />
-        )}
+        ) : null}
       </Box>
       <HStack>
-        <Box display={['none', 'none', 'block']}>
-          <Tooltip label="Keyboard shortcuts" aria-label="Keyboard shortcuts">
-            <IconButton
-              size="md"
-              variant="ghost"
-              color="current"
-              fontSize="2xl"
-              onClick={onOpen}
-              icon={<FaRegKeyboard />}
-              aria-label={`Keyboard shortcuts`}
-            />
-          </Tooltip>
-        </Box>
         <ColorModeSwitcher justifySelf="flex-end" />
-        <Box>
-          {user !== null ? (
+        {user !== null ? (
+          <>
+            <Tooltip
+              label="Keyboard shortcuts"
+              aria-label="Keyboard shortcuts"
+              display={["none", "none", "block"]}
+            >
+              <IconButton
+                size="md"
+                variant="ghost"
+                color="current"
+                fontSize="2xl"
+                onClick={onOpen}
+                icon={<FaRegKeyboard />}
+                aria-label={`Keyboard shortcuts`}
+              />
+            </Tooltip>
             <Tooltip label="Logout" aria-label="Logout">
               <IconButton
                 size="md"
@@ -133,20 +129,8 @@ export const NavBar: React.FC = () => {
                 aria-label={`Logout`}
               />
             </Tooltip>
-          ) : (
-            <Tooltip label="Login" aria-label="Login">
-              <IconButton
-                size="md"
-                variant="ghost"
-                color="current"
-                fontSize="2xl"
-                onClick={() => history.push(config.routes.login)}
-                icon={<IoMdLogIn />}
-                aria-label={`Login`}
-              />
-            </Tooltip>
-          )}
-        </Box>
+          </>
+        ) : null}
       </HStack>
       <KeymapModal modalOpen={isOpen} modalClose={onClose} />
     </Flex>

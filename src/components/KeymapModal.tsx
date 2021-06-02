@@ -24,6 +24,8 @@ export const KeymapModal: React.FC<Props> = ({ modalOpen, modalClose }) => {
     { text: "Focus on create item", key1: "SPACE" },
     { text: "Focus list 1..9", key1: "CTRL", key2: "1..9" },
     { text: "Open Keymap", key1: "CTRL", key2: "K" },
+    { text: "Light mode", key1: "CTRL", key2: "L" },
+    { text: "Dark mode", key1: "CTRL", key2: "D" },
     { text: "Open Side Nav", key1: "CTRL", key2: "O" },
     { text: "Close Side Nav", key1: "CTRL", key2: "B" },
   ];

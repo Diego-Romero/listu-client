@@ -15,22 +15,13 @@ import React from "react";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
 import { loginRequest } from "../api/requests";
-import {
-  config,
-  REQUIRED_FIELD_ERROR,
-  SPACING_BUTTONS,
-  SPACING_INPUTS,
-} from "../config";
+import { config, REQUIRED_FIELD_ERROR, SPACING_INPUTS } from "../config";
 import { useUserContext } from "../context/UserContext";
 import { toastConfig } from "../utils/utils";
 
 export interface LoginFormValues {
   email: string;
   password: string;
-}
-
-interface Props {
-  setLoading: (boolean) => void;
 }
 
 const initialValues = {
@@ -43,15 +34,21 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required(REQUIRED_FIELD_ERROR),
 });
 
-export const LoginForm: React.FC<Props> = ({ setLoading }) => {
+interface Props {
+  modalClose: () => void;
+  openForgotPasswordModal: () => void;
+}
+
+export const LoginForm: React.FC<Props> = ({
+  openForgotPasswordModal,
+  modalClose,
+}) => {
   const history = useHistory();
   const toast = useToast();
   const { setUser } = useUserContext();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
+
   async function loginUser(values: LoginFormValues, actions) {
-    setLoading(true);
-    actions.setSubmitting(false);
-    localStorage.removeItem("token");
     try {
       const res = await loginRequest(values);
       localStorage.setItem("token", res.data.token);
@@ -63,9 +60,15 @@ export const LoginForm: React.FC<Props> = ({ setLoading }) => {
         toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
-      setLoading(false);
+      actions.setSubmitting(false);
     }
   }
+
+  function handleForgotPassword() {
+    modalClose();
+    openForgotPasswordModal();
+  }
+
   return (
     <Box>
       <Formik
@@ -105,33 +108,22 @@ export const LoginForm: React.FC<Props> = ({ setLoading }) => {
                 </FormControl>
               )}
             </Field>
+
             <Text mt={4}>
-              <Link
-                color="gray.600"
-                onClick={() => history.push(config.routes.forgotPassword)}
-              >
+              <Link color="gray.400" onClick={() => handleForgotPassword()}>
                 Forgot password?
               </Link>
             </Text>
             <Button
-              mt={SPACING_BUTTONS - 4}
+              mt={6}
+              mb={6}
               colorScheme="teal"
-              variant="outline"
+              variant="solid"
               isFullWidth
               type="submit"
               isLoading={props.isSubmitting}
             >
               Login
-            </Button>
-            <Button
-              mt={SPACING_BUTTONS - 4}
-              colorScheme="teal"
-              // variant="outline"
-              isFullWidth
-              isLoading={props.isSubmitting}
-              onClick={() => history.push(config.routes.home)}
-            >
-              Back
             </Button>
           </Form>
         )}

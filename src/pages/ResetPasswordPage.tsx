@@ -1,9 +1,28 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Image, Input, InputGroup, InputRightElement, useMediaQuery, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+  Heading,
+  Image,
+  Input,
+  InputGroup,
+  InputRightElement,
+  useMediaQuery,
+  useToast,
+} from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
 import logo from "../images/icons/team_up.svg";
 import * as Yup from "yup";
-import { config, PASSWORD_MIN_LENGTH, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
+import {
+  config,
+  PASSWORD_MIN_LENGTH,
+  SPACING_BUTTONS,
+  SPACING_INPUTS,
+} from "../config";
 import { useHistory, useParams } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import { resetPasswordRequest } from "../api/requests";
@@ -35,23 +54,23 @@ export const ResetPasswordPage = () => {
 
   async function resetPassword(values: ResetPasswordFormTypes, actions) {
     setLoading(true);
-    actions.setSubmitting(false);
     try {
       await resetPasswordRequest(values, token);
       toast(
         toastConfig(
           "Whoop 🙌",
-          "success",
+          "info",
           "You can now log in with your new password"
         )
       );
-      history.push(config.routes.login);
+      history.push(config.routes.home);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
         toastConfig("Yikes... There has been an error", "error", errorMessage)
       );
     } finally {
+      actions.setSubmitting(false);
       setLoading(false);
     }
   }
@@ -112,6 +131,17 @@ export const ResetPasswordPage = () => {
                 isLoading={props.isSubmitting}
               >
                 Reset Password
+              </Button>
+              <Button
+                mt={4}
+                mb={4}
+                colorScheme="gray"
+                variant="outline"
+                isFullWidth
+                type="submit"
+                onClick={() => history.push(config.routes.home)}
+              >
+                Go to home
               </Button>
             </Form>
           )}
