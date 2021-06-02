@@ -5,7 +5,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import * as Yup from "yup";
@@ -13,7 +12,7 @@ import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { List } from "../type";
 import { AddIcon } from "@chakra-ui/icons";
-import MouseTrap from 'mousetrap';
+import MouseTrap from "mousetrap";
 
 export interface CreateListItemValues {
   name: string;
@@ -36,12 +35,12 @@ export const CreateListItemForm: React.FC<Props> = ({
   createNewItem,
   list,
 }) => {
-    const inputEl = React.useRef(null);
+  const inputEl = React.useRef(null);
 
   // const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   React.useEffect(() => {
     MouseTrap.bind("space", () => inputEl.current.focus());
-  }, [])
+  }, []);
   return (
     <Formik
       initialValues={initialValues}

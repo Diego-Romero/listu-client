@@ -16,7 +16,9 @@ import { IoMdLogOut, IoMdHome, IoMdLogIn } from "react-icons/io";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 import { useUiContext } from "../context/UiContext";
-import { FiSidebar } from 'react-icons/fi'
+import { FiSidebar } from "react-icons/fi";
+import { FaRegKeyboard } from "react-icons/fa";
+import { SmallAddIcon } from "@chakra-ui/icons";
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
@@ -56,18 +58,32 @@ export const NavBar: React.FC = () => {
         {user !== null ? (
           <>
             {isOnListPage() ? (
-              <Tooltip label="Toggle side nav" aria-label="Toggle side nav">
-                <IconButton
-                  size="md"
-                  variant="ghost"
-                  color="current"
-                  fontSize="2xl"
-                  isActive={navBarOpen}
-                  onClick={() => setNavBarOpen(!navBarOpen)}
-                  icon={<FiSidebar />}
-                  aria-label={`Toggle side nav`}
-                />
-              </Tooltip>
+              <>
+                <Tooltip label="Toggle side nav" aria-label="Toggle side nav">
+                  <IconButton
+                    size="md"
+                    variant="ghost"
+                    color="current"
+                    fontSize="2xl"
+                    isActive={navBarOpen}
+                    onClick={() => setNavBarOpen(!navBarOpen)}
+                    icon={<FiSidebar />}
+                    aria-label={`Toggle side nav`}
+                  />
+                </Tooltip>
+                <Tooltip label="New list" aria-label="New list">
+                  <IconButton
+                    size="md"
+                    variant="ghost"
+                    color="current"
+                    ml={2}
+                    fontSize="2xl"
+                    onClick={() => console.log("Open new list modal")}
+                    icon={<SmallAddIcon />}
+                    aria-label={`New list`}
+                  />
+                </Tooltip>
+              </>
             ) : (
               <Tooltip label="Go to lists" aria-label="go to lists">
                 <IconButton
@@ -95,6 +111,17 @@ export const NavBar: React.FC = () => {
         )}
       </Box>
       <HStack>
+        <Tooltip label="Keyboard shortcuts" aria-label="Keyboard shortcuts">
+          <IconButton
+            size="md"
+            variant="ghost"
+            color="current"
+            fontSize="2xl"
+            onClick={() => console.log("open keyboard modal")}
+            icon={<FaRegKeyboard />}
+            aria-label={`Keyboard shortcuts`}
+          />
+        </Tooltip>
         <ColorModeSwitcher justifySelf="flex-end" />
         <Box>
           {user !== null ? (
