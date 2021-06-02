@@ -4,6 +4,7 @@ import {
   HStack,
   IconButton,
   Tooltip,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import * as React from "react";
@@ -18,13 +19,19 @@ import { useLocation } from "react-router-dom";
 import { useUiContext } from "../context/UiContext";
 import { FiSidebar } from "react-icons/fi";
 import { FaRegKeyboard } from "react-icons/fa";
-import { SmallAddIcon } from "@chakra-ui/icons";
+import { KeymapModal } from "./KeymapModal";
+import MouseTrap from "mousetrap";
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const { user, removeUser } = useUserContext();
   const { navBarOpen, setNavBarOpen } = useUiContext();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  React.useEffect(() => {
+    MouseTrap.bind("ctrl+k", () => onOpen());
+  }, []);
 
   const location = useLocation();
 
@@ -71,18 +78,6 @@ export const NavBar: React.FC = () => {
                     aria-label={`Toggle side nav`}
                   />
                 </Tooltip>
-                <Tooltip label="New list" aria-label="New list">
-                  <IconButton
-                    size="md"
-                    variant="ghost"
-                    color="current"
-                    ml={2}
-                    fontSize="2xl"
-                    onClick={() => console.log("Open new list modal")}
-                    icon={<SmallAddIcon />}
-                    aria-label={`New list`}
-                  />
-                </Tooltip>
               </>
             ) : (
               <Tooltip label="Go to lists" aria-label="go to lists">
@@ -111,17 +106,19 @@ export const NavBar: React.FC = () => {
         )}
       </Box>
       <HStack>
-        <Tooltip label="Keyboard shortcuts" aria-label="Keyboard shortcuts">
-          <IconButton
-            size="md"
-            variant="ghost"
-            color="current"
-            fontSize="2xl"
-            onClick={() => console.log("open keyboard modal")}
-            icon={<FaRegKeyboard />}
-            aria-label={`Keyboard shortcuts`}
-          />
-        </Tooltip>
+        <Box display={['none', 'none', 'block']}>
+          <Tooltip label="Keyboard shortcuts" aria-label="Keyboard shortcuts">
+            <IconButton
+              size="md"
+              variant="ghost"
+              color="current"
+              fontSize="2xl"
+              onClick={onOpen}
+              icon={<FaRegKeyboard />}
+              aria-label={`Keyboard shortcuts`}
+            />
+          </Tooltip>
+        </Box>
         <ColorModeSwitcher justifySelf="flex-end" />
         <Box>
           {user !== null ? (
@@ -151,6 +148,7 @@ export const NavBar: React.FC = () => {
           )}
         </Box>
       </HStack>
+      <KeymapModal modalOpen={isOpen} modalClose={onClose} />
     </Flex>
   );
 };

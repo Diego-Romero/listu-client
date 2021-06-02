@@ -18,6 +18,7 @@ import { ListRow } from "./ListRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { reorder, storeListOrderInLocalStorage } from "../utils/utils";
 import { CreateListValues } from "./UpdateListModal";
+import MouseTrap from "mousetrap";
 
 interface Props {
   lists: List[];
@@ -45,6 +46,10 @@ export const SideNav: React.FC<Props> = ({
     onOpen: onCreateListModalOpen,
     onClose: onCreateListModalClose,
   } = useDisclosure();
+
+  React.useEffect(() => {
+    MouseTrap.bind("ctrl+n", () => onCreateListModalOpen());
+  }, []);
 
   function onDragEnd(result) {
     // dropped outside the list

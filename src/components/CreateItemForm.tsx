@@ -37,7 +37,6 @@ export const CreateListItemForm: React.FC<Props> = ({
 }) => {
   const inputEl = React.useRef(null);
 
-  // const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   React.useEffect(() => {
     MouseTrap.bind("space", () => inputEl.current.focus());
   }, []);
