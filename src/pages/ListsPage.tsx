@@ -33,16 +33,46 @@ import logo from "../images/icons/team_up.svg";
 import produce from "immer";
 import { remove } from "ramda";
 import { ListDisplay } from "../components/ListDisplay";
-import { UpdateListItemValues } from "./ListItemPage";
 import { CreateListValues } from "../components/UpdateListModal";
+import MouseTrap from "mousetrap";
+import { UpdateListItemValues } from "../components/UpdateListItemModal";
 
 export const ListsPage = () => {
-  const { navBarOpen } = useUiContext();
+  const { navBarOpen, setNavBarOpen } = useUiContext();
   const [loadingScreen, setLoadingScreen] = React.useState(true);
   const [lists, setLists] = React.useState<List[]>([]); // want to use this as the base of all truth for all of them, in order to avoid reload, and maintain a parallel state between server and lists
   const [activeList, setActiveList] = React.useState<List | null>(null);
   const { setUser, removeUser } = useUserContext();
   const toast = useToast();
+
+  React.useEffect(() => {
+    fetchLists();
+  }, []);
+
+  React.useEffect(() => {
+    reBindActiveListHotkeys();
+  }, [lists]);
+
+  function setHotKeyCommands() {
+    MouseTrap.bind("ctrl+b", () => setNavBarOpen(false));
+    MouseTrap.bind("ctrl+o", () => setNavBarOpen(true));
+  }
+
+  function reBindActiveListHotkeys() {
+    MouseTrap.bind(`ctrl+1`, () => setActiveListHotKey(1));
+    MouseTrap.bind(`ctrl+2`, () => setActiveListHotKey(2));
+    MouseTrap.bind(`ctrl+3`, () => setActiveListHotKey(3));
+    MouseTrap.bind(`ctrl+4`, () => setActiveListHotKey(4));
+    MouseTrap.bind(`ctrl+5`, () => setActiveListHotKey(5));
+    MouseTrap.bind(`ctrl+6`, () => setActiveListHotKey(6));
+    MouseTrap.bind(`ctrl+7`, () => setActiveListHotKey(7));
+    MouseTrap.bind(`ctrl+8`, () => setActiveListHotKey(8));
+    MouseTrap.bind(`ctrl+9`, () => setActiveListHotKey(9));
+  }
+
+  function setActiveListHotKey(index: number) {
+    if (index <= lists.length) setActiveList(lists[index - 1]);
+  }
 
   const fetchLists = async () => {
     setLoadingScreen(true);
@@ -55,16 +85,13 @@ export const ListsPage = () => {
       setLists(sortedLists);
       setActiveListFromLocalStorage(setActiveList, lists);
       setLoadingScreen(false);
+      setHotKeyCommands();
     } catch (e) {
       // const errorMessage = e.response.data.message;
       toast(toastConfig("whoops, please log in again", "error"));
       removeUser(); // logout the user if can't fetch the details
     }
   };
-
-  React.useEffect(() => {
-    fetchLists();
-  }, []);
 
   function toggleActiveLists(listId: string) {
     if (listId === activeList?._id) {

@@ -13,6 +13,7 @@ import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { List } from "../type";
 import { AddIcon } from "@chakra-ui/icons";
+import MouseTrap from 'mousetrap';
 
 export interface CreateListItemValues {
   name: string;
@@ -35,7 +36,12 @@ export const CreateListItemForm: React.FC<Props> = ({
   createNewItem,
   list,
 }) => {
-  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
+    const inputEl = React.useRef(null);
+
+  // const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
+  React.useEffect(() => {
+    MouseTrap.bind("space", () => inputEl.current.focus());
+  }, [])
   return (
     <Formik
       initialValues={initialValues}
@@ -45,6 +51,7 @@ export const CreateListItemForm: React.FC<Props> = ({
         actions.setSubmitting(false);
         createNewItem(list._id, values);
         actions.resetForm();
+        inputEl.current.blur();
       }}
       validationSchema={validationSchema}
     >
@@ -60,10 +67,11 @@ export const CreateListItemForm: React.FC<Props> = ({
               >
                 <InputGroup size="md">
                   <Input
-                    autoFocus={isLargerThan480} // only autofocus on non mobile views
+                    // autoFocus={isLargerThan480} // only autofocus on non mobile views
                     type="text"
                     placeholder="Add a new list item"
                     variant="flushed"
+                    ref={inputEl}
                     {...field}
                   />
                   <InputRightElement width="3.2rem">
@@ -74,19 +82,9 @@ export const CreateListItemForm: React.FC<Props> = ({
                       isRound
                       mb={2}
                       type="submit"
-                      aria-label="Delete item"
+                      aria-label="Create item"
                       icon={<AddIcon />}
                     />
-                    {/* <Button
-                      h="1.5rem"
-                      size="sm"
-                      type="submit"
-                      variant="outline"
-                      colorScheme="teal"
-                      isLoading={props.isSubmitting}
-                    >
-                      Add
-                    </Button> */}
                   </InputRightElement>
                 </InputGroup>
                 <FormErrorMessage>{form.errors.name}</FormErrorMessage>
