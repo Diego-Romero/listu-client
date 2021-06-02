@@ -4,7 +4,6 @@ import { config } from "../config";
 import { FourOFourPage } from "../pages/404Page";
 import { Landing } from "../pages/LandingPage";
 import { ListsPage } from "../pages/ListsPage";
-import { Login } from "../pages/LoginPage";
 import { NewFriendPage } from "../pages/NewFriendPage";
 import { ResetPasswordPage } from "../pages/ResetPasswordPage";
 import ReactGA from "react-ga";
