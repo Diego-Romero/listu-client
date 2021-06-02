@@ -6,6 +6,7 @@ import {
   Heading,
   Stack,
   useToast,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { useUserContext } from "../context/UserContext";
@@ -44,6 +45,7 @@ export const ListsPage = () => {
   const [activeList, setActiveList] = React.useState<List | null>(null);
   const { setUser, removeUser } = useUserContext();
   const toast = useToast();
+  const [isLargerThan992] = useMediaQuery("(min-width: 992px)");
 
   React.useEffect(() => {
     fetchLists();
@@ -102,6 +104,10 @@ export const ListsPage = () => {
     const index = findListIndexById(listId);
     setActiveList(lists[index]);
     storeActiveListInLocalStorage(listId);
+    // if on mobile view, close the side nav when selecting a new active list
+    if (!isLargerThan992) {
+      setNavBarOpen(false);
+    }
   }
 
   function findListIndexById(listId: string): number {
@@ -301,11 +307,6 @@ export const ListsPage = () => {
     setActiveList(updatedList);
     updateLists(listIndex, updatedList);
   }
-
-  // todo: new user should have a couple of example lists
-  // todo: test add friend journey
-  // todo: test mobile
-  // todo: add image when screen is too wide
 
   return (
     <Box height="100%">

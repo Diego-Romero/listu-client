@@ -13,6 +13,7 @@ import {
   storeListItemInLocalStorage,
 } from "../utils/utils";
 import { UpdateListItemValues } from "./UpdateListItemModal";
+import { useUiContext } from "../context/UiContext";
 
 interface Props {
   onCreateItem: (listId: string, itemValues: CreateListItemValues) => void;
@@ -24,7 +25,11 @@ interface Props {
     listId: string,
     itemId: string
   ) => void;
-  updateListItem: (listId: string, itemId: string, values: UpdateListItemValues) => void;
+  updateListItem: (
+    listId: string,
+    itemId: string,
+    values: UpdateListItemValues
+  ) => void;
 }
 
 export const ListDisplay: React.FC<Props> = ({
@@ -33,11 +38,11 @@ export const ListDisplay: React.FC<Props> = ({
   toggleItemDone,
   deleteListItem,
   updateListItemAttachmentUrl,
-  updateListItem
+  updateListItem,
 }) => {
   const [undoneItems, setUndoneItems] = React.useState<ListItemType[]>([]);
   const [doneItems, setDoneItems] = React.useState<ListItemType[]>([]);
-  const [loading] = React.useState(false);
+  const { navBarOpen } = useUiContext();
 
   React.useEffect(() => {
     const { done, undone } = splitListItems(list.items);
@@ -68,9 +73,10 @@ export const ListDisplay: React.FC<Props> = ({
       justify="center"
       align="center"
       mx={8}
-      mt={[8, 8, 16]}
+      my={[8, 8, 16]}
+      display={navBarOpen ? ["none", "none", 'none', "flex"] : "flex"}
     >
-      <Card loading={loading} maxHeight="75vh">
+      <Card maxHeight="75vh">
         <Flex
           direction={["column", "column", "row"]}
           align={["start", "start", "center"]}

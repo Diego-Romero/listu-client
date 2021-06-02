@@ -46,6 +46,7 @@ export const SideNav: React.FC<Props> = ({
     onOpen: onCreateListModalOpen,
     onClose: onCreateListModalClose,
   } = useDisclosure();
+  // import { useBreakpointValue } from "@chakra-ui/react";
 
   React.useEffect(() => {
     MouseTrap.bind("ctrl+n", () => onCreateListModalOpen());
