@@ -17,13 +17,11 @@ import {
   config,
   NAME_MIN_LENGTH,
   PASSWORD_MIN_LENGTH,
-  SPACING_BUTTONS,
   SPACING_INPUTS,
 } from "../config";
 import { useHistory } from "react-router";
 import { registerFriendRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
-import { useUserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 
 export interface RegisterFriendFormTypes {
@@ -50,15 +48,13 @@ export const NewFriendForm: React.FC = () => {
   const toast = useToast();
   const { id } = useParams<ParamTypes>();
   const [show, setShow] = React.useState(false);
-  const { login } = useUserContext();
 
   async function registerFriend(values: RegisterFriendFormTypes, actions) {
     actions.setSubmitting(false);
     try {
-      const res = await registerFriendRequest(values, id);
-      login(res.data);
-      toast(toastConfig("Whoop 🙌, you can now login!", "success"));
-      history.push(config.routes.login);
+      await registerFriendRequest(values, id);
+      toast(toastConfig("Whoop 🙌, you can now login!", "info"));
+      history.push(config.routes.home);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
@@ -126,14 +122,23 @@ export const NewFriendForm: React.FC = () => {
               )}
             </Field>
             <Button
-              mt={SPACING_BUTTONS}
-              colorScheme="yellow"
-              variant="outline"
+              mt={6}
+              mb={6}
+              colorScheme="teal"
+              variant="solid"
               isFullWidth
               type="submit"
               isLoading={props.isSubmitting}
             >
               Register
+            </Button>
+            <Button
+              colorScheme="gray"
+              variant="outline"
+              isFullWidth
+              onClick={() => history.push(config.routes.home)}
+            >
+              Go to home
             </Button>
           </Form>
         )}

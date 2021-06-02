@@ -54,11 +54,11 @@ export const Landing: React.FC = () => {
           <Button
             variant="outline"
             colorScheme="teal"
-            color="white"
-            bgGradient="linear(to-r, teal.500,green.500)"
-            _hover={{
-              bgGradient: "linear(to-r, teal.400, green.400)",
-            }}
+            // color="white"
+            // bgGradient="linear(to-r, teal.500,green.500)"
+            // _hover={{
+            //   bgGradient: "linear(to-r, teal.400, green.400)",
+            // }}
             size="md"
             mb={4}
             onClick={onLoginModalOpen}
@@ -68,11 +68,6 @@ export const Landing: React.FC = () => {
           <Button
             variant="outline"
             colorScheme="teal"
-            color="white"
-            bgGradient="linear(to-r, teal.500,green.500)"
-            _hover={{
-              bgGradient: "linear(to-r, teal.400, green.400)",
-            }}
             size="md"
             mb={4}
             onClick={onRegisterModalOpen}
@@ -84,11 +79,7 @@ export const Landing: React.FC = () => {
         <Button
           colorScheme="teal"
           size="lg"
-          color="white"
-          bgGradient="linear(to-r, teal.500,green.500)"
-          _hover={{
-            bgGradient: "linear(to-r, teal.400, green.400)",
-          }}
+          variant="outline"
           mb={4}
           onClick={() => history.push(config.routes.lists)}
         >
@@ -96,7 +87,11 @@ export const Landing: React.FC = () => {
         </Button>
       )}
       <Image mt={2} boxSize={["300px", "450px"]} src={logo} alt="Login" />
-      <LoginModal modalOpen={isLoginModalOpen} modalClose={onLoginModalClose} openForgotPasswordModal={onForgotPasswordOpen} />
+      <LoginModal
+        modalOpen={isLoginModalOpen}
+        modalClose={onLoginModalClose}
+        openForgotPasswordModal={onForgotPasswordOpen}
+      />
       <RegisterModal
         modalOpen={isRegisterModalOpen}
         modalClose={onRegisterModalClose}

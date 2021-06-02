@@ -1,18 +1,14 @@
-import { Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Card";
 import { NewFriendForm } from "../components/NewFriendForm";
-import { useUserContext } from "../context/UserContext";
-import logo from "../images/icons/join.svg";
 
 export const NewFriendPage = () => {
-  const { logout } = useUserContext();
   React.useEffect(() => {
-    logout();
-    localStorage.removeItem('token')
-  }, [])
+    localStorage.removeItem("token");
+  }, []);
   return (
-    <Flex direction="column" justify="center" align="center" mt={[0, 0, 8]}>
+    <Flex direction="column" justify="center" align="center" my={[8, 8, 12]} mx={4}>
       <Card>
         <Heading mb={4} size="lg">
           Register
@@ -22,7 +18,6 @@ export const NewFriendPage = () => {
         </Text>
         <NewFriendForm />
       </Card>
-      <Image mt={4} boxSize="400px" src={logo} alt="New Friend" />
     </Flex>
   );
 };

@@ -82,6 +82,22 @@ export const NavBar: React.FC = () => {
                     aria-label={`Toggle side nav`}
                   />
                 </Tooltip>
+                <Tooltip
+                  label="Keyboard shortcuts"
+                  aria-label="Keyboard shortcuts"
+                  display={["none", "none", "block"]}
+                >
+                  <IconButton
+                    ml={4}
+                    size="md"
+                    variant="ghost"
+                    color="current"
+                    fontSize="2xl"
+                    onClick={onOpen}
+                    icon={<FaRegKeyboard />}
+                    aria-label={`Keyboard shortcuts`}
+                  />
+                </Tooltip>
               </>
             ) : (
               <Tooltip label="Go to lists" aria-label="go to lists">
@@ -103,21 +119,6 @@ export const NavBar: React.FC = () => {
         <ColorModeSwitcher justifySelf="flex-end" />
         {user !== null ? (
           <>
-            <Tooltip
-              label="Keyboard shortcuts"
-              aria-label="Keyboard shortcuts"
-              display={["none", "none", "block"]}
-            >
-              <IconButton
-                size="md"
-                variant="ghost"
-                color="current"
-                fontSize="2xl"
-                onClick={onOpen}
-                icon={<FaRegKeyboard />}
-                aria-label={`Keyboard shortcuts`}
-              />
-            </Tooltip>
             <Tooltip label="Logout" aria-label="Logout">
               <IconButton
                 size="md"

@@ -34,7 +34,7 @@ export const KeymapModal: React.FC<Props> = ({ modalOpen, modalClose }) => {
     <Modal isOpen={modalOpen} onClose={modalClose} size="sm">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Keymap</ModalHeader>
+        <ModalHeader>Shortcuts</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {keyMaps.map((keyMap) => (
@@ -42,7 +42,7 @@ export const KeymapModal: React.FC<Props> = ({ modalOpen, modalClose }) => {
               <Flex alignItems="center" justifyContent="space-between" mb={4}>
                 <Text>{keyMap.text}</Text>
                 <span>
-                  <Kbd>{keyMap.key1}</Kbd>{keyMap.key2 ? <span>+ <Kbd>{keyMap.key2}</Kbd></span> : null} 
+                  <Kbd>{keyMap.key1}</Kbd>{keyMap.key2 ? <span> + <Kbd>{keyMap.key2}</Kbd></span> : null} 
                 </span>
               </Flex>
               <Divider mb={4} />

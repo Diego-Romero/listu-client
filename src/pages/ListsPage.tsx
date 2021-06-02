@@ -84,6 +84,7 @@ export const ListsPage = () => {
       setUser(user);
       setLists(sortedLists);
       setActiveListFromLocalStorage(setActiveList, lists);
+      if (activeList === null && lists.length > 0) setActiveList(lists[0]);
       setLoadingScreen(false);
       setHotKeyCommands();
     } catch (e) {
@@ -301,10 +302,10 @@ export const ListsPage = () => {
     updateLists(listIndex, updatedList);
   }
 
-  // todo: refactor login/signup
-  // todo: test reset password journey
-  // todo: test mobile
   // todo: new user should have a couple of example lists
+  // todo: test add friend journey
+  // todo: test mobile
+  // todo: add image when screen is too wide
 
   return (
     <Box height="100%">
