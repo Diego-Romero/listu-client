@@ -2,6 +2,8 @@
 
 # Listu Client
 
+BE code can be found here: https://github.com/Diego-Romero/listu-api
+
 In order to run the project locally, you will need to first install the necessary dependencies
 
 ```bash
@@ -12,6 +14,8 @@ After that you will need to create a .env file at root level, so you can include
 
 ```bash
 REACT_APP_SERVER_URL=http://localhost:8080
+REACT_APP_GA_ID=your tracking number
+REACT_APP_ENVIRONMENT=development
 ```
 
 ## Available Scripts
