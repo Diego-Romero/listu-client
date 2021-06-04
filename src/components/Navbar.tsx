@@ -85,10 +85,10 @@ export const NavBar: React.FC = () => {
                 <Tooltip
                   label="Keyboard shortcuts"
                   aria-label="Keyboard shortcuts"
-                  display={["none", "none", "block"]}
                 >
                   <IconButton
                     ml={4}
+                    display={["none", "none", "none", "inline-flex"]}
                     size="md"
                     variant="ghost"
                     color="current"

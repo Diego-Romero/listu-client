@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   FormErrorMessage,
@@ -58,43 +59,46 @@ export const AddFriendForm: React.FC<Props> = ({ list }) => {
   };
 
   return (
-    <Formik
-      initialValues={addFriendInitialValues}
-      onSubmit={(values, actions) => {
-        actions.setSubmitting(false);
-        addFriend(values, actions.resetForm);
-      }}
-      validationSchema={addFriendValidationSchema}
-    >
-      {(props) => (
-        <Form>
-          <Field name="email">
-            {({ field, form }) => (
-              <FormControl
-                id="email"
-                mt={SPACING_INPUTS}
-                isRequired
-                isInvalid={form.errors.email && form.touched.email}
-              >
-                <FormLabel htmlFor="email">Email Address</FormLabel>
-                <Input {...field} type="email" autoFocus={isLargerThan480} />
-                <FormErrorMessage>{form.errors.email}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Button
-            mt={4}
-            mb={6}
-            colorScheme="teal"
-            variant="solid"
-            isFullWidth
-            type="submit"
-            isLoading={props.isSubmitting || loading}
-          >
-            Invite friend
-          </Button>
-        </Form>
-      )}
-    </Formik>
+    <Box >
+      <Formik
+        initialValues={addFriendInitialValues}
+        onSubmit={(values, actions) => {
+          actions.setSubmitting(false);
+          addFriend(values, actions.resetForm);
+        }}
+        validationSchema={addFriendValidationSchema}
+      >
+        {(props) => (
+          <Form>
+            <Field name="email">
+              {({ field, form }) => (
+                <FormControl
+                  id="email"
+                  mt={SPACING_INPUTS}
+                  isRequired
+                  isInvalid={form.errors.email && form.touched.email}
+                >
+                  <FormLabel fontSize="sm" htmlFor="email">Email Address</FormLabel>
+                  <Input {...field} size="sm" type="email" autoFocus={isLargerThan480} />
+                  <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Button
+              mt={4}
+              mb={4}
+              colorScheme="teal"
+              variant="solid"
+              size="sm"
+              isFullWidth
+              type="submit"
+              isLoading={props.isSubmitting || loading}
+            >
+              Invite friend
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </Box>
   );
 };

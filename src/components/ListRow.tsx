@@ -1,8 +1,13 @@
-import { DragHandleIcon, EditIcon, StarIcon } from "@chakra-ui/icons";
+import { DragHandleIcon, EditIcon } from "@chakra-ui/icons";
 import { Divider, Box, Text, HStack } from "@chakra-ui/layout";
 import {
   Grid,
   IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
   Tooltip,
   useColorMode,
   useDisclosure,
@@ -11,6 +16,8 @@ import React from "react";
 import { List, User } from "../type";
 import { CreateListValues, UpdateListModal } from "./UpdateListModal";
 import { Draggable } from "react-beautiful-dnd";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { AddFriendForm } from "./AddFriendForm";
 
 interface Props {
   list: List;
@@ -37,6 +44,9 @@ export const ListRow: React.FC<Props> = ({
     onClose: onUpdateListModalClose,
   } = useDisclosure();
   const { colorMode } = useColorMode();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const open = () => setIsOpen(!isOpen);
+  const close = () => setIsOpen(false);
 
   return (
     <Draggable key={list._id} draggableId={list._id} index={index}>
@@ -60,7 +70,11 @@ export const ListRow: React.FC<Props> = ({
             py={4}
             px={4}
             bg={
-              active ? (colorMode === "dark" ? "gray.900" : "gray.200") : "inherit"
+              active
+                ? colorMode === "dark"
+                  ? "gray.900"
+                  : "gray.200"
+                : "inherit"
             }
           >
             <DragHandleIcon cursor="grab" />
@@ -68,28 +82,47 @@ export const ListRow: React.FC<Props> = ({
               {list.name}{" "}
             </Text>
             <HStack>
-              <Tooltip label="Invite friends!">
+              <Tooltip label="Update list">
                 <IconButton
                   aria-label="Update list"
                   icon={<EditIcon />}
-                  size="sm"
+                  size="md"
                   isRound
+                  variant="outline"
                   onClick={onUpdateListModalOpen}
                 />
               </Tooltip>
-              <Tooltip label="Display list">
+
+              <Tooltip label="Add friend">
                 <IconButton
-                  aria-label="Update list"
-                  icon={<StarIcon />}
-                  size="sm"
-                  variant={active ? "solid" : "outline"}
-                  colorScheme={
-                    active ? (colorMode === "dark" ? "teal" : "teal") : "gray"
-                  }
+                  aria-label="Add friend"
+                  icon={<AiOutlineUserAdd />}
+                  size="md"
+                  colorScheme="teal"
+                  variant="outline"
                   isRound
-                  onClick={() => toggleActiveLists(list._id)}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    open();
+                  }}
                 />
               </Tooltip>
+              <Popover
+                isLazy
+                placement="auto"
+                returnFocusOnClose={false}
+                isOpen={isOpen}
+                onClose={close}
+                closeOnBlur={false}
+              >
+                <PopoverContent onClick={(e) => e.stopPropagation()}>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverBody fontSize="sm">
+                    <AddFriendForm list={list} />
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
             </HStack>
           </Grid>
           <Divider />

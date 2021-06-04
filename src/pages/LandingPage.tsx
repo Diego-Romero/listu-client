@@ -1,11 +1,13 @@
 import {
   VStack,
   Heading,
-  Text,
   Button,
   Image,
   Stack,
   useDisclosure,
+  ListItem,
+  List,
+  ListIcon,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router";
@@ -14,6 +16,10 @@ import { LoginModal } from "../components/LoginModal";
 import { RegisterModal } from "../components/RegisterModal";
 import { config } from "../config";
 import logo from "../images/icons/landing-teal.svg";
+import {MdAccessible } from 'react-icons/md'
+import { BiListCheck } from 'react-icons/bi'
+import { FaRegKeyboard, FaUserFriends } from "react-icons/fa";
+import { BsCardChecklist } from "react-icons/bs";
 
 export const Landing: React.FC = () => {
   const history = useHistory();
@@ -48,17 +54,30 @@ export const Landing: React.FC = () => {
       >
         Listu
       </Heading>
-      <Text fontSize="lg">Minimalist app for you and your friends.</Text>
+
+      <List fontSize="lg">
+        <ListItem>
+          <ListIcon as={BsCardChecklist} color="teal.500" size="lg" />
+          Dead simple todo list app
+        </ListItem>
+        <ListItem>
+          <ListIcon as={FaUserFriends} color="teal.500" />
+          Share lists with your friends
+        </ListItem>
+        <ListItem>
+          <ListIcon as={FaRegKeyboard} color="teal.500" />
+          Ultra keyboard enhanced for speed
+        </ListItem>
+        <ListItem>
+          <ListIcon as={MdAccessible} color="teal.500" />
+          Optimized for accessibility
+        </ListItem>
+      </List>
       {!token ? (
         <Stack spacing={0}>
           <Button
-            variant="outline"
+            variant="solid"
             colorScheme="teal"
-            // color="white"
-            // bgGradient="linear(to-r, teal.500,green.500)"
-            // _hover={{
-            //   bgGradient: "linear(to-r, teal.400, green.400)",
-            // }}
             size="md"
             mb={4}
             onClick={onLoginModalOpen}
@@ -69,7 +88,6 @@ export const Landing: React.FC = () => {
             variant="outline"
             colorScheme="teal"
             size="md"
-            mb={4}
             onClick={onRegisterModalOpen}
           >
             Register
