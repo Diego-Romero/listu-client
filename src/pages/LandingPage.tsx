@@ -103,7 +103,7 @@ export const Landing: React.FC = () => {
           Lists
         </Button>
       )}
-      <Image mt={2} boxSize={["300px", "450px"]} src={logo} alt="Login" />
+      <Image boxSize={["300px", "450px"]} src={logo} alt="Login" />
       <LoginModal
         modalOpen={isLoginModalOpen}
         modalClose={onLoginModalClose}

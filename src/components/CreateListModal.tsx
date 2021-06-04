@@ -1,5 +1,7 @@
 import {
   Button,
+  Image,
+  Center,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -22,6 +24,7 @@ import { createListRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
 import ReactGA from "react-ga";
 import { List } from "../type";
+import logo from "../images/icons/landing-teal.svg";
 
 export interface CreateListValues {
   name: string;
@@ -153,6 +156,9 @@ export const CreateListModal: React.FC<Props> = ({
             )}
           </Formik>
         </ModalBody>
+        <Center>
+          <Image boxSize={["200px"]} src={logo} alt="Login" />
+        </Center>
       </ModalContent>
     </Modal>
   );

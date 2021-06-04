@@ -1,4 +1,6 @@
 import {
+  Center,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -7,6 +9,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import React from "react";
+import logo from "../images/icons/join.svg";
 import { RegisterForm } from "./RegisterForm";
 
 interface Props {
@@ -24,6 +27,9 @@ export const RegisterModal: React.FC<Props> = ({ modalOpen, modalClose }) => {
         <ModalBody>
           <RegisterForm />
         </ModalBody>
+        <Center>
+          <Image boxSize={["300px"]} src={logo} alt="Register" />
+        </Center>
       </ModalContent>
     </Modal>
   );

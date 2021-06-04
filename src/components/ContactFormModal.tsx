@@ -1,6 +1,8 @@
 import {
   Button,
+  Center,
   FormControl,
+  Image,
   FormErrorMessage,
   FormLabel,
   Input,
@@ -20,6 +22,7 @@ import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
 import { sendContactMessageRequest } from "../api/requests";
 import { toastConfig } from "../utils/utils";
+import logo from "../images/icons/contact.svg";
 
 export interface ContactFormValues {
   message: string;
@@ -153,6 +156,9 @@ export const ContactFormModal: React.FC<Props> = ({
             )}
           </Formik>
         </ModalBody>
+        <Center>
+          <Image boxSize={["200px"]} src={logo} alt="Register" />
+        </Center>
       </ModalContent>
     </Modal>
   );

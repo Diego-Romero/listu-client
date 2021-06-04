@@ -5,8 +5,11 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Image,
+  Center,
 } from "@chakra-ui/react";
 import React from "react";
+import logo from "../images/icons/landing2.svg";
 import { LoginForm } from "./LoginForm";
 
 interface Props {
@@ -15,7 +18,11 @@ interface Props {
   openForgotPasswordModal: () => void;
 }
 
-export const LoginModal: React.FC<Props> = ({ modalOpen, modalClose, openForgotPasswordModal }) => {
+export const LoginModal: React.FC<Props> = ({
+  modalOpen,
+  modalClose,
+  openForgotPasswordModal,
+}) => {
   return (
     <Modal isOpen={modalOpen} onClose={modalClose} size="sm">
       <ModalOverlay />
@@ -23,8 +30,14 @@ export const LoginModal: React.FC<Props> = ({ modalOpen, modalClose, openForgotP
         <ModalHeader>Login</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <LoginForm openForgotPasswordModal={openForgotPasswordModal} modalClose={modalClose}/>
+          <LoginForm
+            openForgotPasswordModal={openForgotPasswordModal}
+            modalClose={modalClose}
+          />
         </ModalBody>
+        <Center>
+          <Image boxSize={["200px"]} src={logo} alt="Login" />
+        </Center>
       </ModalContent>
     </Modal>
   );

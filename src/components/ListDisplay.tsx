@@ -1,6 +1,7 @@
 import {
   Box,
   Flex,
+  Image,
   Heading,
   HStack,
   Text,
@@ -13,6 +14,7 @@ import { CreateListItemForm, CreateListItemValues } from "./CreateItemForm";
 import { List, ListItemType, TentativeListItem } from "../type";
 import { ListItemRow } from "./ListItemRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import logo from "../images/icons/sleeping.svg";
 import {
   reorder,
   sortListItemsBasedOnPreviousOrder,
@@ -61,7 +63,6 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
   // initial hook
   React.useEffect(() => {
     // if items exist in local storage set them, at the same time fetch the items from the list
-    console.log("new list set");
     localIndex = 1;
     localLength.current = items.length;
     const sortedItems = sortListItemsBasedOnPreviousOrder(list.items, list._id);
@@ -214,7 +215,6 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
       direction="column"
       justify="center"
       align="center"
-      // mx={8}
       my={10}
       display={navBarOpen ? ["none", "none", "none", "flex"] : "flex"}
     >
@@ -233,9 +233,17 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
         <CreateListItemForm createNewItem={createListItem} />
 
         {items.length === 0 ? (
-          <Box mt={6}>
-            <Text>You do not have any items.</Text>
-          </Box>
+          <Flex
+            mt={6}
+            alignItems="center"
+            justifyContent="center"
+            flexDir="column"
+          >
+            <Text width="100%" mb={6}>
+              You do not have any items.
+            </Text>
+            <Image boxSize={["300px", "300px"]} src={logo} alt="Login" />
+          </Flex>
         ) : (
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="list-items">
