@@ -16,8 +16,7 @@ import { LoginModal } from "../components/LoginModal";
 import { RegisterModal } from "../components/RegisterModal";
 import { config } from "../config";
 import logo from "../images/icons/landing-teal.svg";
-import {MdAccessible } from 'react-icons/md'
-import { BiListCheck } from 'react-icons/bi'
+import { MdAccessible } from "react-icons/md";
 import { FaRegKeyboard, FaUserFriends } from "react-icons/fa";
 import { BsCardChecklist } from "react-icons/bs";
 
