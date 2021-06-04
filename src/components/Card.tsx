@@ -1,12 +1,18 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
+import { LoadingComponent } from "./Loading";
 
 interface Props {
   maxHeight?: string;
   width?: string;
+  loading?: boolean;
 }
 
-export const Card: React.FC<Props> = ({ children, maxHeight = "auto" }) => (
+export const Card: React.FC<Props> = ({
+  children,
+  maxHeight = "auto",
+  loading = false,
+}) => (
   <Box
     minW={["80vw", "500px", "600px"]}
     borderStyle="solid"
@@ -18,6 +24,6 @@ export const Card: React.FC<Props> = ({ children, maxHeight = "auto" }) => (
     borderColor="gray.200"
     borderWidth="1px"
   >
-    {children}
+    {loading ? <LoadingComponent /> : <Box>{children}</Box>}
   </Box>
 );

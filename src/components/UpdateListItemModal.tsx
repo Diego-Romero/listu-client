@@ -2,7 +2,6 @@ import {
   Text,
   Box,
   Button,
-  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -26,16 +25,13 @@ import { Field, Form, Formik } from "formik";
 import { longDateFormat, toastConfig } from "../utils/utils";
 import { ListItemType } from "../type";
 import { useDropzone } from "react-dropzone";
-import {
-  getSignedUrlRequest,
-  putFileToS3,
-} from "../api/requests";
+import { getSignedUrlRequest, putFileToS3 } from "../api/requests";
 import { AttachmentIcon, ExternalLinkIcon, InfoIcon } from "@chakra-ui/icons";
 
 export interface UpdateListItemValues {
   name: string;
   description?: string;
-  done: boolean;
+  // done: boolean;
 }
 
 const validationSchema = Yup.object().shape({
@@ -48,16 +44,9 @@ interface Props {
   modalClose: () => void;
   listItem: ListItemType;
   listId: string;
-  updateListItemAttachmentUrl: (
-    url: string,
-    listId: string,
-    itemId: string
-  ) => void;
-  updateListItem: (
-    listId: string,
-    itemId: string,
-    values: UpdateListItemValues
-  ) => void;
+  updateListItemAttachmentUrl: (url: string, index: number) => void;
+  index: number;
+  updateListItem: (index: number, values: UpdateListItemValues) => void;
 }
 
 export const UpdateListItemModal: React.FC<Props> = ({
@@ -67,6 +56,7 @@ export const UpdateListItemModal: React.FC<Props> = ({
   listId,
   updateListItemAttachmentUrl,
   updateListItem,
+  index,
 }) => {
   const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
@@ -82,7 +72,7 @@ export const UpdateListItemModal: React.FC<Props> = ({
   const initialValues: UpdateListItemValues = {
     name: listItem.name,
     description: listItem.description as string,
-    done: listItem.done,
+    // done: listItem.done,
   };
 
   React.useEffect(() => {
@@ -106,7 +96,7 @@ export const UpdateListItemModal: React.FC<Props> = ({
       const url = getSignedUrl.data.url as string;
       await putFileToS3(file, url);
       const uploadedImageUrl = `https://listu-${config.environment}.s3.amazonaws.com/${fileName}`;
-      updateListItemAttachmentUrl(uploadedImageUrl, listId, listItem._id);
+      updateListItemAttachmentUrl(uploadedImageUrl, index);
     } catch (e) {
       if (e.response) {
         const errorMessage = e.response.data.message;
@@ -127,12 +117,13 @@ export const UpdateListItemModal: React.FC<Props> = ({
   }
 
   async function updateListItemSubmit(values: UpdateListItemValues) {
+    console.log(values);
     const updated = { ...listItem } as ListItemType;
     updated.name = values.name;
-    updated.description = values.description;
-    updated.done = values.done;
-    updateListItem(listId, listItem._id, updated);
-    modalClose()
+    updated.description = values.description || "";
+    // updated.done = values.done;
+    updateListItem(index, updated);
+    modalClose();
   }
 
   return (
@@ -187,20 +178,27 @@ export const UpdateListItemModal: React.FC<Props> = ({
                     </FormControl>
                   )}
                 </Field>
-                <Field name="done">
+                {/* <Field name="done"> // todo: make done work with formik, field needs to be updated manually
                   {({ field, form }) => (
                     <FormControl
                       id="done"
                       mt={SPACING_INPUTS}
                       isInvalid={form.errors.done && form.touched.done}
                     >
-                      <Checkbox size="lg" colorScheme="teal" {...field}>
+                      <Checkbox
+                        onChange={(e) =>
+                          field.setFieldValue("terms", e.target.checked)
+                        }
+                        size="lg"
+                        colorScheme="teal"
+                        {...field}
+                      >
                         Mark as done
                       </Checkbox>
                       <FormErrorMessage>{form.errors.done}</FormErrorMessage>
                     </FormControl>
                   )}
-                </Field>
+                </Field> */}
                 {listItem.attachmentUrl ? (
                   <Box>
                     <Button

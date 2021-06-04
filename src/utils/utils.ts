@@ -61,23 +61,23 @@ export function sortListsBasedOnPreviousOrder(lists: List[]): List[] {
   return [...listsWithOrder, ...otherLists];
 }
 
-export function sortUndoneListItemsBasedOnPreviousOrder(
-  undoneItems: ListItemType[],
+export function sortListItemsBasedOnPreviousOrder(
+  items: ListItemType[],
   listId: string
 ): ListItemType[] {
   const orderString = localStorage.getItem(listId);
-  if (!orderString || orderString === null) return undoneItems;
+  if (!orderString || orderString === null) return items;
 
   const orderObject: listOrderType = JSON.parse(orderString);
-  let itemsWithOrder = new Array(undoneItems.length).fill(null);
+  let itemsWithOrder = new Array(items.length).fill(null);
   const other: ListItemType[] = [];
-  for (const item of undoneItems) {
+  for (const item of items) {
     const index = orderObject[item._id];
     if (index !== undefined) itemsWithOrder[index] = item;
     else other.push(item);
   }
   itemsWithOrder = itemsWithOrder.filter((i) => i !== null);
-  return [...itemsWithOrder, ...other];
+  return [...other, ...itemsWithOrder];
 }
 
 export function storeListOrderInLocalStorage(items: List[]): void {

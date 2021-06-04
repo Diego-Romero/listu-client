@@ -10,7 +10,6 @@ import React from "react";
 import * as Yup from "yup";
 import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
-import { List } from "../type";
 import { AddIcon } from "@chakra-ui/icons";
 import MouseTrap from "mousetrap";
 
@@ -27,14 +26,10 @@ const validationSchema = Yup.object().shape({
 });
 
 interface Props {
-  createNewItem: (listId: string, itemValues: CreateListItemValues) => void;
-  list: List;
+  createNewItem: (itemValues: CreateListItemValues) => void;
 }
 
-export const CreateListItemForm: React.FC<Props> = ({
-  createNewItem,
-  list,
-}) => {
+export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
   const inputEl = React.useRef(null);
 
   React.useEffect(() => {
@@ -47,7 +42,7 @@ export const CreateListItemForm: React.FC<Props> = ({
       validateOnBlur={false}
       onSubmit={(values: CreateListItemValues, actions) => {
         actions.setSubmitting(false);
-        createNewItem(list._id, values);
+        createNewItem(values);
         actions.resetForm();
         inputEl.current.blur();
       }}

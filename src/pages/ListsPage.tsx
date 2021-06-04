@@ -12,11 +12,8 @@ import React from "react";
 import { useUserContext } from "../context/UserContext";
 import { useUiContext } from "../context/UiContext";
 import {
-  createListItemRequest,
-  deleteListItemRequest,
   deleteListRequest,
   getUserRequest,
-  updateListItemRequest,
   updateListRequest,
 } from "../api/requests";
 import {
@@ -25,18 +22,15 @@ import {
   storeActiveListInLocalStorage,
   toastConfig,
 } from "../utils/utils";
-import { List, ListItemType, TentativeListItem } from "../type";
+import { List } from "../type";
 import { LoadingComponent } from "../components/Loading";
 import { SideNav } from "../components/SideNav";
-import { CreateListItemValues } from "../components/CreateItemForm";
-import { v4 as uuidv4 } from "uuid";
 import logo from "../images/icons/team_up.svg";
 import produce from "immer";
 import { remove } from "ramda";
 import { ListDisplay } from "../components/ListDisplay";
 import { CreateListValues } from "../components/UpdateListModal";
 import MouseTrap from "mousetrap";
-import { UpdateListItemValues } from "../components/UpdateListItemModal";
 
 export const ListsPage = () => {
   const { navBarOpen, setNavBarOpen } = useUiContext();
@@ -138,7 +132,6 @@ export const ListsPage = () => {
 
   async function deleteList(listId: string) {
     const snapshot = [...lists];
-    console.log(listId);
     const listIndex = findListIndexById(listId);
     const updatedLists = remove(listIndex, 1, lists);
     setLists(updatedLists);
@@ -158,154 +151,11 @@ export const ListsPage = () => {
     }
   }
 
-  /**
-   * In order for the application to be snappy, I'm creating first a local record of the created item, with a unique id.
-   * Then the item is being saved to be BE in parallel, when the item is saved it will be updated in React, but will be not be perceived by the user
-   * If the request fails, I roll back to a snapshot before the item was created.
-   */
-  async function createListItem(
-    listId: string,
-    newItemValues: CreateListItemValues
-  ) {
-    const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
-    const tentativeId = uuidv4();
-    const newItem: TentativeListItem = {
-      ...newItemValues,
-      _id: tentativeId,
-      done: false,
-    };
-    const listIndex = findListIndexById(listId);
-    const list = lists[listIndex];
-    const items = [newItem, ...list.items];
-    const updatedList = { ...list, items };
-    setActiveList(updatedList);
-    updateLists(listIndex, updatedList);
-
-    try {
-      // update the item in the BE, if successful update the item in the list too
-      const createdItem = await createListItemRequest(newItem, list._id);
-      const itemIndex: number = items.findIndex(
-        (item) => item._id === tentativeId
-      );
-      const updatedItem = produce(items, (draft) => {
-        draft[itemIndex] = createdItem.data;
-      });
-      const updatedList = { ...list, items: updatedItem };
-      setActiveList(updatedList);
-      updateLists(listIndex, updatedList);
-    } catch (e) {
-      setLists(snapshot);
-      toast(
-        toastConfig(
-          "Whoops, there has been an error saving your todo, please try again",
-          "error"
-        )
-      );
-    }
-  }
-
   function updateLists(index: number, updatedList: List) {
     const nextState = produce(lists, (draft) => {
       draft[index] = updatedList;
     });
     setLists(nextState);
-  }
-
-  async function toggleItemDone(listId: string, itemId: string) {
-    const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
-    const listIndex = findListIndexById(listId);
-    const list = lists[listIndex];
-    const itemIndex = list.items.findIndex((item) => item._id === itemId);
-    const item = list.items[itemIndex];
-    const updatedListItem = { ...item, done: !item.done };
-    const updatedItems = produce(list.items, (draft) => {
-      draft[itemIndex] = updatedListItem;
-    });
-    const updatedList = { ...list, items: updatedItems };
-    setActiveList(updatedList);
-    updateLists(listIndex, updatedList);
-    try {
-      await updateListItemRequest(listId, itemId, updatedListItem);
-    } catch (e) {
-      setLists(snapshot);
-      toast(
-        toastConfig(
-          "Whoops, there has been an error updating your todo, please try again",
-          "error"
-        )
-      );
-    }
-  }
-
-  async function updateListItem(
-    listId: string,
-    itemId: string,
-    values: UpdateListItemValues
-  ) {
-    const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
-    const listIndex = findListIndexById(listId);
-    const list = lists[listIndex];
-    const itemIndex = list.items.findIndex((item) => item._id === itemId);
-    const item = list.items[itemIndex];
-    const { name, description } = values;
-    const updatedListItem = { ...item, name, description };
-    const updatedItems = produce(list.items, (draft) => {
-      draft[itemIndex] = updatedListItem;
-    });
-    const updatedList = { ...list, items: updatedItems };
-    setActiveList(updatedList);
-    updateLists(listIndex, updatedList);
-    try {
-      await updateListItemRequest(listId, itemId, updatedListItem);
-    } catch (e) {
-      setLists(snapshot);
-      toast(
-        toastConfig(
-          "Whoops, there has been an error updating your todo, please try again",
-          "error"
-        )
-      );
-    }
-  }
-
-  async function deleteListItem(listId: string, itemId: string) {
-    const snapshot = [...lists]; // taking a snapshot in case that rolling back is needed
-    const listIndex = findListIndexById(listId);
-    const list = lists[listIndex];
-    const itemIndex = list.items.findIndex((item) => item._id === itemId);
-    const updatedItems = remove(itemIndex, 1, list.items);
-    const updatedList = { ...list, items: updatedItems };
-    setActiveList(updatedList);
-    updateLists(listIndex, updatedList);
-    try {
-      await deleteListItemRequest(listId, itemId);
-    } catch (e) {
-      setLists(snapshot);
-      toast(
-        toastConfig(
-          "Whoops, there has been an error deleting your todo, please try again",
-          "error"
-        )
-      );
-    }
-  }
-
-  function updateListItemAttachmentUrl(
-    url: string,
-    listId: string,
-    itemId: string
-  ): void {
-    const listIndex = findListIndexById(listId);
-    const list = lists[listIndex];
-    const listItemIndex = list.items.findIndex((l) => l._id === itemId);
-    const item = list.items[listItemIndex];
-    const updatedItem: ListItemType = { ...item, attachmentUrl: url };
-    const updatedItems = produce(list.items, (draft) => {
-      draft[listItemIndex] = updatedItem;
-    });
-    const updatedList = { ...list, items: updatedItems };
-    setActiveList(updatedList);
-    updateLists(listIndex, updatedList);
   }
 
   return (
@@ -338,14 +188,7 @@ export const ListsPage = () => {
             justifyContent="center"
           >
             {activeList ? (
-              <ListDisplay
-                list={activeList}
-                onCreateItem={createListItem}
-                toggleItemDone={toggleItemDone}
-                deleteListItem={deleteListItem}
-                updateListItemAttachmentUrl={updateListItemAttachmentUrl}
-                updateListItem={updateListItem}
-              />
+              <ListDisplay list={activeList} />
             ) : (
               <Stack textAlign="center">
                 <Image mt={4} boxSize="400px" src={logo} alt="Login" />

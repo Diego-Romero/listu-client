@@ -5,7 +5,7 @@ export interface List {
   description?: string;
   createdAt: Date;
   createdBy: User;
-  items: (ListItem | TentativeListItem)[]
+  items: (ListItem | TentativeListItem)[];
 }
 export interface ListItem {
   _id: string;
@@ -16,6 +16,7 @@ export interface ListItem {
   done: boolean;
   dateCompleted?: string;
   attachmentUrl?: string;
+  loading: boolean;
 }
 export interface User {
   _id: string;
@@ -32,6 +33,7 @@ export interface TentativeListItem {
   name: string;
   done: boolean;
   attachmentUrl?: string;
+  loading: boolean;
 }
 
 export type ListItemType = ListSingleItem | TentativeListItem;
