@@ -29,7 +29,7 @@ export const ListRow: React.FC<Props> = ({
   toggleActiveLists,
   active,
   updateList,
-  deleteList
+  deleteList,
 }) => {
   const {
     isOpen: isUpdateListModalOpen,
@@ -50,6 +50,8 @@ export const ListRow: React.FC<Props> = ({
             textDecoration: "underline",
             bgColor: colorMode === "light" ? "gray.100" : "gray.900",
           }}
+          cursor="pointer"
+          onClick={() => toggleActiveLists(list._id)}
         >
           <Grid
             gridTemplateColumns="auto 1fr auto"
@@ -57,15 +59,12 @@ export const ListRow: React.FC<Props> = ({
             justifyContent="center"
             py={4}
             px={4}
+            bg={
+              active ? (colorMode === "dark" ? "gray.900" : "gray.200") : "inherit"
+            }
           >
             <DragHandleIcon cursor="grab" />
-            <Text
-              fontSize="md"
-              ml={2}
-              noOfLines={1}
-              onClick={() => toggleActiveLists(list._id)}
-              cursor="pointer"
-            >
+            <Text fontSize="md" ml={2} noOfLines={1} cursor="pointer">
               {list.name}{" "}
             </Text>
             <HStack>

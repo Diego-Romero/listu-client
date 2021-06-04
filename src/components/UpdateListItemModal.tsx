@@ -117,7 +117,6 @@ export const UpdateListItemModal: React.FC<Props> = ({
   }
 
   async function updateListItemSubmit(values: UpdateListItemValues) {
-    console.log(values);
     const updated = { ...listItem } as ListItemType;
     updated.name = values.name;
     updated.description = values.description || "";

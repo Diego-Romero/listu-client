@@ -1,52 +1,52 @@
 import {
-  Box,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
+  useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import React from "react";
-import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { addFriendRequest } from "../api/requests";
-import { config, SPACING_BUTTONS, SPACING_INPUTS } from "../config";
+import { config, SPACING_INPUTS } from "../config";
+import { List, User } from "../type";
 import { toastConfig } from "../utils/utils";
-
 export interface AddFriendFormValues {
   email: string;
 }
 
-const initialValues: AddFriendFormValues = {
+const addFriendInitialValues: AddFriendFormValues = {
   email: "",
 };
 
-interface ParamTypes {
-  id: string;
-}
-
-const validationSchema = Yup.object().shape({
+const addFriendValidationSchema = Yup.object().shape({
   email: config.validation.email,
 });
-
-interface Props {
-  refreshList: () => void;
+export interface CreateListValues {
+  name: string;
+  description: string;
 }
 
-export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
+interface Props {
+  list: List;
+}
+
+export const AddFriendForm: React.FC<Props> = ({ list }) => {
   const [loading, setLoading] = React.useState(false);
-  const { id } = useParams<ParamTypes>();
   const toast = useToast();
+  const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
   const addFriend = async (values: AddFriendFormValues, resetForm: any) => {
     setLoading(true);
     try {
-      const res = await addFriendRequest(values, id);
-      toast(toastConfig(res.data.message, "success"));
+      const res = await addFriendRequest(values, list._id);
+      console.log(res);
+      toast(toastConfig(res.data.message, "info"));
       resetForm();
-      refreshList();
+      list.users.push(res.data.user as User);
     } catch (e) {
       const errorMessage = e.response.data.message;
       toast(
@@ -56,45 +56,45 @@ export const AddFriendForm: React.FC<Props> = ({ refreshList }) => {
       setLoading(false);
     }
   };
+
   return (
-    <Box>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          actions.setSubmitting(false);
-          addFriend(values, actions.resetForm);
-        }}
-        validationSchema={validationSchema}
-      >
-        {(props) => (
-          <Form>
-            <Field name="email">
-              {({ field, form }) => (
-                <FormControl
-                  id="email"
-                  mt={SPACING_INPUTS}
-                  isRequired
-                  isInvalid={form.errors.email && form.touched.email}
-                >
-                  <FormLabel htmlFor="email">Email Address</FormLabel>
-                  <Input {...field} type="email" />
-                  <FormErrorMessage>{form.errors.email}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Button
-              mt={SPACING_BUTTONS - 4}
-              colorScheme="teal"
-              variant="solid"
-              isFullWidth
-              type="submit"
-              isLoading={props.isSubmitting || loading}
-            >
-              Invite friend
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    </Box>
+    <Formik
+      initialValues={addFriendInitialValues}
+      onSubmit={(values, actions) => {
+        actions.setSubmitting(false);
+        addFriend(values, actions.resetForm);
+      }}
+      validationSchema={addFriendValidationSchema}
+    >
+      {(props) => (
+        <Form>
+          <Field name="email">
+            {({ field, form }) => (
+              <FormControl
+                id="email"
+                mt={SPACING_INPUTS}
+                isRequired
+                isInvalid={form.errors.email && form.touched.email}
+              >
+                <FormLabel htmlFor="email">Email Address</FormLabel>
+                <Input {...field} type="email" autoFocus={isLargerThan480} />
+                <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+              </FormControl>
+            )}
+          </Field>
+          <Button
+            mt={4}
+            mb={6}
+            colorScheme="teal"
+            variant="solid"
+            isFullWidth
+            type="submit"
+            isLoading={props.isSubmitting || loading}
+          >
+            Invite friend
+          </Button>
+        </Form>
+      )}
+    </Formik>
   );
 };

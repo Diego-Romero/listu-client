@@ -23,7 +23,6 @@ import {
   Textarea,
   useDisclosure,
   useMediaQuery,
-  useToast,
   UnorderedList,
   ListItem,
   Popover,
@@ -38,22 +37,10 @@ import React from "react";
 import * as Yup from "yup";
 import { config, SPACING_INPUTS } from "../config";
 import { Field, Form, Formik } from "formik";
-import { addFriendRequest } from "../api/requests";
-import { toastConfig } from "../utils/utils";
 import { List, User } from "../type";
 import { AiOutlineUserAdd } from "react-icons/ai";
+import { AddFriendForm } from "./AddFriendForm";
 
-export interface AddFriendFormValues {
-  email: string;
-}
-
-const addFriendInitialValues: AddFriendFormValues = {
-  email: "",
-};
-
-const addFriendValidationSchema = Yup.object().shape({
-  email: config.validation.email,
-});
 export interface CreateListValues {
   name: string;
   description: string;
@@ -81,7 +68,6 @@ export const UpdateListModal: React.FC<Props> = ({
   updateList,
   deleteList,
 }) => {
-  const toast = useToast();
   const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
   const alertDialogCancelRef = React.useRef();
   const {
@@ -89,28 +75,10 @@ export const UpdateListModal: React.FC<Props> = ({
     onOpen: onDeleteAlertOpen,
     onClose: onDeleteAlertClose,
   } = useDisclosure();
-  const [loading, setLoading] = React.useState(false);
 
   const initialValues: CreateListValues = {
     name: list.name,
     description: list.description as string,
-  };
-
-  const addFriend = async (values: AddFriendFormValues, resetForm: any) => {
-    setLoading(true);
-    try {
-      const res = await addFriendRequest(values, list._id);
-      toast(toastConfig(res.data.message, "info"));
-      resetForm();
-      list.users.push(res.data.user as User);
-    } catch (e) {
-      const errorMessage = e.response.data.message;
-      toast(
-        toastConfig("Yikes... There has been an error", "error", errorMessage)
-      );
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -173,7 +141,6 @@ export const UpdateListModal: React.FC<Props> = ({
                   variant="solid"
                   isFullWidth
                   type="submit"
-                  isLoading={loading}
                 >
                   Update
                 </Button>
@@ -183,7 +150,6 @@ export const UpdateListModal: React.FC<Props> = ({
                   colorScheme="gray"
                   variant="outline"
                   isFullWidth
-                  isLoading={loading}
                   onClick={() => modalClose()}
                 >
                   Cancel
@@ -226,7 +192,6 @@ export const UpdateListModal: React.FC<Props> = ({
                   mt={4}
                   isFullWidth
                   variant="outline"
-                  isLoading={loading}
                 >
                   Add Friend
                 </Button>
@@ -236,54 +201,7 @@ export const UpdateListModal: React.FC<Props> = ({
                 <PopoverCloseButton />
                 <PopoverHeader>Add Friend</PopoverHeader>
                 <PopoverBody>
-                  <Formik
-                    initialValues={addFriendInitialValues}
-                    onSubmit={(values, actions) => {
-                      actions.setSubmitting(false);
-                      addFriend(values, actions.resetForm);
-                    }}
-                    validationSchema={addFriendValidationSchema}
-                  >
-                    {(props) => (
-                      <Form>
-                        <Field name="email">
-                          {({ field, form }) => (
-                            <FormControl
-                              id="email"
-                              mt={SPACING_INPUTS}
-                              isRequired
-                              isInvalid={
-                                form.errors.email && form.touched.email
-                              }
-                            >
-                              <FormLabel htmlFor="email">
-                                Email Address
-                              </FormLabel>
-                              <Input
-                                {...field}
-                                type="email"
-                                autoFocus={isLargerThan480}
-                              />
-                              <FormErrorMessage>
-                                {form.errors.email}
-                              </FormErrorMessage>
-                            </FormControl>
-                          )}
-                        </Field>
-                        <Button
-                          mt={4}
-                          mb={6}
-                          colorScheme="teal"
-                          variant="solid"
-                          isFullWidth
-                          type="submit"
-                          isLoading={props.isSubmitting || loading}
-                        >
-                          Invite friend
-                        </Button>
-                      </Form>
-                    )}
-                  </Formik>
+                  <AddFriendForm list={list} />
                 </PopoverBody>
               </PopoverContent>
             </Popover>
@@ -303,7 +221,6 @@ export const UpdateListModal: React.FC<Props> = ({
                 colorScheme="red"
                 variant="outline"
                 isFullWidth
-                isLoading={loading}
                 onClick={onDeleteAlertOpen}
               >
                 Delete List

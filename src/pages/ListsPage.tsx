@@ -55,15 +55,15 @@ export const ListsPage = () => {
   }
 
   function reBindActiveListHotkeys() {
-    MouseTrap.bind(`ctrl+1`, () => setActiveListHotKey(1));
-    MouseTrap.bind(`ctrl+2`, () => setActiveListHotKey(2));
-    MouseTrap.bind(`ctrl+3`, () => setActiveListHotKey(3));
-    MouseTrap.bind(`ctrl+4`, () => setActiveListHotKey(4));
-    MouseTrap.bind(`ctrl+5`, () => setActiveListHotKey(5));
-    MouseTrap.bind(`ctrl+6`, () => setActiveListHotKey(6));
-    MouseTrap.bind(`ctrl+7`, () => setActiveListHotKey(7));
-    MouseTrap.bind(`ctrl+8`, () => setActiveListHotKey(8));
-    MouseTrap.bind(`ctrl+9`, () => setActiveListHotKey(9));
+    MouseTrap.bind(`1`, () => setActiveListHotKey(1));
+    MouseTrap.bind(`2`, () => setActiveListHotKey(2));
+    MouseTrap.bind(`3`, () => setActiveListHotKey(3));
+    MouseTrap.bind(`4`, () => setActiveListHotKey(4));
+    MouseTrap.bind(`5`, () => setActiveListHotKey(5));
+    MouseTrap.bind(`6`, () => setActiveListHotKey(6));
+    MouseTrap.bind(`7`, () => setActiveListHotKey(7));
+    MouseTrap.bind(`8`, () => setActiveListHotKey(8));
+    MouseTrap.bind(`9`, () => setActiveListHotKey(9));
   }
 
   function setActiveListHotKey(index: number) {

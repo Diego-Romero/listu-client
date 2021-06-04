@@ -22,7 +22,6 @@ import {
   UpdateListItemModal,
   UpdateListItemValues,
 } from "./UpdateListItemModal";
-
 interface Props {
   item: ListItem | TentativeListItem;
   listId: string;
@@ -30,15 +29,8 @@ interface Props {
   isActive: boolean;
   toggleItemDone: (itemIndex: number) => void;
   deleteListItem: (index: number) => void;
-  updateListItemAttachmentUrl: (
-    url: string,
-    listId: string,
-    itemId: string
-  ) => void;
-  updateListItem: (
-    index: number,
-    values: UpdateListItemValues
-  ) => void;
+  updateListItemAttachmentUrl: (url: string, index: number) => void;
+  updateListItem: (index: number, values: UpdateListItemValues) => void;
 }
 
 export const ListItemRow: React.FC<Props> = ({
@@ -92,7 +84,7 @@ export const ListItemRow: React.FC<Props> = ({
                 textAlign="left"
                 onClick={onOpen}
               >
-                <Text fontSize="lg" noOfLines={1} ml={2} isTruncated>
+                <Text fontSize={["sm", "md", "lg"]} noOfLines={1} ml={2} >
                   {item.name}
                 </Text>
               </Flex>
@@ -168,15 +160,17 @@ export const ListItemRow: React.FC<Props> = ({
           </Box>
         )}
       </Draggable>
-      <UpdateListItemModal
-        modalClose={onClose}
-        modalOpen={isOpen}
-        listItem={item}
-        updateListItemAttachmentUrl={updateListItemAttachmentUrl}
-        listId={listId}
-        index={index}
-        updateListItem={updateListItem}
-      />
+      {isOpen ? (
+        <UpdateListItemModal
+          modalClose={onClose}
+          modalOpen={isOpen}
+          listItem={item}
+          updateListItemAttachmentUrl={updateListItemAttachmentUrl}
+          listId={listId}
+          index={index}
+          updateListItem={updateListItem}
+        />
+      ) : null}
     </Box>
   );
 };

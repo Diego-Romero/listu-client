@@ -21,8 +21,13 @@ interface Props {
 export const KeymapModal: React.FC<Props> = ({ modalOpen, modalClose }) => {
   const keyMaps = [
     { text: "Create new list", key1: "CTRL", key2: "N" },
-    { text: "Focus on create item", key1: "SPACE" },
-    { text: "Focus list 1..9", key1: "CTRL", key2: "1..9" },
+    { text: "Create new list item", key1: "SPACE" },
+    { text: "Focus list 1-9", key1: "1 - 9" },
+    { text: "Move down list items", key1: "DOWN", orKey2: "J" },
+    { text: "Move up list items", key1: "UP", orKey2: "K" },
+    { text: "Delete list item", key1: "BACKSPACE", orKey2: "X" },
+    { text: "Update list item", key1: "U", orKey2: "O" },
+    { text: "Toggle item done/undone", key1: "D" },
     { text: "Open Keymap", key1: "CTRL", key2: "K" },
     { text: "Light mode", key1: "CTRL", key2: "L" },
     { text: "Dark mode", key1: "CTRL", key2: "D" },
@@ -42,7 +47,19 @@ export const KeymapModal: React.FC<Props> = ({ modalOpen, modalClose }) => {
               <Flex alignItems="center" justifyContent="space-between" mb={4}>
                 <Text>{keyMap.text}</Text>
                 <span>
-                  <Kbd>{keyMap.key1}</Kbd>{keyMap.key2 ? <span> + <Kbd>{keyMap.key2}</Kbd></span> : null} 
+                  <Kbd>{keyMap.key1}</Kbd>
+                  {keyMap.key2 ? (
+                    <span>
+                      {" "}
+                      + <Kbd>{keyMap.key2}</Kbd>
+                    </span>
+                  ) : null}
+                  {keyMap.orKey2 ? (
+                    <span>
+                      {" "}
+                      or <Kbd>{keyMap.orKey2}</Kbd>
+                    </span>
+                  ) : null}
                 </span>
               </Flex>
               <Divider mb={4} />

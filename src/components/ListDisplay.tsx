@@ -1,4 +1,12 @@
-import { Box, Flex, Heading, HStack, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import React from "react";
 import { Card } from "./Card";
 import { CreateListItemForm, CreateListItemValues } from "./CreateItemForm";
@@ -11,7 +19,10 @@ import {
   storeListItemInLocalStorage,
   toastConfig,
 } from "../utils/utils";
-import { UpdateListItemValues } from "./UpdateListItemModal";
+import {
+  UpdateListItemModal,
+  UpdateListItemValues,
+} from "./UpdateListItemModal";
 import { useUiContext } from "../context/UiContext";
 import MouseTrap from "mousetrap";
 import produce from "immer";
@@ -29,22 +40,30 @@ interface Props {
 }
 
 let localIndex = -1;
+let localItems: ListItemType[] = [];
 export const ListDisplay: React.FC<Props> = ({ list }) => {
   const [items, setItems] = React.useState<ListItemType[]>([]);
   const { navBarOpen } = useUiContext();
   const [activeIndex, setActiveIndex] = React.useState(localIndex);
   const localLength = React.useRef(0);
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   async function fetchList() {
     const res = await getListDataRequest(list._id);
-    const sortedItems = sortListItemsBasedOnPreviousOrder(res.data.items, list._id);
+    const sortedItems = sortListItemsBasedOnPreviousOrder(
+      res.data.items,
+      list._id
+    );
     setItems(sortedItems);
   }
 
   // initial hook
   React.useEffect(() => {
     // if items exist in local storage set them, at the same time fetch the items from the list
+    console.log("new list set");
+    localIndex = 1;
+    localLength.current = items.length;
     const sortedItems = sortListItemsBasedOnPreviousOrder(list.items, list._id);
     setItems(sortedItems);
     fetchList();
@@ -52,8 +71,9 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
 
   // every time the items are updated store the order in local storage
   React.useEffect(() => {
-    storeListItemInLocalStorage(items, list._id);
     localLength.current = items.length;
+    localItems = items;
+    storeListItemInLocalStorage(items, list._id);
   }, [items]);
 
   // crud operations
@@ -90,7 +110,7 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
   }
 
   async function toggleItemDone(itemIndex: number) {
-    const updatedItems = produce(items, (draft) => {
+    const updatedItems = produce(localItems, (draft) => {
       draft[itemIndex].done = !draft[itemIndex].done;
     });
     setItems(updatedItems);
@@ -131,8 +151,8 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
 
   async function deleteListItem(index: number) {
     const snapshot = [...items]; // taking a snapshot in case that rolling back is needed
-    const item = items[index];
-    const updatedItems = remove(index, 1, items);
+    const item = localItems[index];
+    const updatedItems = remove(index, 1, localItems);
     setItems(updatedItems);
     try {
       await deleteListItemRequest(list._id, item._id);
@@ -147,7 +167,7 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
     }
   }
 
-  function updateListItemAttachmentUrl(url: string, index: string): void {
+  function updateListItemAttachmentUrl(url: string, index: number): void {
     const item = items[index];
     const updatedItem: ListItemType = { ...item, attachmentUrl: url };
     const updatedItems = produce(items, (draft) => {
@@ -159,21 +179,16 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
 
   // key mappings
   React.useEffect(() => {
-    MouseTrap.bind("up", () => moveSelected(-1));
-    MouseTrap.bind("down", () => moveSelected(1));
-    MouseTrap.bind("right", () => handleRightArrow());
+    MouseTrap.bind(["up", "k"], () => moveSelected(-1));
+    MouseTrap.bind(["down", "j"], () => moveSelected(1));
+    MouseTrap.bind(["backspace", "x"], () => {
+      if (localItems[localIndex]) deleteListItem(localIndex);
+    });
+    MouseTrap.bind(["d"], () => {
+      if (localItems[localIndex]) toggleItemDone(localIndex);
+    });
+    MouseTrap.bind(["u", "o"], () => onOpen());
   }, []);
-
-  function handleRightArrow() {
-    // const currentItem = items[localIndex];
-    // // console.log(currentItem);
-    // if (currentItem.done) {
-    //   // console.log("deleting", currentItem);
-    //   deleteListItem(list._id, currentItem._id);
-    // } else {
-    //   toggleItemDone(localIndex);
-    // }
-  }
 
   const moveSelected = (n: number) => {
     localIndex += n;
@@ -199,10 +214,9 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
       direction="column"
       justify="center"
       align="center"
-      mx={8}
-      my={[8, 8, 16]}
+      // mx={8}
+      my={10}
       display={navBarOpen ? ["none", "none", "none", "flex"] : "flex"}
-      // width={[]} // todo: set the correct width depending on how wide the screen is
     >
       <Card maxHeight="75vh">
         <Flex
@@ -251,6 +265,17 @@ export const ListDisplay: React.FC<Props> = ({ list }) => {
           </DragDropContext>
         )}
       </Card>
+      {isOpen ? (
+        <UpdateListItemModal
+          modalClose={onClose}
+          modalOpen={isOpen}
+          listItem={localItems[localIndex]}
+          updateListItemAttachmentUrl={updateListItemAttachmentUrl}
+          listId={list._id}
+          index={localIndex}
+          updateListItem={updateListItem}
+        />
+      ) : null}
     </Flex>
   );
 };

@@ -4,7 +4,6 @@ import { LoadingComponent } from "./Loading";
 
 interface Props {
   maxHeight?: string;
-  width?: string;
   loading?: boolean;
 }
 
@@ -14,7 +13,7 @@ export const Card: React.FC<Props> = ({
   loading = false,
 }) => (
   <Box
-    minW={["80vw", "500px", "600px"]}
+    w={["85vw", "80vw", "75vw", "55vw", "50vw", "40vw"]}
     borderStyle="solid"
     borderRadius="12px"
     maxHeight={maxHeight}

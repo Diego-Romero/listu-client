@@ -33,8 +33,11 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
   const inputEl = React.useRef(null);
 
   React.useEffect(() => {
-    MouseTrap.bind("space", () => inputEl.current.focus());
+    MouseTrap.bind(["space"], () => {
+      inputEl.current.focus();
+    });
   }, []);
+
   return (
     <Formik
       initialValues={initialValues}
@@ -67,7 +70,7 @@ export const CreateListItemForm: React.FC<Props> = ({ createNewItem }) => {
                     ref={inputEl}
                     {...field}
                   />
-                  <InputRightElement width="3.2rem">
+                  <InputRightElement width="3.2rem" ml={2}>
                     <IconButton
                       variant="solid"
                       colorScheme="teal"
